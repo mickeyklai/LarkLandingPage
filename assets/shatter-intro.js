@@ -175,7 +175,7 @@
   }
 
   /** Seconds of the full sequence the user actually sees (end is the rush toward the camera). */
-  var VISIBLE_TAIL_SECONDS = 3;
+  var VISIBLE_TAIL_SECONDS = 2;
   var EXPLODE_DELAY = 0.7;
 
   function buildShatterTimeline() {
