@@ -45,12 +45,12 @@
             overflow: visible;
             /* Center “breakout” width: frame lines stop at sides; eye sits above this layer */
             --bf-side: 26%;
-            /* Neon frame: 50% of the viewport band below header (was full remaining height) */
+            --hero-padding-x: clamp(1.5rem, 5vw, 4rem);
             flex: 0 0 auto;
             min-height: calc(100vh - var(--header-block));
             min-height: calc(100dvh - var(--header-block));
             margin: 0;
-            padding: clamp(2rem, 5vw, 4rem);
+            padding: clamp(2rem, 5vw, 4rem) var(--hero-padding-x);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -137,10 +137,10 @@
         .neon-blue {
             color: #c8f8ff;
             text-shadow:
-                0 0 4px #00e6ff,
-                0 0 12px #00c8ff,
-                0 0 24px rgba(0, 180, 255, 0.85),
-                0 0 48px rgba(0, 140, 255, 0.45);
+                0 0 6px #00e6ff,
+                0 0 16px #00c8ff,
+                0 0 32px rgba(0, 180, 255, 0.9),
+                0 0 64px rgba(0, 140, 255, 0.5);
         }
 
         .hero-eye {
@@ -152,16 +152,16 @@
             width: auto;
             height: 140%;
             max-height: none;
-            max-width: min(85%, 800px);
+            max-width: min(90%, 800px);
             object-fit: contain;
             object-position: center;
             background: none;
             mix-blend-mode: screen;
             pointer-events: none;
-            opacity: 0.6;
+            opacity: 0.7;
         }
 
-        /* Poster content stack — center */
+        /* Poster content stack — shared */
         .hero-content {
             position: relative;
             z-index: 6;
@@ -173,26 +173,31 @@
             flex: 1;
             min-height: 0;
             gap: 0;
+            width: 100%;
         }
 
         .hero-title {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            font-size: clamp(2.5rem, 12vw, 6.5rem);
-            font-weight: 300;
-            letter-spacing: 0.35em;
+            font-size: clamp(2.75rem, 13vw, 6.5rem);
+            font-weight: 400;
             text-transform: uppercase;
             margin: 0;
-            line-height: 0.95;
+            line-height: 1.05;
+            white-space: nowrap;
+        }
+
+        .hero-title-text {
+            display: inline-block;
         }
 
         .hero-hook {
             font-family: Georgia, 'Times New Roman', serif;
-            font-size: clamp(1rem, 3vw, 1.5rem);
+            font-size: clamp(1.05rem, 3.2vw, 1.5rem);
             font-style: italic;
             font-weight: 400;
-            line-height: 1.4;
+            line-height: 1.35;
             color: #d4f7ff;
-            margin: 1rem 0 0.6rem;
+            margin: clamp(0.85rem, 2.5vw, 1rem) 0 clamp(0.4rem, 1.5vw, 0.6rem);
             text-shadow:
                 0 0 4px rgba(0, 230, 255, 0.95),
                 0 0 14px rgba(0, 190, 255, 0.65),
@@ -201,7 +206,7 @@
 
         .hero-tagline {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            font-size: clamp(0.7rem, 1.6vw, 0.9rem);
+            font-size: clamp(0.8rem, 1.8vw, 0.9rem);
             font-weight: 400;
             letter-spacing: 0.08em;
             color: rgba(200, 220, 235, 0.78);
@@ -873,6 +878,25 @@
             hyphens: auto;
         }
 
+        /* ——— Desktop (769px+) ——— */
+        @media (min-width: 769px) {
+            .hero-content {
+                max-width: min(42rem, calc(100vw - var(--hero-padding-x) * 2));
+                padding-inline: clamp(0.75rem, 3vw, 1.5rem);
+            }
+
+            .hero-title {
+                font-size: clamp(2.75rem, 13vw, 6.5rem);
+                text-align: center;
+            }
+
+            .hero-title-text {
+                letter-spacing: 0.35em;
+                margin-right: -0.35em;
+            }
+        }
+
+        /* ——— Mobile (768px and below) ——— */
         @media (max-width: 768px) {
             body {
                 --header-block: 4.25rem;
@@ -888,11 +912,34 @@
             }
 
             .hero {
-                padding: 1.5rem 1rem;
+                --hero-padding-x: clamp(1rem, 4vw, 1.5rem);
+                padding: clamp(1.75rem, 4vw, 2.5rem) var(--hero-padding-x);
+            }
+
+            .hero-content {
+                padding-inline: 0.75rem;
+                max-width: calc(100vw - var(--hero-padding-x) * 2);
             }
 
             .hero-title {
-                letter-spacing: 0.2em;
+                font-size: clamp(1.5rem, 7.5vw, 4.5rem);
+                display: flex;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .hero-title-text {
+                letter-spacing: clamp(0.05em, 1vw, 0.18em);
+                margin-right: calc(-1 * clamp(0.05em, 1vw, 0.18em));
+            }
+
+            .hero-hook {
+                font-size: clamp(1.15rem, 4vw, 1.4rem);
+                margin: clamp(0.9rem, 2vw, 1rem) 0 clamp(0.5rem, 1.5vw, 0.6rem);
+            }
+
+            .hero-tagline {
+                font-size: clamp(0.875rem, 2.2vw, 0.95rem);
             }
 
             .arc-section {
@@ -953,7 +1000,7 @@
             height="571"
         >
         <div class="hero-content">
-            <h1 class="hero-title neon-blue">Independent</h1>
+            <h1 class="hero-title neon-blue"><span class="hero-title-text">Independent</span></h1>
             <p class="hero-hook">I wasn't his type. I was his target.</p>
             <p class="hero-tagline">A dark romance of obsession, power, and the price of losing control.</p>
         </div>
