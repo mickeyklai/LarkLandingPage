@@ -47,11 +47,14 @@
             --bf-side: 26%;
             /* Neon frame: 50% of the viewport band below header (was full remaining height) */
             flex: 0 0 auto;
-            height: calc((100vh - var(--header-block) - 1.5rem) * 0.5);
-            min-height: 0;
-            margin: 0 1.5rem 1.5rem;
-            padding: clamp(1rem, 3vw, 2rem);
-            display: block;
+            min-height: calc(100vh - var(--header-block));
+            min-height: calc(100dvh - var(--header-block));
+            margin: 0;
+            padding: clamp(2rem, 5vw, 4rem);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             /* No fill — transparent PNG shows page behind; RGB exports still need blend on .hero-eye */
             background-color: transparent;
             /* Outer glow only — inset frame is drawn as broken segments below */
@@ -140,62 +143,175 @@
                 0 0 48px rgba(0, 140, 255, 0.45);
         }
 
-        .hero-independent {
+        .hero-eye {
             position: absolute;
-            top: clamp(0.65rem, 2vw, 1.25rem);
-            left: clamp(0.65rem, 2vw, 1.25rem);
-            z-index: 6;
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            font-size: clamp(0.65rem, 1.8vw, 0.95rem);
-            font-weight: 600;
-            letter-spacing: 0.35em;
-            text-transform: uppercase;
+            left: 50%;
+            top: 50%;
+            z-index: 0;
+            transform: translate(-50%, -50%);
+            width: auto;
+            height: 140%;
+            max-height: none;
+            max-width: min(85%, 800px);
+            object-fit: contain;
+            object-position: center;
+            background: none;
+            mix-blend-mode: screen;
+            pointer-events: none;
+            opacity: 0.6;
         }
 
-        .hero-quote {
-            position: absolute;
-            top: clamp(0.65rem, 2vw, 1.25rem);
-            right: clamp(0.65rem, 2vw, 1.25rem);
-            left: auto;
+        /* Poster content stack — center */
+        .hero-content {
+            position: relative;
             z-index: 6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex: 1;
+            min-height: 0;
+            gap: 0;
+        }
+
+        .hero-title {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            font-size: clamp(2.5rem, 12vw, 6.5rem);
+            font-weight: 300;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
             margin: 0;
-            max-width: min(42%, 22rem);
-            padding: 0;
-            border: none;
+            line-height: 0.95;
+        }
+
+        .hero-hook {
             font-family: Georgia, 'Times New Roman', serif;
-            font-size: clamp(0.62rem, 1.5vw, 0.88rem);
+            font-size: clamp(1rem, 3vw, 1.5rem);
             font-style: italic;
             font-weight: 400;
-            line-height: 1.45;
-            text-align: right;
+            line-height: 1.4;
             color: #d4f7ff;
+            margin: 1rem 0 0.6rem;
             text-shadow:
                 0 0 4px rgba(0, 230, 255, 0.95),
                 0 0 14px rgba(0, 190, 255, 0.65),
                 0 0 28px rgba(0, 140, 255, 0.35);
         }
 
-        /* Taller than the neon frame so art breaks top & bottom edges */
-        .hero-eye {
+        .hero-tagline {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            font-size: clamp(0.7rem, 1.6vw, 0.9rem);
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            color: rgba(200, 220, 235, 0.78);
+            margin: 0;
+            max-width: 28rem;
+        }
+
+        /* Elegant email capture — bottom center */
+        .hero-cta {
+            position: relative;
+            z-index: 6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            margin-top: auto;
+            padding-bottom: 1rem;
+        }
+
+        .hero-cta-form {
+            display: flex;
+            align-items: stretch;
+            width: 100%;
+            max-width: 22rem;
+        }
+
+        .hero-cta-input {
+            flex: 1;
+            min-width: 0;
+            padding: 0.85rem 1rem;
+            font-size: 0.9rem;
+            color: #e8eef4;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-right: none;
+            border-radius: 2px 0 0 2px;
+            font-family: inherit;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .hero-cta-input::placeholder {
+            color: rgba(170, 185, 200, 0.5);
+        }
+
+        .hero-cta-input:hover {
+            border-color: rgba(0, 200, 255, 0.22);
+        }
+
+        .hero-cta-input:focus {
+            outline: none;
+            border-color: rgba(0, 230, 255, 0.45);
+            box-shadow: 0 0 0 2px rgba(0, 200, 255, 0.1);
+        }
+
+        .btn-hero-cta {
+            flex-shrink: 0;
+            padding: 0.85rem 1.25rem;
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #0a1218;
+            background: linear-gradient(180deg, #a8eeff 0%, #2ad4f0 100%);
+            border: 1px solid rgba(0, 230, 255, 0.45);
+            border-left: none;
+            border-radius: 0 2px 2px 0;
+            cursor: pointer;
+            font-family: inherit;
+            transition: filter 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .btn-hero-cta:hover {
+            filter: brightness(1.05);
+            box-shadow: 0 0 16px rgba(0, 200, 255, 0.25);
+        }
+
+        .btn-hero-cta:focus-visible {
+            outline: 2px solid rgba(0, 240, 255, 0.9);
+            outline-offset: 2px;
+        }
+
+        /* Micro-copy — editorial fragments */
+        .hero-micro {
             position: absolute;
-            left: 50%;
-            top: 50%;
-            /* Above broken frame + inner wash; below corner text */
-            z-index: 4;
-            display: block;
-            transform: translate(-50%, -50%);
-            width: auto;
-            height: 175%;
-            max-height: none;
-            max-width: min(96%, 920px);
-            object-fit: contain;
-            object-position: center;
-            background: none;
-            background-color: transparent;
-            /* RGB PNGs with black baked in: lets black read as see-through on #000. Remove this line if you use a true RGBA PNG. */
-            mix-blend-mode: screen;
-            pointer-events: none;
+            z-index: 3;
+            font-size: 0.55rem;
+            font-weight: 500;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(0, 210, 255, 0.4);
+        }
+
+        .hero-micro-tl {
+            top: clamp(1rem, 3vw, 2rem);
+            left: clamp(1rem, 3vw, 2rem);
+        }
+
+        .hero-micro-tr {
+            top: clamp(1rem, 3vw, 2rem);
+            right: clamp(1rem, 3vw, 2rem);
+        }
+
+        .hero-micro-bl {
+            bottom: clamp(1rem, 3vw, 2rem);
+            left: clamp(1rem, 3vw, 2rem);
+        }
+
+        .hero-micro-br {
+            bottom: clamp(1rem, 3vw, 2rem);
+            right: clamp(1rem, 3vw, 2rem);
         }
 
         .logo {
@@ -709,6 +825,43 @@
             outline-offset: 2px;
         }
 
+        /* —— ARC section (below fold) —— */
+        .arc-section {
+            padding: clamp(3rem, 8vw, 5rem) clamp(2rem, 5vw, 4rem);
+            max-width: 42rem;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .arc-heading {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            color: #f0f6fa;
+            margin: 0 0 1.5rem;
+        }
+
+        .arc-intro {
+            font-size: 0.9375rem;
+            line-height: 1.7;
+            color: rgba(200, 215, 230, 0.85);
+            margin-bottom: 2rem;
+        }
+
+        .arc-intro p {
+            margin: 0 0 1rem;
+        }
+
+        .arc-intro p:last-child {
+            margin-bottom: 0;
+        }
+
+        .arc-intro em {
+            font-style: italic;
+            color: rgba(220, 235, 248, 0.95);
+        }
+
         .form-footnote {
             font-size: 0.7rem;
             line-height: 1.45;
@@ -735,57 +888,22 @@
             }
 
             .hero {
-                margin: 0 1rem 1rem;
-                padding: 1rem;
+                padding: 1.5rem 1rem;
             }
 
-            .hero-quote {
-                max-width: min(58%, 16rem);
-                font-size: clamp(0.55rem, 2.4vw, 0.75rem);
+            .hero-title {
+                letter-spacing: 0.2em;
             }
 
-            .hero-independent {
-                letter-spacing: 0.22em;
+            .arc-section {
+                padding: 2.5rem 1.25rem;
             }
 
-            .newsletter {
-                margin: 0 1rem 1.5rem;
-                padding: 1rem 1rem 1rem 1.15rem;
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .newsletter-actions {
-                justify-content: stretch;
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .newsletter-quick {
-                max-width: none;
-            }
-
-            .newsletter-quick-form {
-                max-width: none;
-            }
-
-            .newsletter-flow-divider {
+            .arc-section .btn-arc {
+                display: block;
                 width: 100%;
-                min-height: 1px;
-                height: 1px;
-                min-height: 0;
-                background: linear-gradient(
-                    90deg,
-                    transparent,
-                    rgba(0, 200, 255, 0.35) 15%,
-                    rgba(0, 200, 255, 0.35) 85%,
-                    transparent
-                );
-            }
-
-            .btn-arc {
-                width: 100%;
-                justify-content: center;
+                max-width: 20rem;
+                margin: 0 auto;
                 letter-spacing: 0.16em;
             }
 
@@ -814,7 +932,11 @@
         </a>
     </header>
 
-    <section class="hero" aria-label="Featured image">
+    <section class="hero" aria-label="Independent — dark romance reveal">
+        <span class="hero-micro hero-micro-tl" aria-hidden="true">Dark romance</span>
+        <span class="hero-micro hero-micro-tr" aria-hidden="true">Adult readers only</span>
+        <span class="hero-micro hero-micro-bl" aria-hidden="true">Coming soon</span>
+        <span class="hero-micro hero-micro-br" aria-hidden="true">A novel by Lark Elwood</span>
         <div class="hero-broken-frame" aria-hidden="true">
             <span class="bf bf-tl"></span>
             <span class="bf bf-tr"></span>
@@ -823,64 +945,59 @@
             <span class="bf bf-vl"></span>
             <span class="bf bf-vr"></span>
         </div>
-        <p class="hero-independent neon-blue">Independent</p>
-        <blockquote class="hero-quote">
-            "I wasen't is type. I was is target."
-        </blockquote>
-        <!-- Replace assets/eye-with-smoke.png with a PNG that has an alpha channel, then remove mix-blend-mode from .hero-eye in CSS. -->
         <img
             class="hero-eye"
             src="assets/eye-with-smoke.png"
-            alt="Lark Elwood — blue eye through shattered darkness with mist"
+            alt=""
             width="1024"
             height="571"
         >
+        <div class="hero-content">
+            <h1 class="hero-title neon-blue">Independent</h1>
+            <p class="hero-hook">I wasn't his type. I was his target.</p>
+            <p class="hero-tagline">A dark romance of obsession, power, and the price of losing control.</p>
+        </div>
+        <div class="hero-cta">
+            <form class="hero-cta-form" id="newsletterQuickForm" action="#" method="post" aria-label="Join the reader list">
+                <label class="visually-hidden" for="quick-email">Email address</label>
+                <input
+                    type="email"
+                    id="quick-email"
+                    name="email"
+                    class="hero-cta-input"
+                    autocomplete="email"
+                    required
+                    placeholder="Enter your email"
+                >
+                <button type="submit" class="btn-hero-cta">Join the reader list</button>
+            </form>
+        </div>
     </section>
 
-    <section class="newsletter" aria-labelledby="newsletter-heading">
-        <div class="newsletter-copy">
-            <p class="newsletter-kicker">Reader list</p>
-            <h2 class="newsletter-title" id="newsletter-heading">The Lark Elwood newsletter</h2>
-            <p class="newsletter-text">
-                First notice on new releases, exclusive excerpts, and occasional notes from the desk—no clutter, unsubscribe anytime.
-            </p>
+    <section class="arc-section" id="arc" aria-labelledby="arc-heading">
+        <h2 class="arc-heading" id="arc-heading">Join the ARC Team</h2>
+        <div class="arc-intro">
+            <p>Thank you for your interest in reading <em>Independent</em> before release.</p>
+            <p><em>Independent</em> is a dark romance for adult readers and contains mature themes, emotional intensity, morally complex characters, and explicit intimacy. If selected, you'll receive an advance reader copy in exchange for an honest review.</p>
+            <p>Please apply only if you enjoy dark romance and feel comfortable reviewing stories with mature content.</p>
         </div>
-        <div class="newsletter-actions">
-            <div class="newsletter-quick">
-                <span class="newsletter-quick-label" id="quick-signup-label">Quick signup</span>
-                <form class="newsletter-quick-form" id="newsletterQuickForm" action="#" method="post" aria-labelledby="quick-signup-label">
-                    <label class="visually-hidden" for="quick-email">Email address</label>
-                    <input
-                        type="email"
-                        id="quick-email"
-                        name="email"
-                        class="newsletter-email-input"
-                        autocomplete="email"
-                        required
-                        placeholder="your@email.com"
-                    >
-                    <button type="submit" class="btn-newsletter-quick">Subscribe</button>
-                </form>
-            </div>
-            <div class="newsletter-flow-divider" aria-hidden="true"></div>
-            <button
-                type="button"
-                class="btn-arc"
-                id="openNewsletter"
-                aria-haspopup="dialog"
-                aria-controls="newsletterDialog"
-            >
-                Join arc list
-            </button>
-        </div>
+        <button
+            type="button"
+            class="btn-arc"
+            id="openNewsletter"
+            aria-haspopup="dialog"
+            aria-controls="newsletterDialog"
+        >
+            Apply for ARC
+        </button>
     </section>
 
     <dialog class="newsletter-dialog" id="newsletterDialog" aria-labelledby="dialog-title">
         <div class="dialog-surface">
             <button type="button" class="dialog-close" id="closeNewsletter" aria-label="Close dialog">&times;</button>
-            <h2 class="dialog-title" id="dialog-title">ARC Application</h2>
+            <h2 class="dialog-title" id="dialog-title">Join the ARC Team</h2>
             <p class="dialog-lead">
-                Apply for an Advanced Reader Copy of <em>Independent</em>. Complete all required fields below.
+                Apply for an advance reader copy of <em>Independent</em>. Complete all required fields below.
             </p>
             <form class="newsletter-form" id="newsletterForm" action="#" method="post">
                 <div class="field">
