@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Slow Motion Glass Shatter</title>
+    <style>
+        body { margin: 0; background-color: #000; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
+
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Stronger lights to catch the "edges" of the slow-moving shards
+        const light1 = new THREE.PointLight(0xffffff, 300);
+        light1.position.set(10, 10, 10);
+        scene.add(light1);
+        
+        const light2 = new THREE.PointLight(0x4488ff, 150); // Subtle blue highlight
+        light2.position.set(-10, -10, 5);
+        scene.add(light2);
+
+        camera.position.z = 12;
+
+        const shards = [];
+        const shardCount = 180; 
+
+        const glassMat = new THREE.MeshPhongMaterial({ 
+            color: 0xffffff, 
+            opacity: 0.5, 
+            transparent: true, 
+            shininess: 100, 
+            specular: 0xffffff,
+            side: THREE.DoubleSide 
+        });
+
+        function createShatter() {
+            for (let i = 0; i < shardCount; i++) {
+                // Varying sizes for realistic debris
+                const size = 0.2 + Math.random() * 0.8;
+                const geometry = new THREE.CircleGeometry(size, 3); 
+                const shard = new THREE.Mesh(geometry, glassMat.clone());
+                
+                // Start them slightly spread out across the "pane" area
+                shard.position.set(
+                    (Math.random() - 0.5) * 12,
+                    (Math.random() - 0.5) * 8,
+                    0
+                );
+                
+                shard.rotation.set(Math.random(), Math.random(), Math.random());
+                shard.scale.set(0, 0, 0); // Start invisible
+                
+                scene.add(shard);
+                shards.push(shard);
+            }
+        }
+
+        function explode() {
+            shards.forEach((shard) => {
+                shard.scale.set(1, 1, 1);
+
+                // SLOW MOTION MOVEMENT
+                gsap.to(shard.position, {
+                    x: shard.position.x * 2.5,
+                    y: shard.position.y * 2.5,
+                    z: 25 + Math.random() * 10, // Float toward camera
+                    duration: 8, // MUCH LONGER DURATION
+                    ease: "power1.out" // Smooth deceleration
+                });
+
+                // SLOW MOTION SPIN
+                gsap.to(shard.rotation, {
+                    x: shard.rotation.x + (Math.random() - 0.5) * 8,
+                    y: shard.rotation.y + (Math.random() - 0.5) * 8,
+                    z: shard.rotation.z + (Math.random() - 0.5) * 8,
+                    duration: 10,
+                    ease: "power1.out"
+                });
+
+                // LATE FADE OUT
+                gsap.to(shard.material, {
+                    opacity: 0,
+                    duration: 3,
+                    delay: 5, // Wait for the motion to happen before fading
+                    onComplete: () => scene.remove(shard)
+                });
+            });
+        }
+
+        createShatter();
+        setTimeout(explode, 800); // Trigger shortly after load
+
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
