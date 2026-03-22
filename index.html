@@ -50,7 +50,7 @@
             --text-muted: rgba(200, 215, 230, 0.72);
             --text-faint: rgba(175, 192, 210, 0.45);
             --bg: #000000;
-            --bg-raised: #03070f;
+            --bg-raised: #000000;
             background: var(--bg);
             color: var(--text);
             font-family: Georgia, 'Times New Roman', serif;
@@ -1390,6 +1390,26 @@
         @media (max-width: 420px) {
             .site-nav { display: none; }
         }
+
+        /* ================================================================
+           SMOKE CANVAS STACKING
+           Canvas sits at z-index 0. main + footer are raised to z-index 1
+           so all content renders above the smoke. Section backgrounds are
+           transparent so the fixed smoke canvas shows through them.
+        ================================================================ */
+        main, footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        .book-section,
+        .readers-section,
+        .author-section,
+        .faq-section,
+        .arc-section,
+        .follow-section {
+            background: transparent;
+        }
     </style>
 
     <!-- Structured data: Author + Book + Website -->
@@ -1910,6 +1930,11 @@
             });
         })();
     </script>
+
+    <!-- Three.js (required by smoke.js) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Atmospheric smoke overlay -->
+    <script src="smoke.js"></script>
 
 </body>
 </html>
