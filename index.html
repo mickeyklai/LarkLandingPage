@@ -292,6 +292,11 @@
             max-width: 22rem;
         }
 
+        /* Author `display:flex` wins over the default [hidden] rule — force hide after subscribe */
+        .hero-cta-form[hidden] {
+            display: none !important;
+        }
+
         .hero-cta-input {
             flex: 1;
             min-width: 0;
@@ -2048,6 +2053,9 @@
                             heroSubmitting = false;
                             if (heroSuccessPanel && !heroSuccessPanel.hidden) {
                                 heroSubmitBtn.removeAttribute('aria-busy');
+                                heroSubmitBtn.disabled = false;
+                                heroEmailInput.disabled = false;
+                                heroSubmitBtn.textContent = heroSubmitDefaultLabel;
                                 return;
                             }
                             heroSubmitBtn.disabled = false;
