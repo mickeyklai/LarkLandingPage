@@ -1295,15 +1295,35 @@
         }
 
         .arc-form-success {
-            padding: 0.85rem 0 0.25rem;
+            box-sizing: border-box;
+            margin: 0.35rem 0 0.75rem;
+            padding: 1.15rem 1.1rem 1.25rem;
             text-align: center;
+            background: rgba(0, 195, 255, 0.07);
+            border: 1px solid rgba(0, 220, 255, 0.32);
+            border-radius: 8px;
+            box-shadow: 0 0 28px rgba(0, 160, 200, 0.12);
+        }
+
+        .arc-form-success-title {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(1.15rem, 3.5vw, 1.35rem);
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            color: #f4fafc;
+            margin: 0 0 0.5rem 0;
+            line-height: 1.25;
         }
 
         .arc-form-success-text {
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             line-height: 1.6;
-            color: rgba(215, 230, 242, 0.92);
+            color: rgba(215, 230, 242, 0.95);
             margin: 0;
+        }
+
+        .arc-form-success[hidden] {
+            display: none !important;
         }
 
         .arc-netlify-honeypot {
@@ -2018,6 +2038,7 @@
                 Apply for an advance reader copy of <em>Independent</em>. Complete the required fields below.
             </p>
             <div class="arc-form-success" id="arcFormSuccess" role="status" aria-live="polite" hidden tabindex="-1">
+                <p class="arc-form-success-title">Application sent</p>
                 <p class="arc-form-success-text">Application received. If you're selected, you'll hear from me soon.</p>
             </div>
             <form
@@ -2543,7 +2564,18 @@
                                 }
                             }
                             modalForm.hidden = true;
-                            window.setTimeout(closeDialog, 2800);
+                            var arcDialogSurface = modalForm && modalForm.closest
+                                ? modalForm.closest('.dialog-surface')
+                                : null;
+                            if (arcDialogSurface) arcDialogSurface.scrollTop = 0;
+                            if (arcFormSuccess && typeof arcFormSuccess.scrollIntoView === 'function') {
+                                try {
+                                    arcFormSuccess.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                                } catch (scrollIntoV) {
+                                    arcFormSuccess.scrollIntoView(true);
+                                }
+                            }
+                            window.setTimeout(closeDialog, 5200);
                         })
                         .catch(function () {
                             setArcSubmitError(
