@@ -1059,8 +1059,83 @@
         .field input::placeholder { color: rgba(180, 195, 210, 0.35); }
         .field input:hover { border-color: rgba(0, 200, 255, 0.25); }
 
+        .field select {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+            padding: 0.65rem 2.35rem 0.65rem 0.85rem;
+            font-size: 0.9375rem;
+            line-height: 1.4;
+            color: #e8eef4;
+            background-color: rgba(0, 0, 0, 0.5);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%2399c4d8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 0.65rem auto;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 6px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .field select:hover { border-color: rgba(0, 200, 255, 0.25); }
+
+        .field select option {
+            background: #0c141c;
+            color: #e8eef4;
+        }
+
+        .field-hint {
+            font-size: 0.72rem;
+            line-height: 1.45;
+            color: rgba(165, 185, 205, 0.68);
+            margin: -0.2rem 0 0.45rem 0;
+        }
+
+        .field-error {
+            display: none;
+            font-size: 0.72rem;
+            line-height: 1.4;
+            color: rgba(255, 185, 175, 0.92);
+            margin: 0.4rem 0 0 0;
+        }
+
+        .field.is-invalid .field-error,
+        .field-consent.is-invalid .field-error {
+            display: block;
+        }
+
+        .field.is-invalid input,
+        .field.is-invalid select,
+        .field.is-invalid textarea {
+            border-color: rgba(255, 130, 110, 0.45);
+            box-shadow: 0 0 0 3px rgba(255, 90, 70, 0.09);
+        }
+
+        .field-consent {
+            margin-bottom: 1rem;
+        }
+
+        .field-consent .field-checkbox {
+            margin-bottom: 0;
+        }
+
+        .field-consent .field-error {
+            margin-top: 0.35rem;
+        }
+
+        .field-consent.is-invalid .field-checkbox input[type='checkbox'] {
+            border-color: rgba(255, 130, 110, 0.6);
+        }
+
         .field input:focus,
-        .field textarea:focus {
+        .field textarea:focus,
+        .field select:focus {
             outline: none;
             border-color: rgba(0, 230, 255, 0.55);
             box-shadow: 0 0 0 3px rgba(0, 200, 255, 0.12);
@@ -1161,8 +1236,9 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .agreement-group .field-checkbox { margin-bottom: 1rem; }
-        .agreement-group .field-checkbox:last-of-type { margin-bottom: 0; }
+        .agreement-group .field-consent .field-checkbox {
+            margin-bottom: 0;
+        }
 
         .dialog-actions {
             display: flex;
@@ -1201,6 +1277,12 @@
             outline-offset: 2px;
         }
 
+        .btn-submit:disabled {
+            cursor: not-allowed;
+            filter: grayscale(0.35) brightness(0.92);
+            box-shadow: none;
+        }
+
         .form-footnote {
             font-size: 0.7rem;
             line-height: 1.45;
@@ -1210,6 +1292,46 @@
             max-width: 100%;
             overflow-wrap: break-word;
             hyphens: auto;
+        }
+
+        .arc-form-success {
+            padding: 0.85rem 0 0.25rem;
+            text-align: center;
+        }
+
+        .arc-form-success-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: rgba(215, 230, 242, 0.92);
+            margin: 0;
+        }
+
+        .arc-netlify-honeypot {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .arc-form-submit-error {
+            font-size: 0.78rem;
+            line-height: 1.45;
+            color: rgba(255, 195, 188, 0.95);
+            text-align: center;
+            margin: 0 0 0.9rem 0;
+            padding: 0.55rem 0.65rem;
+            background: rgba(255, 70, 50, 0.07);
+            border: 1px solid rgba(255, 130, 110, 0.28);
+            border-radius: 6px;
+        }
+
+        .arc-form-submit-error[hidden] {
+            display: none !important;
         }
 
         /* ================================================================
@@ -1892,61 +2014,166 @@
         <div class="dialog-surface">
             <button type="button" class="dialog-close" id="closeNewsletter" aria-label="Close dialog">&times;</button>
             <h2 class="dialog-title" id="dialog-title">Join the ARC Team</h2>
-            <p class="dialog-lead">
-                Apply for an advance reader copy of <em>Independent</em>. Complete all required fields below.
+            <p class="dialog-lead" id="arcDialogLead">
+                Apply for an advance reader copy of <em>Independent</em>. Complete the required fields below.
             </p>
-            <form class="newsletter-form" id="newsletterForm" action="#" method="post">
-                <div class="field">
+            <div class="arc-form-success" id="arcFormSuccess" role="status" aria-live="polite" hidden tabindex="-1">
+                <p class="arc-form-success-text">Application received. If you're selected, you'll hear from me soon.</p>
+            </div>
+            <form
+                class="newsletter-form"
+                id="newsletterForm"
+                name="arc-application"
+                method="POST"
+                action="/"
+                novalidate
+            >
+                <input type="hidden" name="form-name" value="arc-application">
+                <div class="arc-netlify-honeypot" aria-hidden="true">
+                    <label for="arc-bot-field">Leave this field empty</label>
+                    <input type="text" id="arc-bot-field" name="bot-field" tabindex="-1" autocomplete="off">
+                </div>
+                <div class="field" data-arc-field="firstname">
                     <label for="arc-firstname">First name <span class="required">*</span></label>
-                    <input type="text" id="arc-firstname" name="firstname" autocomplete="given-name" required placeholder="Your first name">
+                    <input type="text" id="arc-firstname" name="firstname" autocomplete="given-name" placeholder="Your first name" aria-describedby="arc-firstname-error">
+                    <p class="field-error" id="arc-firstname-error" role="alert"></p>
                 </div>
-                <div class="field">
+                <div class="field" data-arc-field="email">
                     <label for="arc-email">Email <span class="required">*</span></label>
-                    <input type="email" id="arc-email" name="email" autocomplete="email" required placeholder="you@example.com">
+                    <input type="email" id="arc-email" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com" aria-describedby="arc-email-error">
+                    <p class="field-error" id="arc-email-error" role="alert"></p>
                 </div>
-                <div class="field">
-                    <label for="arc-review-locations">Where do you plan to post your review?</label>
-                    <input type="text" id="arc-review-locations" name="review_locations" placeholder="Amazon, Goodreads, Bookstagram, TikTok, etc.">
+                <div class="field" data-arc-field="primary_review_platform">
+                    <label for="arc-primary-platform">Primary review platform <span class="required">*</span></label>
+                    <input type="text" id="arc-primary-platform" name="primary_review_platform" autocomplete="off" placeholder="Amazon, Goodreads, Bookstagram, TikTok, etc." aria-describedby="arc-primary-platform-error">
+                    <p class="field-error" id="arc-primary-platform-error" role="alert"></p>
                 </div>
-                <div class="field">
-                    <label for="arc-goodreads">Goodreads profile link <span class="required">*</span></label>
-                    <input type="url" id="arc-goodreads" name="goodreads" required placeholder="https://www.goodreads.com/user/show/...">
+                <div class="field" data-arc-field="primary_profile_link">
+                    <label for="arc-primary-profile">Primary review profile link <span class="required">*</span></label>
+                    <p class="field-hint" id="arc-primary-profile-hint">Link to the profile where you most often post reviews</p>
+                    <input type="text" id="arc-primary-profile" name="primary_profile_link" inputmode="url" autocomplete="url" placeholder="https://..." aria-describedby="arc-primary-profile-hint arc-primary-profile-error">
+                    <p class="field-error" id="arc-primary-profile-error" role="alert"></p>
                 </div>
-                <div class="field">
+                <div class="field" data-arc-field="goodreads">
+                    <label for="arc-goodreads">Goodreads profile link</label>
+                    <input type="text" id="arc-goodreads" name="goodreads" inputmode="url" autocomplete="url" placeholder="https://www.goodreads.com/user/show/..." aria-describedby="arc-goodreads-error">
+                    <p class="field-error" id="arc-goodreads-error" role="alert"></p>
+                </div>
+                <div class="field" data-arc-field="instagram">
                     <label for="arc-instagram">Instagram profile</label>
-                    <input type="url" id="arc-instagram" name="instagram" placeholder="https://www.instagram.com/...">
+                    <input type="text" id="arc-instagram" name="instagram" inputmode="url" autocomplete="url" placeholder="https://www.instagram.com/..." aria-describedby="arc-instagram-error">
+                    <p class="field-error" id="arc-instagram-error" role="alert"></p>
                 </div>
-                <div class="field">
+                <div class="field" data-arc-field="tiktok">
                     <label for="arc-tiktok">TikTok profile</label>
-                    <input type="url" id="arc-tiktok" name="tiktok" placeholder="https://www.tiktok.com/@...">
+                    <input type="text" id="arc-tiktok" name="tiktok" inputmode="url" autocomplete="url" placeholder="https://www.tiktok.com/@..." aria-describedby="arc-tiktok-error">
+                    <p class="field-error" id="arc-tiktok-error" role="alert"></p>
                 </div>
-                <div class="field">
+                <div class="field" data-arc-field="other_links">
                     <label for="arc-other-links">Any other links you'd like to share?</label>
-                    <textarea id="arc-other-links" name="other_links" placeholder="Additional profile or review platform links"></textarea>
+                    <p class="field-hint" id="arc-other-links-hint">Additional profile or review platform links</p>
+                    <textarea id="arc-other-links" name="other_links" placeholder="Blog, Fable, Amazon reviewer page, BookTok, etc." aria-describedby="arc-other-links-hint"></textarea>
+                </div>
+                <div class="field" data-arc-field="dark_romance_reviewed">
+                    <label for="arc-dark-romance">Have you reviewed dark romance before? <span class="required">*</span></label>
+                    <select id="arc-dark-romance" name="dark_romance_reviewed" aria-describedby="arc-dark-romance-error">
+                        <option value="">Select an option</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                        <option value="sometimes">Sometimes</option>
+                    </select>
+                    <p class="field-error" id="arc-dark-romance-error" role="alert"></p>
+                </div>
+                <div class="field" data-arc-field="release_week">
+                    <label for="arc-release-week">Can you post your review around release week? <span class="required">*</span></label>
+                    <select id="arc-release-week" name="release_week" aria-describedby="arc-release-week-error">
+                        <option value="">Select an option</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                        <option value="not_sure">Not sure</option>
+                    </select>
+                    <p class="field-error" id="arc-release-week-error" role="alert"></p>
                 </div>
 
                 <div class="agreement-group">
-                    <div class="field-checkbox">
-                        <input type="checkbox" id="arc-agreement-review" name="agreement_review" required>
-                        <label for="arc-agreement-review">
-                            I agree to leave an honest review if selected. I understand that <em>Independent</em> is a dark romance intended for adult readers and contains mature themes. I confirm that I have reviewed the content warnings before applying.
-                        </label>
+                    <div class="field-consent" data-arc-field="agreement_mature">
+                        <div class="field-checkbox">
+                            <input type="checkbox" id="arc-consent-mature" name="agreement_mature" value="yes">
+                            <label for="arc-consent-mature">
+                                I understand that <em>Independent</em> is intended for adult readers and contains mature themes. I have reviewed the content warnings and I'm comfortable reading this type of book.
+                            </label>
+                        </div>
+                        <p class="field-error" id="arc-consent-mature-error" role="alert"></p>
                     </div>
-                    <div class="field-checkbox">
-                        <input type="checkbox" id="arc-agreement-noshare" name="agreement_noshare" required>
-                        <label for="arc-agreement-noshare">
-                            I agree not to share, redistribute, copy, or upload this ARC in any format. This copy is for my personal reading and review purposes only.
-                        </label>
+                    <div class="field-consent" data-arc-field="agreement_honest">
+                        <div class="field-checkbox">
+                            <input type="checkbox" id="arc-consent-honest" name="agreement_honest" value="yes">
+                            <label for="arc-consent-honest">
+                                I understand that if I receive an ARC, a review is appreciated but not required. If I choose to review, it will reflect my honest opinion.
+                            </label>
+                        </div>
+                        <p class="field-error" id="arc-consent-honest-error" role="alert"></p>
+                    </div>
+                    <div class="field-consent" data-arc-field="agreement_noshare">
+                        <div class="field-checkbox">
+                            <input type="checkbox" id="arc-consent-noshare" name="agreement_noshare" value="yes">
+                            <label for="arc-consent-noshare">
+                                I agree not to share, redistribute, copy, or upload this ARC in any format. This copy is for my personal reading and review purposes only.
+                            </label>
+                        </div>
+                        <p class="field-error" id="arc-consent-noshare-error" role="alert"></p>
                     </div>
                 </div>
 
+                <p class="arc-form-submit-error" id="arcFormSubmitError" role="alert" hidden></p>
+
                 <div class="dialog-actions">
-                    <button type="submit" class="btn-submit">Submit Application</button>
+                    <button type="submit" class="btn-submit" id="arcSubmitButton">Submit Application</button>
                     <p class="form-footnote">All required fields must be completed. Applications are reviewed on a rolling basis.</p>
                 </div>
             </form>
         </div>
     </dialog>
+
+    <!--
+      Netlify Forms: static blueprint for build-time field detection.
+      The visible ARC modal form mirrors these `name` values. Do not remove.
+    -->
+    <form
+        name="arc-application"
+        method="POST"
+        action="/"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        hidden
+        aria-hidden="true"
+    >
+        <input type="hidden" name="form-name" value="arc-application">
+        <input type="text" name="bot-field" tabindex="-1" autocomplete="off">
+        <input type="text" name="firstname">
+        <input type="email" name="email">
+        <input type="text" name="primary_review_platform">
+        <input type="text" name="primary_profile_link">
+        <input type="text" name="goodreads">
+        <input type="text" name="instagram">
+        <input type="text" name="tiktok">
+        <textarea name="other_links"></textarea>
+        <select name="dark_romance_reviewed">
+            <option value=""></option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+            <option value="sometimes">Sometimes</option>
+        </select>
+        <select name="release_week">
+            <option value=""></option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+            <option value="not_sure">Not sure</option>
+        </select>
+        <input type="checkbox" name="agreement_mature" value="yes">
+        <input type="checkbox" name="agreement_honest" value="yes">
+        <input type="checkbox" name="agreement_noshare" value="yes">
+    </form>
 
     <script>
         (function () {
@@ -1955,6 +2182,13 @@
             var openBtn = document.getElementById('openNewsletter');
             var closeBtn = document.getElementById('closeNewsletter');
             var modalForm = document.getElementById('newsletterForm');
+            var arcFormSuccess = document.getElementById('arcFormSuccess');
+            var arcSubmitButton = document.getElementById('arcSubmitButton');
+            var arcSubmitDefaultLabel =
+                arcSubmitButton && arcSubmitButton.textContent
+                    ? arcSubmitButton.textContent.trim()
+                    : 'Submit Application';
+            var arcSubmitting = false;
             var heroForm = document.getElementById('heroQuickForm');
             var heroSubmitBtn = document.getElementById('heroQuickSubmit');
             var heroEmailInput = document.getElementById('quick-email');
@@ -1981,6 +2215,93 @@
                 return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
             }
 
+            function normalizeUrlInput(value) {
+                var v = (value || '').trim();
+                if (!v) return '';
+                if (!/^https?:\/\//i.test(v)) v = 'https://' + v;
+                return v;
+            }
+
+            function isValidOptionalUrl(value) {
+                var raw = (value || '').trim();
+                if (!raw) return true;
+                var v = normalizeUrlInput(raw);
+                try {
+                    var u = new URL(v);
+                    return u.protocol === 'http:' || u.protocol === 'https:';
+                } catch (err) {
+                    return false;
+                }
+            }
+
+            function isValidRequiredUrl(value) {
+                var raw = (value || '').trim();
+                if (!raw) return false;
+                return isValidOptionalUrl(raw);
+            }
+
+            function getArcFieldWrap(el) {
+                if (!el) return null;
+                return el.closest('[data-arc-field]');
+            }
+
+            function clearArcFieldError(wrap) {
+                if (!wrap) return;
+                wrap.classList.remove('is-invalid');
+                var err = wrap.querySelector('.field-error');
+                if (err) err.textContent = '';
+                wrap.querySelectorAll('input, select, textarea').forEach(function (ctl) {
+                    ctl.removeAttribute('aria-invalid');
+                });
+            }
+
+            function setArcFieldError(wrap, message) {
+                if (!wrap) return;
+                wrap.classList.add('is-invalid');
+                var err = wrap.querySelector('.field-error');
+                if (err) err.textContent = message;
+                wrap.querySelectorAll('input, select, textarea').forEach(function (ctl) {
+                    ctl.setAttribute('aria-invalid', 'true');
+                });
+            }
+
+            function clearAllArcErrors(form) {
+                if (!form) return;
+                form.querySelectorAll('[data-arc-field].is-invalid').forEach(function (w) {
+                    clearArcFieldError(w);
+                });
+            }
+
+            function setArcSubmitError(message) {
+                var el = document.getElementById('arcFormSubmitError');
+                if (!el) return;
+                if (message) {
+                    el.textContent = message;
+                    el.hidden = false;
+                } else {
+                    el.textContent = '';
+                    el.hidden = true;
+                }
+            }
+
+            function resetArcApplicationUi() {
+                var arcDialogLead = document.getElementById('arcDialogLead');
+                if (arcDialogLead) arcDialogLead.hidden = false;
+                setArcSubmitError('');
+                arcSubmitting = false;
+                if (arcSubmitButton) {
+                    arcSubmitButton.disabled = false;
+                    arcSubmitButton.textContent = arcSubmitDefaultLabel;
+                    arcSubmitButton.removeAttribute('aria-busy');
+                }
+                if (modalForm) {
+                    modalForm.reset();
+                    clearAllArcErrors(modalForm);
+                    modalForm.hidden = false;
+                }
+                if (arcFormSuccess) arcFormSuccess.hidden = true;
+            }
+
             function openDialog() {
                 if (dialog && typeof dialog.showModal === 'function') {
                     dialog.showModal();
@@ -2000,6 +2321,7 @@
                 dialog.addEventListener('click', function (e) {
                     if (e.target === dialog) closeDialog();
                 });
+                dialog.addEventListener('close', resetArcApplicationUi);
             }
 
             /* Flow 1: hero email-only quick subscribe (MailerLite via Netlify function) */
@@ -2073,11 +2395,177 @@
 
             /* Flow 2: full ARC application in dialog */
             if (modalForm) {
+                modalForm.addEventListener('input', function (e) {
+                    var w = getArcFieldWrap(e.target);
+                    if (w && w.classList.contains('is-invalid')) clearArcFieldError(w);
+                });
+                modalForm.addEventListener('change', function (e) {
+                    var w = getArcFieldWrap(e.target);
+                    if (w && w.classList.contains('is-invalid')) clearArcFieldError(w);
+                });
+
                 modalForm.addEventListener('submit', function (e) {
                     e.preventDefault();
-                    /* Hook your email provider — ARC list endpoint */
-                    closeDialog();
-                    modalForm.reset();
+                    clearAllArcErrors(modalForm);
+
+                    var firstnameEl = document.getElementById('arc-firstname');
+                    var emailEl = document.getElementById('arc-email');
+                    var platformEl = document.getElementById('arc-primary-platform');
+                    var profileEl = document.getElementById('arc-primary-profile');
+                    var goodreadsEl = document.getElementById('arc-goodreads');
+                    var instagramEl = document.getElementById('arc-instagram');
+                    var tiktokEl = document.getElementById('arc-tiktok');
+                    var darkRomanceEl = document.getElementById('arc-dark-romance');
+                    var releaseWeekEl = document.getElementById('arc-release-week');
+                    var matureEl = document.getElementById('arc-consent-mature');
+                    var honestEl = document.getElementById('arc-consent-honest');
+                    var noshareEl = document.getElementById('arc-consent-noshare');
+
+                    var firstInvalid = null;
+                    function flag(wrap, message) {
+                        setArcFieldError(wrap, message);
+                        if (!firstInvalid) firstInvalid = wrap;
+                    }
+
+                    var fn = firstnameEl ? firstnameEl.value.trim() : '';
+                    if (!fn) {
+                        flag(getArcFieldWrap(firstnameEl), 'Please add your first name.');
+                    }
+
+                    if (!isValidEmail(emailEl && emailEl.value)) {
+                        flag(
+                            getArcFieldWrap(emailEl),
+                            emailEl && emailEl.value.trim()
+                                ? 'That email doesn’t look quite right — a quick double-check usually fixes it.'
+                                : 'An email address is required so I can reach you if you’re selected.'
+                        );
+                    }
+
+                    var plat = platformEl ? platformEl.value.trim() : '';
+                    if (!plat) {
+                        flag(
+                            getArcFieldWrap(platformEl),
+                            'Let me know your main review platform (Amazon, social, blog — anything genuine works).'
+                        );
+                    }
+
+                    if (!isValidRequiredUrl(profileEl && profileEl.value)) {
+                        flag(
+                            getArcFieldWrap(profileEl),
+                            profileEl && profileEl.value.trim()
+                                ? 'That doesn’t look like a valid link. Pasting the full URL from your browser address bar works best.'
+                                : 'Please share a link to the profile or page where your reviews live.'
+                        );
+                    }
+
+                    if (goodreadsEl && goodreadsEl.value.trim() && !isValidOptionalUrl(goodreadsEl.value)) {
+                        flag(getArcFieldWrap(goodreadsEl), 'That Goodreads URL doesn’t look quite right — want to try again?');
+                    }
+                    if (instagramEl && instagramEl.value.trim() && !isValidOptionalUrl(instagramEl.value)) {
+                        flag(getArcFieldWrap(instagramEl), 'That Instagram URL doesn’t look quite right — want to try again?');
+                    }
+                    if (tiktokEl && tiktokEl.value.trim() && !isValidOptionalUrl(tiktokEl.value)) {
+                        flag(getArcFieldWrap(tiktokEl), 'That TikTok URL doesn’t look quite right — want to try again?');
+                    }
+
+                    if (!darkRomanceEl || !darkRomanceEl.value) {
+                        flag(getArcFieldWrap(darkRomanceEl), 'Please select an option — honesty is welcome; this just helps me gauge fit.');
+                    }
+                    if (!releaseWeekEl || !releaseWeekEl.value) {
+                        flag(
+                            getArcFieldWrap(releaseWeekEl),
+                            'Please let me know what you can commit to around release week — “not sure” is absolutely fine.'
+                        );
+                    }
+
+                    if (!matureEl || !matureEl.checked) {
+                        flag(
+                            getArcFieldWrap(matureEl),
+                            'Please confirm you’re comfortable with mature themes and the content warnings.'
+                        );
+                    }
+                    if (!honestEl || !honestEl.checked) {
+                        flag(
+                            getArcFieldWrap(honestEl),
+                            'Please confirm you understand reviews are appreciated, not required, and always honest.'
+                        );
+                    }
+                    if (!noshareEl || !noshareEl.checked) {
+                        flag(getArcFieldWrap(noshareEl), 'Please confirm you won’t share or distribute the ARC.');
+                    }
+
+                    if (firstInvalid) {
+                        var focusEl = firstInvalid.querySelector(
+                            'input:not([type="checkbox"]), select, textarea'
+                        );
+                        if (!focusEl) focusEl = firstInvalid.querySelector('input[type="checkbox"]');
+                        if (focusEl && typeof focusEl.focus === 'function') focusEl.focus();
+                        try {
+                            firstInvalid.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                        } catch (scrollErr) {
+                            firstInvalid.scrollIntoView(true);
+                        }
+                        return;
+                    }
+
+                    if (arcSubmitting) return;
+                    arcSubmitting = true;
+                    setArcSubmitError('');
+                    if (arcSubmitButton) {
+                        arcSubmitButton.disabled = true;
+                        arcSubmitButton.setAttribute('aria-busy', 'true');
+                        arcSubmitButton.textContent = 'Submitting…';
+                    }
+
+                    var body = new URLSearchParams(new FormData(modalForm)).toString();
+
+                    fetch('/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: body,
+                    })
+                        .then(function (res) {
+                            if (!res.ok) throw new Error('Form submission failed');
+                            return res.text();
+                        })
+                        .then(function () {
+                            modalForm.reset();
+                            clearAllArcErrors(modalForm);
+                            setArcSubmitError('');
+                            var arcDialogLead = document.getElementById('arcDialogLead');
+                            if (arcDialogLead) arcDialogLead.hidden = true;
+                            if (arcFormSuccess) {
+                                arcFormSuccess.hidden = false;
+                                if (typeof arcFormSuccess.focus === 'function') {
+                                    try {
+                                        arcFormSuccess.focus();
+                                    } catch (focusSucc) { /* ignore */ }
+                                }
+                            }
+                            modalForm.hidden = true;
+                            window.setTimeout(closeDialog, 2800);
+                        })
+                        .catch(function () {
+                            setArcSubmitError(
+                                'We couldn’t send your application just now. Your answers are still here — please try again in a moment.'
+                            );
+                        })
+                        .then(function () {
+                            arcSubmitting = false;
+                            if (arcFormSuccess && !arcFormSuccess.hidden) {
+                                if (arcSubmitButton) {
+                                    arcSubmitButton.disabled = false;
+                                    arcSubmitButton.textContent = arcSubmitDefaultLabel;
+                                    arcSubmitButton.removeAttribute('aria-busy');
+                                }
+                                return;
+                            }
+                            if (arcSubmitButton) {
+                                arcSubmitButton.disabled = false;
+                                arcSubmitButton.textContent = arcSubmitDefaultLabel;
+                                arcSubmitButton.removeAttribute('aria-busy');
+                            }
+                        });
                 });
             }
 
