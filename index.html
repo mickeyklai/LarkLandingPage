@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lark Elwood — Independent | Dark Romance Novel</title>
-    <meta name="description" content="Independent is the debut dark romance novel by Lark Elwood — a story of obsession, power, and the price of losing control. I wasn't his type. I was his target. Join the reader list or apply for an advance reader copy.">
+    <title>Lark Elwood | Independent | Dark Romance Novel</title>
+    <meta name="description" content="Independent is the debut dark romance novel by Lark Elwood. A story of obsession, power, and the price of losing control. I wasn't his type. I was his target. Join the reader list or apply for an advance reader copy.">
     <link rel="canonical" href="https://larkelwood.com/">
 
     <!-- Open Graph -->
@@ -24,7 +24,7 @@
     <meta name="twitter:description" content="A dark romance waiting for you.">
     <meta name="twitter:image" content="https://larkelwood.com/og-lark-elwood.jpg">
 
-    <!-- Fonts: Cormorant Garamond — luxury editorial serif -->
+    <!-- Fonts: Cormorant Garamond, luxury editorial serif -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
@@ -46,10 +46,15 @@
             overflow-y: auto;
         }
 
-        /* Scrollbars — match dark + cyan brand (Firefox + WebKit/Blink) */
+        /* Scrollbars: match dark + cyan brand (Firefox + WebKit/Blink) */
+        :root {
+            --header-block: 5.25rem;
+        }
+
         html {
             scrollbar-width: thin;
             scrollbar-color: rgba(0, 195, 230, 0.5) rgba(4, 10, 16, 0.92);
+            scroll-padding-top: var(--header-block);
         }
 
         html::-webkit-scrollbar {
@@ -90,7 +95,6 @@
         }
 
         body {
-            --header-block: 5.25rem;
             --accent: #00ebff;
             --accent-dim: rgba(0, 210, 255, 0.5);
             --accent-faint: rgba(0, 200, 255, 0.18);
@@ -113,14 +117,20 @@
            HEADER
         ================================================================ */
         header {
-            position: relative;
-            z-index: 10;
+            position: sticky;
+            top: 0;
+            z-index: 100;
             flex-shrink: 0;
             width: 100%;
             padding: 1.75rem 2.5rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            background: rgba(0, 0, 0, 0.78);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 200, 255, 0.09);
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
         }
 
         .logo {
@@ -144,6 +154,16 @@
             gap: 2.25rem;
         }
 
+        .site-nav-rest {
+            display: flex;
+            align-items: center;
+            gap: 2.25rem;
+        }
+
+        .site-nav-cta-compact {
+            display: none;
+        }
+
         .site-nav a {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             font-size: 0.63rem;
@@ -157,6 +177,36 @@
 
         .site-nav a:hover {
             color: rgba(0, 210, 255, 0.85);
+        }
+
+        .site-nav a.site-nav-primary {
+            flex-shrink: 0;
+            white-space: nowrap;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            color: rgba(0, 235, 255, 0.92);
+            padding: 0.5rem 0.85rem;
+            margin: -0.5rem -0.25rem -0.5rem 0;
+            border: 1px solid rgba(0, 210, 255, 0.5);
+            border-radius: 999px;
+            background: rgba(0, 120, 160, 0.12);
+            box-shadow:
+                0 0 0 1px rgba(0, 0, 0, 0.35) inset,
+                0 0 18px rgba(0, 200, 255, 0.08);
+            transition:
+                color 0.18s ease,
+                border-color 0.18s ease,
+                background 0.18s ease,
+                box-shadow 0.18s ease;
+        }
+
+        .site-nav a.site-nav-primary:hover {
+            color: #ffffff;
+            border-color: rgba(0, 235, 255, 0.85);
+            background: rgba(0, 180, 220, 0.22);
+            box-shadow:
+                0 0 0 1px rgba(0, 235, 255, 0.12) inset,
+                0 0 22px rgba(0, 210, 255, 0.18);
         }
 
         /* ================================================================
@@ -241,7 +291,7 @@
             opacity: 0.7;
         }
 
-        /* Corner micro-labels — editorial atmosphere */
+        /* Corner micro-labels: editorial atmosphere */
         .hero-micro {
             position: absolute;
             z-index: 3;
@@ -311,7 +361,7 @@
             max-width: 28rem;
         }
 
-        /* Hero CTA — email capture at bottom */
+        /* Hero CTA: email capture at bottom */
         .hero-cta {
             position: relative;
             z-index: 6;
@@ -340,7 +390,7 @@
             max-width: 22rem;
         }
 
-        /* Author `display:flex` wins over the default [hidden] rule — force hide after subscribe */
+        /* Author `display:flex` wins over the default [hidden] rule: force hide after subscribe */
         .hero-cta-form[hidden] {
             display: none !important;
         }
@@ -485,7 +535,7 @@
         }
 
         /* ================================================================
-           CONTENT SECTIONS — BASE
+           CONTENT SECTIONS: BASE
         ================================================================ */
         .content-section {
             padding: clamp(4.5rem, 11vw, 7rem) clamp(1.5rem, 5vw, 4rem);
@@ -777,8 +827,21 @@
             color: rgba(208, 224, 242, 0.82);
         }
 
+        .faq-answer-inner a {
+            color: rgba(0, 220, 255, 0.88);
+            text-decoration: underline;
+            text-decoration-color: rgba(0, 210, 255, 0.35);
+            text-underline-offset: 0.2em;
+            transition: color 0.15s ease, text-decoration-color 0.15s ease;
+        }
+
+        .faq-answer-inner a:hover {
+            color: rgba(0, 240, 255, 0.95);
+            text-decoration-color: rgba(0, 235, 255, 0.65);
+        }
+
         /* ================================================================
-           ARC SECTION — private invitation
+           ARC SECTION: private invitation
         ================================================================ */
         .arc-section {
             background: var(--bg-raised);
@@ -968,7 +1031,7 @@
         }
 
         /* ================================================================
-           MODAL — ARC APPLICATION
+           MODAL: ARC APPLICATION
         ================================================================ */
         .newsletter-dialog {
             padding: 0;
@@ -1439,7 +1502,7 @@
         }
 
         /* ================================================================
-           HERO — SOCIAL HINT
+           HERO: SOCIAL HINT
         ================================================================ */
         .hero-social-hint {
             display: flex;
@@ -1584,7 +1647,7 @@
             transition: opacity 0.2s ease, transform 0.2s ease;
         }
 
-        /* Email row — slightly brighter to signal primary action */
+        /* Email row: slightly brighter to signal primary action */
         .channel-row--email .channel-platform {
             color: rgba(0, 215, 255, 0.72);
         }
@@ -1626,14 +1689,73 @@
         }
 
         @media (max-width: 768px) {
-            body { --header-block: 4.25rem; }
+            /* Row 1: author name + CTA; row 2: section jump links */
+            :root { --header-block: 8rem; }
 
-            header { padding: 1.25rem 1.25rem; }
+            header {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) auto;
+                grid-template-rows: auto auto;
+                align-items: center;
+                column-gap: 0.65rem;
+                row-gap: 0.6rem;
+                padding: 0.75rem 1rem 0.85rem;
+            }
 
-            .logo-name { font-size: 1.1rem; letter-spacing: 0.18em; }
+            .site-nav {
+                display: contents;
+            }
 
-            .site-nav { gap: 1.5rem; }
-            .site-nav a { font-size: 0.6rem; letter-spacing: 0.18em; }
+            .logo {
+                grid-column: 1;
+                grid-row: 1;
+                min-width: 0;
+                justify-self: start;
+                text-align: left;
+                align-self: center;
+            }
+
+            .logo-name {
+                display: block;
+                font-size: 1.05rem;
+                letter-spacing: 0.16em;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
+            }
+
+            .site-nav a {
+                font-size: 0.6rem;
+                letter-spacing: 0.16em;
+            }
+
+            .site-nav a.site-nav-primary {
+                grid-column: 2;
+                grid-row: 1;
+                justify-self: end;
+                align-self: center;
+                letter-spacing: 0.12em;
+                font-size: 0.64rem;
+                width: auto;
+                max-width: none;
+                margin: 0;
+                padding: 0.52rem 0.78rem;
+                text-align: center;
+                box-sizing: border-box;
+                white-space: nowrap;
+            }
+
+            .site-nav-rest {
+                grid-column: 1 / -1;
+                grid-row: 2;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 0.45rem 1rem;
+                row-gap: 0.55rem;
+                padding-top: 0.6rem;
+                border-top: 1px solid rgba(0, 200, 255, 0.1);
+            }
 
             .hero {
                 --hero-padding-x: clamp(1rem, 4vw, 1.5rem);
@@ -1697,8 +1819,46 @@
             .dialog-close { top: 0.65rem; right: 0.65rem; }
         }
 
+        @media (max-width: 480px) {
+            .site-nav-cta-full {
+                display: none;
+            }
+
+            .site-nav-cta-compact {
+                display: inline;
+            }
+
+            .site-nav a.site-nav-primary {
+                font-size: 0.56rem;
+                letter-spacing: 0.08em;
+                padding: 0.48rem 0.62rem;
+            }
+        }
+
         @media (max-width: 420px) {
-            .site-nav { display: none; }
+            :root { --header-block: 9rem; }
+
+            header {
+                padding: 0.65rem 0.85rem 0.8rem;
+                column-gap: 0.5rem;
+                row-gap: 0.55rem;
+            }
+
+            .logo-name {
+                font-size: 0.92rem;
+                letter-spacing: 0.12em;
+            }
+
+            .site-nav a {
+                font-size: 0.54rem;
+                letter-spacing: 0.14em;
+            }
+
+            .site-nav-rest {
+                gap: 0.4rem 0.7rem;
+                row-gap: 0.5rem;
+                padding-top: 0.55rem;
+            }
         }
 
         /* ================================================================
@@ -1757,7 +1917,7 @@
                 "@type": "WebSite",
                 "@id": "https://larkelwood.com/#website",
                 "url": "https://larkelwood.com",
-                "name": "Lark Elwood — Official Author Website",
+                "name": "Lark Elwood: Official Author Website",
                 "description": "Official website of dark romance author Lark Elwood. Debut novel: Independent.",
                 "author": { "@id": "https://larkelwood.com/#author" }
             }
@@ -1768,15 +1928,18 @@
 <body>
 
     <header>
-        <a href="#" class="logo" aria-label="Lark Elwood — Home">
+        <a href="#" class="logo" aria-label="Lark Elwood, home">
             <span class="logo-name">Lark Elwood</span>
         </a>
         <nav class="site-nav" aria-label="Site navigation">
-            <a href="#the-book">The Book</a>
-            <a href="#about">About</a>
-            <a href="#faq">FAQ</a>
-            <a href="#follow">Follow</a>
-            <a href="#arc">ARC</a>
+            <a href="#reader-list" class="site-nav-primary" aria-label="Join the reader list: release updates and early access"><span class="site-nav-cta-full">Join the reader list</span><span class="site-nav-cta-compact" aria-hidden="true">Join list</span></a>
+            <div class="site-nav-rest">
+                <a href="#the-book">The Book</a>
+                <a href="#about">About</a>
+                <a href="#faq">FAQ</a>
+                <a href="#follow">Follow</a>
+                <a href="#arc">ARC</a>
+            </div>
         </nav>
     </header>
 
@@ -1785,7 +1948,7 @@
         <!-- ============================================================
              HERO
         ============================================================ -->
-        <section class="hero" aria-label="Independent — dark romance reveal">
+        <section class="hero" aria-label="Independent: dark romance reveal">
             <span class="hero-micro hero-micro-tl" aria-hidden="true">Dark romance</span>
             <span class="hero-micro hero-micro-tr" aria-hidden="true">Adult readers only</span>
             <span class="hero-micro hero-micro-bl" aria-hidden="true">Coming soon</span>
@@ -1809,7 +1972,7 @@
             <div class="hero-content">
                 <h1 class="hero-title neon-blue"><span class="hero-title-text">Independent</span></h1>
             </div>
-            <div class="hero-cta">
+            <div class="hero-cta" id="reader-list" aria-labelledby="reader-list-heading">
                 <p class="hero-hook">I wasn't his type. I was his target.</p>
                 <p class="hero-tagline">A dark romance of obsession, power, and the price of losing control.</p>
                 <p class="hero-social-hint" aria-label="Follow @larkelwood">
@@ -1821,7 +1984,7 @@
                     <span class="sep" aria-hidden="true">·</span>
                     <a href="https://x.com/larkelwood" target="_blank" rel="noopener noreferrer">X</a>
                 </p>
-                <p class="hero-cta-label">Release updates &amp; early access</p>
+                <p class="hero-cta-label" id="reader-list-heading">Release updates &amp; early access</p>
                 <div class="hero-cta-form-wrap">
                     <form class="hero-cta-form" id="heroQuickForm" action="#" method="post" aria-label="Join the reader list" novalidate>
                         <label class="visually-hidden" for="quick-email">Email address</label>
@@ -1856,10 +2019,10 @@
                 <div class="ornament" aria-hidden="true"><div class="ornament-gem"></div></div>
                 <h2 class="section-heading" id="book-heading">Independent</h2>
                 <div class="book-blurb">
-                    <p>She built her life on her terms — her career, her rules, her carefully guarded independence. The last thing she needed was <em>him</em>.</p>
+                    <p>She built her life on her terms: her career, her rules, her carefully guarded independence. The last thing she needed was <em>him</em>.</p>
                     <p>He doesn't chase. He <em>acquires</em>.</p>
                     <p>When circumstance pulls them into the same orbit, she tells herself she can handle it. She's handled worse. But obsession doesn't negotiate, and he has never lost anything he decided was his.</p>
-                    <p><em>Independent</em> is a dark romance. It doesn't promise a safe journey — but it does promise an unforgettable one.</p>
+                    <p><em>Independent</em> is a dark romance. It doesn't promise a safe journey, but it does promise an unforgettable one.</p>
                 </div>
                 <div class="genre-tags" role="list" aria-label="Genre">
                     <span class="genre-tag" role="listitem">Dark Romance</span>
@@ -1880,7 +2043,7 @@
                 <span class="section-kicker">The Reader</span>
                 <h2 class="section-heading" id="readers-heading">This book is for you if&hellip;</h2>
                 <ul class="for-you-list">
-                    <li><span class="list-rose" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(72 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(144 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(216 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(288 12 12)"/></svg></span>You love a hero who takes what he wants — and you're rooting for him anyway</li>
+                    <li><span class="list-rose" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(72 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(144 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(216 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(288 12 12)"/></svg></span>You love a hero who takes what he wants, and you're rooting for him anyway</li>
                     <li><span class="list-rose" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(72 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(144 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(216 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(288 12 12)"/></svg></span>You read for the tension as much as the resolution</li>
                     <li><span class="list-rose" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(72 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(144 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(216 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(288 12 12)"/></svg></span>Morally complex characters feel more interesting to you than safe ones</li>
                     <li><span class="list-rose" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(72 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(144 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(216 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(288 12 12)"/></svg></span>Obsession, possessiveness, and power dynamics are your comfort zone</li>
@@ -1902,7 +2065,7 @@
                 <div class="ornament" aria-hidden="true"><div class="ornament-gem"></div></div>
                 <h2 class="section-heading" id="author-heading">Lark Elwood</h2>
                 <div class="author-bio">
-                    <p>Lark Elwood writes dark romance for readers who aren't afraid of the complicated parts — the power plays, the obsession, the characters who make choices you wouldn't but understand completely.</p>
+                    <p>Lark Elwood writes dark romance for readers who aren't afraid of the complicated parts: the power plays, the obsession, the characters who make choices you wouldn't but understand completely.</p>
                     <p><em>Independent</em> is her debut novel. She believes every great dark romance has to earn its ending, and she spent a long time making sure this one does.</p>
                     <p>She writes for the readers who finish a book at 2am and lie awake thinking about it. This one is for you.</p>
                 </div>
@@ -1935,7 +2098,7 @@
                         </button>
                         <div class="faq-answer" role="region">
                             <div class="faq-answer-inner">
-                                Yes. <em>Independent</em> is a spicy romance with explicit sexual content. It is intended for readers 18 and older. If you prefer closed-door romance, this one is not for you — but if you're here, you probably already knew that.
+                                Yes. <em>Independent</em> is a spicy romance with explicit sexual content. It is intended for readers 18 and older. If you prefer closed-door romance, this one is not for you. But if you're here, you probably already knew that.
                             </div>
                         </div>
                     </div>
@@ -1946,7 +2109,7 @@
                         </button>
                         <div class="faq-answer" role="region">
                             <div class="faq-answer-inner">
-                                Yes. <em>Independent</em> contains mature themes including power imbalance, obsessive and possessive behavior, morally gray dynamics, and emotionally intense situations. A detailed content warning list is available to readers — join the reader list or reach out directly to request it before applying for an ARC.
+                                Yes. <em>Independent</em> contains mature themes including power imbalance, obsessive and possessive behavior, morally gray dynamics, and emotionally intense situations. A detailed content warning list is available to readers: join the reader list or reach out directly to request it before <a href="#arc">applying for an ARC</a>.
                             </div>
                         </div>
                     </div>
@@ -1957,7 +2120,7 @@
                         </button>
                         <div class="faq-answer" role="region">
                             <div class="faq-answer-inner">
-                                A release date will be announced to the reader list first. Join using the form at the top of this page to be notified as soon as a date is confirmed — along with cover reveals, bonus content, and early access details.
+                                A release date will be announced to the reader list first. Join using the form at the top of this page to be notified as soon as a date is confirmed, along with cover reveals, bonus content, and early access details.
                             </div>
                         </div>
                     </div>
@@ -1968,7 +2131,7 @@
                         </button>
                         <div class="faq-answer" role="region">
                             <div class="faq-answer-inner">
-                                An ARC (advance reader copy) is a pre-release version of the book given to approved readers in exchange for an honest review posted around or after release. The ARC team for <em>Independent</em> is small and selective. Apply using the form below — all applicants will be contacted, and applications are reviewed on a rolling basis.
+                                An ARC (advance reader copy) is a pre-release version of the book given to approved readers in exchange for an honest review posted around or after release. The ARC team for <em>Independent</em> is small and selective. Apply using the form in the <a href="#arc">ARC section</a>. All applicants will be contacted, and applications are reviewed on a rolling basis.
                             </div>
                         </div>
                     </div>
@@ -1984,7 +2147,7 @@
             <div class="section-inner">
                 <span class="section-kicker">Stay Connected</span>
                 <h2 class="section-heading text-center" id="follow-heading">Follow the world of <em>Independent</em></h2>
-                <p class="follow-lead">Lark Elwood is active across platforms. Find teasers, aesthetics, and updates — wherever you read.</p>
+                <p class="follow-lead">Lark Elwood is active across platforms. Find teasers, aesthetics, and updates, wherever you read.</p>
                 <nav class="channels" aria-label="Lark Elwood on social media">
 
                     <a class="channel-row" href="https://www.tiktok.com/@larkelwood" target="_blank" rel="noopener noreferrer">
@@ -2015,7 +2178,7 @@
                         <span class="channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
                         <span class="channel-platform">Email</span>
                         <span class="channel-rule" aria-hidden="true"></span>
-                        <span class="channel-desc">First access to releases, bonus pages, and ARC news — the reader list gets everything first</span>
+                        <span class="channel-desc">First access to releases, bonus pages, and ARC news. The reader list gets everything first</span>
                         <span class="channel-arrow" aria-hidden="true">→</span>
                     </a>
 
@@ -2048,7 +2211,7 @@
         </section>
 
         <!-- ============================================================
-             ARC SECTION — Private Invitation
+             ARC SECTION: Private Invitation
         ============================================================ -->
         <section class="arc-section content-section" id="arc" aria-labelledby="arc-heading">
             <div class="arc-invitation">
@@ -2541,7 +2704,7 @@
                         flag(
                             getArcFieldWrap(emailEl),
                             emailEl && emailEl.value.trim()
-                                ? 'That email doesn’t look quite right — a quick double-check usually fixes it.'
+                                ? 'That email doesn’t look quite right. A quick double-check usually fixes it.'
                                 : 'An email address is required so I can reach you if you’re selected.'
                         );
                     }
@@ -2550,7 +2713,7 @@
                     if (!plat) {
                         flag(
                             getArcFieldWrap(platformEl),
-                            'Let me know your main review platform (Amazon, social, blog — anything genuine works).'
+                            'Let me know your main review platform (Amazon, social, blog; anything genuine works).'
                         );
                     }
 
@@ -2564,22 +2727,22 @@
                     }
 
                     if (goodreadsEl && goodreadsEl.value.trim() && !isValidOptionalUrl(goodreadsEl.value)) {
-                        flag(getArcFieldWrap(goodreadsEl), 'That Goodreads URL doesn’t look quite right — want to try again?');
+                        flag(getArcFieldWrap(goodreadsEl), 'That Goodreads URL doesn’t look quite right. Want to try again?');
                     }
                     if (instagramEl && instagramEl.value.trim() && !isValidOptionalUrl(instagramEl.value)) {
-                        flag(getArcFieldWrap(instagramEl), 'That Instagram URL doesn’t look quite right — want to try again?');
+                        flag(getArcFieldWrap(instagramEl), 'That Instagram URL doesn’t look quite right. Want to try again?');
                     }
                     if (tiktokEl && tiktokEl.value.trim() && !isValidOptionalUrl(tiktokEl.value)) {
-                        flag(getArcFieldWrap(tiktokEl), 'That TikTok URL doesn’t look quite right — want to try again?');
+                        flag(getArcFieldWrap(tiktokEl), 'That TikTok URL doesn’t look quite right. Want to try again?');
                     }
 
                     if (!darkRomanceEl || !darkRomanceEl.value) {
-                        flag(getArcFieldWrap(darkRomanceEl), 'Please select an option — honesty is welcome; this just helps me gauge fit.');
+                        flag(getArcFieldWrap(darkRomanceEl), 'Please select an option. Honesty is welcome; this just helps me gauge fit.');
                     }
                     if (!releaseWeekEl || !releaseWeekEl.value) {
                         flag(
                             getArcFieldWrap(releaseWeekEl),
-                            'Please let me know what you can commit to around release week — “not sure” is absolutely fine.'
+                            'Please let me know what you can commit to around release week. “Not sure” is absolutely fine.'
                         );
                     }
 
@@ -2663,7 +2826,7 @@
                         })
                         .catch(function () {
                             setArcSubmitError(
-                                'We couldn’t send your application just now. Your answers are still here — please try again in a moment.'
+                                'We couldn’t send your application just now. Your answers are still here. Please try again in a moment.'
                             );
                         })
                         .then(function () {

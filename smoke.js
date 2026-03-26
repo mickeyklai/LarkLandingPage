@@ -1,5 +1,5 @@
 /**
- * smoke.js — WebGL smoke overlay
+ * smoke.js: WebGL smoke overlay
  *
  * Exact port of https://codepen.io/teolitto/pen/KwOVvL by Teo Litto.
  * Technique: 150 rotating PlaneGeometry meshes sharing one smoke sprite
