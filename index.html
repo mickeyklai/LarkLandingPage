@@ -28,6 +28,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <script async src="https://tally.so/widgets/embed.js"></script>
 
     <style>
         /* ================================================================
@@ -49,12 +50,14 @@
         /* Scrollbars: match dark + cyan brand (Firefox + WebKit/Blink) */
         :root {
             --header-block: 5.25rem;
+            /* In-page #anchors: must clear sticky header (taller than --header-block on mobile) */
+            --anchor-offset: var(--header-block);
         }
 
         html {
             scrollbar-width: thin;
             scrollbar-color: rgba(0, 195, 230, 0.5) rgba(4, 10, 16, 0.92);
-            scroll-padding-top: var(--header-block);
+            scroll-padding-top: var(--anchor-offset);
         }
 
         html::-webkit-scrollbar {
@@ -1031,477 +1034,6 @@
         }
 
         /* ================================================================
-           MODAL: ARC APPLICATION
-        ================================================================ */
-        .newsletter-dialog {
-            padding: 0;
-            border: none;
-            background: transparent;
-            width: min(28rem, calc(100vw - 1.5rem));
-            max-width: 100%;
-            max-height: min(90dvh, 52rem);
-            margin: auto;
-            box-sizing: border-box;
-        }
-
-        .newsletter-dialog::backdrop {
-            background: rgba(0, 3, 10, 0.84);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-
-        .dialog-surface {
-            position: relative;
-            box-sizing: border-box;
-            width: 100%;
-            max-width: 100%;
-            padding: clamp(1.25rem, 4vw, 1.85rem);
-            padding-top: clamp(1.35rem, 4vw, 1.95rem);
-            padding-right: clamp(2.75rem, 8vw, 3.25rem);
-            background: linear-gradient(180deg, #0c141c 0%, #060a10 100%);
-            border: 1px solid rgba(0, 210, 255, 0.22);
-            border-radius: 8px;
-            box-shadow:
-                0 0 0 1px rgba(0, 0, 0, 0.6),
-                0 24px 64px rgba(0, 0, 0, 0.65),
-                0 0 48px rgba(0, 120, 180, 0.12);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            max-height: min(85dvh, 48rem);
-            overflow-x: hidden;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            overscroll-behavior: contain;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(0, 200, 235, 0.48) rgba(0, 0, 0, 0.38);
-        }
-
-        .dialog-surface::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        .dialog-surface::-webkit-scrollbar-track {
-            margin: 6px 0;
-            background: rgba(0, 0, 0, 0.32);
-            border-radius: 999px;
-            border: 1px solid rgba(0, 200, 255, 0.08);
-            box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.45);
-        }
-
-        .dialog-surface::-webkit-scrollbar-thumb {
-            background: linear-gradient(
-                180deg,
-                rgba(0, 225, 255, 0.4) 0%,
-                rgba(0, 155, 200, 0.32) 100%
-            );
-            border-radius: 999px;
-            border: 2px solid rgba(6, 12, 18, 0.65);
-            background-clip: padding-box;
-            box-shadow:
-                0 0 12px rgba(0, 180, 220, 0.18),
-                inset 0 0 0 1px rgba(0, 240, 255, 0.1);
-        }
-
-        .dialog-surface::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(
-                180deg,
-                rgba(0, 240, 255, 0.55) 0%,
-                rgba(0, 185, 225, 0.42) 100%
-            );
-        }
-
-        .dialog-surface::-webkit-scrollbar-corner {
-            background: rgba(0, 0, 0, 0.32);
-        }
-
-        .dialog-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            width: 2.25rem;
-            height: 2.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 2px;
-            background: rgba(255, 255, 255, 0.04);
-            color: rgba(230, 240, 250, 0.85);
-            font-size: 1.25rem;
-            line-height: 1;
-            cursor: pointer;
-            transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-        }
-
-        .dialog-close:hover {
-            background: rgba(0, 200, 255, 0.12);
-            border-color: rgba(0, 220, 255, 0.35);
-            color: #fff;
-        }
-
-        .dialog-close:focus-visible {
-            outline: 2px solid rgba(0, 230, 255, 0.85);
-            outline-offset: 2px;
-        }
-
-        .dialog-title {
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            font-size: clamp(1.2rem, 4vw, 1.4rem);
-            font-weight: 500;
-            letter-spacing: 0.04em;
-            color: #f0f6fa;
-            margin: 0 0 0.5rem 0;
-            padding-right: 0.25rem;
-            line-height: 1.25;
-        }
-
-        .dialog-lead {
-            font-size: 0.8125rem;
-            line-height: 1.55;
-            color: rgba(200, 215, 230, 0.72);
-            margin-bottom: 1.35rem;
-        }
-
-        .newsletter-form {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            min-width: 0;
-            width: 100%;
-        }
-
-        .field {
-            margin-bottom: 1rem;
-            min-width: 0;
-            width: 100%;
-        }
-
-        .field label {
-            display: block;
-            font-size: 0.8125rem;
-            font-weight: 500;
-            letter-spacing: 0.02em;
-            line-height: 1.4;
-            color: rgba(210, 228, 240, 0.92);
-            margin-bottom: 0.4rem;
-        }
-
-        .field input {
-            display: block;
-            width: 100%;
-            max-width: 100%;
-            min-width: 0;
-            box-sizing: border-box;
-            padding: 0.65rem 0.85rem;
-            font-size: 0.9375rem;
-            line-height: 1.4;
-            color: #e8eef4;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            border-radius: 6px;
-            font-family: inherit;
-            transition: border-color 0.15s ease, box-shadow 0.15s ease;
-        }
-
-        .field input::placeholder { color: rgba(180, 195, 210, 0.35); }
-        .field input:hover { border-color: rgba(0, 200, 255, 0.25); }
-
-        .field select {
-            display: block;
-            width: 100%;
-            max-width: 100%;
-            min-width: 0;
-            box-sizing: border-box;
-            padding: 0.65rem 2.35rem 0.65rem 0.85rem;
-            font-size: 0.9375rem;
-            line-height: 1.4;
-            color: #e8eef4;
-            background-color: rgba(0, 0, 0, 0.5);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%2399c4d8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0.75rem center;
-            background-size: 0.65rem auto;
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            border-radius: 6px;
-            font-family: inherit;
-            cursor: pointer;
-            transition: border-color 0.15s ease, box-shadow 0.15s ease;
-            appearance: none;
-            -webkit-appearance: none;
-        }
-
-        .field select:hover { border-color: rgba(0, 200, 255, 0.25); }
-
-        .field select option {
-            background: #0c141c;
-            color: #e8eef4;
-        }
-
-        .field-hint {
-            font-size: 0.72rem;
-            line-height: 1.45;
-            color: rgba(165, 185, 205, 0.68);
-            margin: -0.2rem 0 0.45rem 0;
-        }
-
-        .field-error {
-            display: none;
-            font-size: 0.72rem;
-            line-height: 1.4;
-            color: rgba(255, 185, 175, 0.92);
-            margin: 0.4rem 0 0 0;
-        }
-
-        .field.is-invalid .field-error,
-        .field-consent.is-invalid .field-error {
-            display: block;
-        }
-
-        .field.is-invalid input,
-        .field.is-invalid select,
-        .field.is-invalid textarea {
-            border-color: rgba(255, 130, 110, 0.45);
-            box-shadow: 0 0 0 3px rgba(255, 90, 70, 0.09);
-        }
-
-        .field-consent {
-            margin-bottom: 1rem;
-        }
-
-        .field-consent .field-checkbox {
-            margin-bottom: 0;
-        }
-
-        .field-consent .field-error {
-            margin-top: 0.35rem;
-        }
-
-        .field-consent.is-invalid .field-checkbox input[type='checkbox'] {
-            border-color: rgba(255, 130, 110, 0.6);
-        }
-
-        .field input:focus,
-        .field textarea:focus,
-        .field select:focus {
-            outline: none;
-            border-color: rgba(0, 230, 255, 0.55);
-            box-shadow: 0 0 0 3px rgba(0, 200, 255, 0.12);
-        }
-
-        .field textarea {
-            display: block;
-            width: 100%;
-            max-width: 100%;
-            min-width: 0;
-            box-sizing: border-box;
-            padding: 0.65rem 0.85rem;
-            font-size: 0.9375rem;
-            line-height: 1.45;
-            font-family: inherit;
-            color: #e8eef4;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            border-radius: 6px;
-            resize: vertical;
-            min-height: 4.5rem;
-            transition: border-color 0.15s ease, box-shadow 0.15s ease;
-        }
-
-        .field textarea::placeholder { color: rgba(180, 195, 210, 0.35); }
-        .field textarea:hover { border-color: rgba(0, 200, 255, 0.25); }
-
-        .field label .required {
-            color: rgba(120, 220, 255, 0.95);
-            font-weight: 600;
-            margin-left: 0.15em;
-        }
-
-        .field-checkbox {
-            display: grid;
-            grid-template-columns: 1.375rem minmax(0, 1fr);
-            gap: 0.75rem;
-            align-items: start;
-            margin-bottom: 1rem;
-            min-width: 0;
-            width: 100%;
-        }
-
-        .field-checkbox input[type="checkbox"] {
-            appearance: none;
-            -webkit-appearance: none;
-            width: 1.375rem;
-            height: 1.375rem;
-            margin: 0.2rem 0 0 0;
-            flex-shrink: 0;
-            box-sizing: border-box;
-            border: 2px solid rgba(0, 200, 255, 0.4);
-            border-radius: 5px;
-            background: rgba(0, 0, 0, 0.55);
-            cursor: pointer;
-            transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
-        }
-
-        .field-checkbox input[type="checkbox"]:hover {
-            border-color: rgba(0, 230, 255, 0.65);
-        }
-
-        .field-checkbox input[type="checkbox"]:focus-visible {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(0, 200, 255, 0.2);
-        }
-
-        .field-checkbox input[type="checkbox"]:checked {
-            background-color: rgba(0, 210, 240, 0.95);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10'%3E%3Cpath fill='none' stroke='%23041018' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M1 5l3.5 3.5L11 1'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: 0.65rem auto;
-            border-color: rgba(0, 235, 255, 0.95);
-        }
-
-        .field-checkbox label {
-            display: block;
-            cursor: pointer;
-            font-size: 0.78rem;
-            line-height: 1.55;
-            color: rgba(200, 215, 230, 0.88);
-            font-weight: 400;
-            letter-spacing: 0.01em;
-            min-width: 0;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        .field-checkbox label em {
-            font-style: italic;
-            color: rgba(220, 235, 248, 0.95);
-        }
-
-        .agreement-group {
-            margin-top: 1.35rem;
-            padding: 1.15rem 0 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .agreement-group .field-consent .field-checkbox {
-            margin-bottom: 0;
-        }
-
-        .dialog-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 0.65rem;
-            margin-top: 1.35rem;
-            padding-bottom: env(safe-area-inset-bottom, 0);
-            min-width: 0;
-        }
-
-        .btn-submit {
-            width: 100%;
-            max-width: 100%;
-            box-sizing: border-box;
-            padding: 0.8rem 1rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: #041018;
-            background: linear-gradient(180deg, #5ee7ff 0%, #00b8d9 100%);
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            transition: filter 0.15s ease, box-shadow 0.15s ease;
-        }
-
-        .btn-submit:hover {
-            filter: brightness(1.06);
-            box-shadow: 0 0 24px rgba(0, 200, 255, 0.35);
-        }
-
-        .btn-submit:focus-visible {
-            outline: 2px solid rgba(0, 240, 255, 0.9);
-            outline-offset: 2px;
-        }
-
-        .btn-submit:disabled {
-            cursor: not-allowed;
-            filter: grayscale(0.35) brightness(0.92);
-            box-shadow: none;
-        }
-
-        .form-footnote {
-            font-size: 0.7rem;
-            line-height: 1.45;
-            color: rgba(160, 175, 190, 0.55);
-            text-align: center;
-            margin-top: 0.25rem;
-            max-width: 100%;
-            overflow-wrap: break-word;
-            hyphens: auto;
-        }
-
-        .arc-form-success {
-            box-sizing: border-box;
-            margin: 0.35rem 0 0.75rem;
-            padding: 1.15rem 1.1rem 1.25rem;
-            text-align: center;
-            background: rgba(0, 195, 255, 0.07);
-            border: 1px solid rgba(0, 220, 255, 0.32);
-            border-radius: 8px;
-            box-shadow: 0 0 28px rgba(0, 160, 200, 0.12);
-        }
-
-        .arc-form-success-title {
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            font-size: clamp(1.15rem, 3.5vw, 1.35rem);
-            font-weight: 500;
-            letter-spacing: 0.03em;
-            color: #f4fafc;
-            margin: 0 0 0.5rem 0;
-            line-height: 1.25;
-        }
-
-        .arc-form-success-text {
-            font-size: 0.88rem;
-            line-height: 1.6;
-            color: rgba(215, 230, 242, 0.95);
-            margin: 0;
-        }
-
-        .arc-form-success[hidden] {
-            display: none !important;
-        }
-
-        .arc-netlify-honeypot {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        .arc-form-submit-error {
-            font-size: 0.78rem;
-            line-height: 1.45;
-            color: rgba(255, 195, 188, 0.95);
-            text-align: center;
-            margin: 0 0 0.9rem 0;
-            padding: 0.55rem 0.65rem;
-            background: rgba(255, 70, 50, 0.07);
-            border: 1px solid rgba(255, 130, 110, 0.28);
-            border-radius: 6px;
-        }
-
-        .arc-form-submit-error[hidden] {
-            display: none !important;
-        }
-
-        /* ================================================================
            HERO: SOCIAL HINT
         ================================================================ */
         .hero-social-hint {
@@ -1690,7 +1222,19 @@
 
         @media (max-width: 768px) {
             /* Row 1: author name + CTA; row 2: section jump links */
-            :root { --header-block: 8rem; }
+            :root {
+                --header-block: 8rem;
+            }
+
+            /* Anchor alignment is handled in JS (measures real header). Avoid huge scroll-margin here — it caused a gap under the bar. */
+            html {
+                scroll-padding-top: 0;
+            }
+
+            #reader-list,
+            section.content-section[id] {
+                scroll-margin-top: 0;
+            }
 
             header {
                 display: grid;
@@ -1805,18 +1349,6 @@
             .channel-arrow { display: none; }
             .channel-row { flex-wrap: wrap; gap: 0.35rem 1rem; }
 
-            .newsletter-dialog {
-                width: calc(100vw - 1rem);
-                max-height: min(92dvh, 52rem);
-            }
-
-            .dialog-surface {
-                max-height: min(88dvh, 48rem);
-                padding-left: 1rem;
-                padding-right: 2.75rem;
-            }
-
-            .dialog-close { top: 0.65rem; right: 0.65rem; }
         }
 
         @media (max-width: 480px) {
@@ -1836,7 +1368,9 @@
         }
 
         @media (max-width: 420px) {
-            :root { --header-block: 9rem; }
+            :root {
+                --header-block: 9rem;
+            }
 
             header {
                 padding: 0.65rem 0.85rem 0.8rem;
@@ -2227,7 +1761,11 @@
                     class="btn-arc"
                     id="openNewsletter"
                     aria-haspopup="dialog"
-                    aria-controls="newsletterDialog"
+                    data-tally-open="9qO4jV"
+                    data-tally-layout="modal"
+                    data-tally-overlay="1"
+                    data-tally-auto-close="1000"
+                    data-tally-form-events-forwarding="1"
                 >
                     Apply for Access
                 </button>
@@ -2274,189 +1812,160 @@
         </div>
     </footer>
 
-    <!-- ============================================================
-         ARC APPLICATION MODAL
-    ============================================================ -->
-    <dialog class="newsletter-dialog" id="newsletterDialog" aria-labelledby="dialog-title">
-        <div class="dialog-surface">
-            <button type="button" class="dialog-close" id="closeNewsletter" aria-label="Close dialog">&times;</button>
-            <h2 class="dialog-title" id="dialog-title">Join the ARC Team</h2>
-            <p class="dialog-lead" id="arcDialogLead">
-                Apply for an advance reader copy of <em>Independent</em>. Complete the required fields below.
-            </p>
-            <div class="arc-form-success" id="arcFormSuccess" role="status" aria-live="polite" hidden tabindex="-1">
-                <p class="arc-form-success-title">Application sent</p>
-                <p class="arc-form-success-text">Application received. If you're selected, you'll hear from me soon.</p>
-            </div>
-            <form
-                class="newsletter-form"
-                id="newsletterForm"
-                name="arc-application"
-                method="POST"
-                action="/"
-                novalidate
-            >
-                <input type="hidden" name="form-name" value="arc-application">
-                <div class="arc-netlify-honeypot" aria-hidden="true">
-                    <label for="arc-bot-field">Leave this field empty</label>
-                    <input type="text" id="arc-bot-field" name="bot-field" tabindex="-1" autocomplete="off">
-                </div>
-                <div class="field" data-arc-field="firstname">
-                    <label for="arc-firstname">First name <span class="required">*</span></label>
-                    <input type="text" id="arc-firstname" name="firstname" autocomplete="given-name" placeholder="Your first name" aria-describedby="arc-firstname-error">
-                    <p class="field-error" id="arc-firstname-error" role="alert"></p>
-                </div>
-                <div class="field" data-arc-field="email">
-                    <label for="arc-email">Email <span class="required">*</span></label>
-                    <input type="email" id="arc-email" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com" aria-describedby="arc-email-error">
-                    <p class="field-error" id="arc-email-error" role="alert"></p>
-                </div>
-                <div class="field" data-arc-field="primary_review_platform">
-                    <label for="arc-primary-platform">Primary review platform <span class="required">*</span></label>
-                    <input type="text" id="arc-primary-platform" name="primary_review_platform" autocomplete="off" placeholder="Amazon, Goodreads, Bookstagram, TikTok, etc." aria-describedby="arc-primary-platform-error">
-                    <p class="field-error" id="arc-primary-platform-error" role="alert"></p>
-                </div>
-                <div class="field" data-arc-field="primary_profile_link">
-                    <label for="arc-primary-profile">Primary review profile link <span class="required">*</span></label>
-                    <p class="field-hint" id="arc-primary-profile-hint">Link to the profile where you most often post reviews</p>
-                    <input type="text" id="arc-primary-profile" name="primary_profile_link" inputmode="url" autocomplete="url" placeholder="https://..." aria-describedby="arc-primary-profile-hint arc-primary-profile-error">
-                    <p class="field-error" id="arc-primary-profile-error" role="alert"></p>
-                </div>
-                <div class="field" data-arc-field="goodreads">
-                    <label for="arc-goodreads">Goodreads profile link</label>
-                    <input type="text" id="arc-goodreads" name="goodreads" inputmode="url" autocomplete="url" placeholder="https://www.goodreads.com/user/show/..." aria-describedby="arc-goodreads-error">
-                    <p class="field-error" id="arc-goodreads-error" role="alert"></p>
-                </div>
-                <div class="field" data-arc-field="instagram">
-                    <label for="arc-instagram">Instagram profile</label>
-                    <input type="text" id="arc-instagram" name="instagram" inputmode="url" autocomplete="url" placeholder="https://www.instagram.com/..." aria-describedby="arc-instagram-error">
-                    <p class="field-error" id="arc-instagram-error" role="alert"></p>
-                </div>
-                <div class="field" data-arc-field="tiktok">
-                    <label for="arc-tiktok">TikTok profile</label>
-                    <input type="text" id="arc-tiktok" name="tiktok" inputmode="url" autocomplete="url" placeholder="https://www.tiktok.com/@..." aria-describedby="arc-tiktok-error">
-                    <p class="field-error" id="arc-tiktok-error" role="alert"></p>
-                </div>
-                <div class="field" data-arc-field="other_links">
-                    <label for="arc-other-links">Any other links you'd like to share?</label>
-                    <p class="field-hint" id="arc-other-links-hint">Additional profile or review platform links</p>
-                    <textarea id="arc-other-links" name="other_links" placeholder="Blog, Fable, Amazon reviewer page, BookTok, etc." aria-describedby="arc-other-links-hint"></textarea>
-                </div>
-                <div class="field" data-arc-field="dark_romance_reviewed">
-                    <label for="arc-dark-romance">Have you reviewed dark romance before? <span class="required">*</span></label>
-                    <select id="arc-dark-romance" name="dark_romance_reviewed" aria-describedby="arc-dark-romance-error">
-                        <option value="">Select an option</option>
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                        <option value="sometimes">Sometimes</option>
-                    </select>
-                    <p class="field-error" id="arc-dark-romance-error" role="alert"></p>
-                </div>
-                <div class="field" data-arc-field="release_week">
-                    <label for="arc-release-week">Can you post your review around release week? <span class="required">*</span></label>
-                    <select id="arc-release-week" name="release_week" aria-describedby="arc-release-week-error">
-                        <option value="">Select an option</option>
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                        <option value="not_sure">Not sure</option>
-                    </select>
-                    <p class="field-error" id="arc-release-week-error" role="alert"></p>
-                </div>
+    <script>
+        (function () {
+            /* Tight gap under measured sticky header (JS positions targets; avoid large fudge or you get empty space). */
+            var HEADER_PAD_PX = 6;
+            /* Avoid duplicate scroll when we set location.hash; skip History API on file: (Chrome security / embedded preview). */
+            var skipHashchangeScroll = false;
 
-                <div class="agreement-group">
-                    <div class="field-consent" data-arc-field="agreement_mature">
-                        <div class="field-checkbox">
-                            <input type="checkbox" id="arc-consent-mature" name="agreement_mature" value="yes">
-                            <label for="arc-consent-mature">
-                                I understand that <em>Independent</em> is intended for adult readers and contains mature themes. I have reviewed the content warnings and I'm comfortable reading this type of book.
-                            </label>
-                        </div>
-                        <p class="field-error" id="arc-consent-mature-error" role="alert"></p>
-                    </div>
-                    <div class="field-consent" data-arc-field="agreement_honest">
-                        <div class="field-checkbox">
-                            <input type="checkbox" id="arc-consent-honest" name="agreement_honest" value="yes">
-                            <label for="arc-consent-honest">
-                                I understand that if I receive an ARC, a review is appreciated but not required. If I choose to review, it will reflect my honest opinion.
-                            </label>
-                        </div>
-                        <p class="field-error" id="arc-consent-honest-error" role="alert"></p>
-                    </div>
-                    <div class="field-consent" data-arc-field="agreement_noshare">
-                        <div class="field-checkbox">
-                            <input type="checkbox" id="arc-consent-noshare" name="agreement_noshare" value="yes">
-                            <label for="arc-consent-noshare">
-                                I agree not to share, redistribute, copy, or upload this ARC in any format. This copy is for my personal reading and review purposes only.
-                            </label>
-                        </div>
-                        <p class="field-error" id="arc-consent-noshare-error" role="alert"></p>
-                    </div>
-                </div>
+            function isMobileViewport() {
+                return window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+            }
 
-                <p class="arc-form-submit-error" id="arcFormSubmitError" role="alert" hidden></p>
+            function getScrollY() {
+                return (
+                    window.scrollY ||
+                    window.pageYOffset ||
+                    document.documentElement.scrollTop ||
+                    document.body.scrollTop ||
+                    0
+                );
+            }
 
-                <div class="dialog-actions">
-                    <button type="submit" class="btn-submit" id="arcSubmitButton">Submit Application</button>
-                    <p class="form-footnote">All required fields must be completed. Applications are reviewed on a rolling basis.</p>
-                </div>
-            </form>
-        </div>
-    </dialog>
+            function setScrollTop(y) {
+                y = Math.max(0, Math.round(y));
+                try {
+                    window.scrollTo({ top: y, left: 0, behavior: 'auto' });
+                } catch (err) {
+                    window.scrollTo(0, y);
+                }
+                if (document.documentElement) document.documentElement.scrollTop = y;
+                if (document.body) document.body.scrollTop = y;
+            }
 
-    <!--
-      Netlify Forms: static blueprint for build-time field detection.
-      The visible ARC modal form mirrors these `name` values. Do not remove.
-    -->
-    <form
-        name="arc-application"
-        method="POST"
-        action="/"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
-        hidden
-        aria-hidden="true"
-    >
-        <input type="hidden" name="form-name" value="arc-application">
-        <input type="text" name="bot-field" tabindex="-1" autocomplete="off">
-        <input type="text" name="firstname">
-        <input type="email" name="email">
-        <input type="text" name="primary_review_platform">
-        <input type="text" name="primary_profile_link">
-        <input type="text" name="goodreads">
-        <input type="text" name="instagram">
-        <input type="text" name="tiktok">
-        <textarea name="other_links"></textarea>
-        <select name="dark_romance_reviewed">
-            <option value=""></option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-            <option value="sometimes">Sometimes</option>
-        </select>
-        <select name="release_week">
-            <option value=""></option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-            <option value="not_sure">Not sure</option>
-        </select>
-        <input type="checkbox" name="agreement_mature" value="yes">
-        <input type="checkbox" name="agreement_honest" value="yes">
-        <input type="checkbox" name="agreement_noshare" value="yes">
-    </form>
+            function headerScrollPadding() {
+                var hdr = document.querySelector('header');
+                var h = hdr ? Math.round(hdr.getBoundingClientRect().height) : 0;
+                return h + HEADER_PAD_PX;
+            }
+
+            function scrollToAnchorId(id, behavior) {
+                if (!id) return false;
+                var target = document.getElementById(id);
+                if (!target) return false;
+                var top = target.getBoundingClientRect().top + getScrollY() - headerScrollPadding();
+                if (top < 0) top = 0;
+                var allowSmooth =
+                    behavior === 'smooth' &&
+                    window.matchMedia &&
+                    !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                if (allowSmooth) {
+                    window.scrollTo({ top: top, left: 0, behavior: 'smooth' });
+                } else {
+                    setScrollTop(top);
+                }
+                return true;
+            }
+
+            /* One correction after mobile URL bar / layout settles (avoids stutter from many timeouts). */
+            function scheduleScrollRefinements(id) {
+                if (!isMobileViewport() || !id) return;
+                /* After `smooth` scroll (~400ms) or URL bar resize; instant earlier would fight the animation. */
+                window.setTimeout(function () {
+                    scrollToAnchorId(id, 'auto');
+                }, 520);
+            }
+
+            function setFragmentInUrl(id) {
+                var hash = '#' + encodeURIComponent(id);
+                if (location.hash === hash) return;
+
+                if (location.protocol === 'file:') {
+                    skipHashchangeScroll = true;
+                    location.hash = hash;
+                    return;
+                }
+
+                if (history.pushState) {
+                    try {
+                        history.pushState(null, '', hash);
+                        return;
+                    } catch (err) {
+                        /* file:, opaque origins, or embedded preview */
+                    }
+                }
+
+                skipHashchangeScroll = true;
+                location.hash = hash;
+            }
+
+            function onSamePageAnchorClick(e) {
+                var a = e.target.closest && e.target.closest('a[href^="#"]');
+                if (!a) return;
+                if (e.button !== 0 && e.button !== undefined) return;
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                var href = a.getAttribute('href');
+                if (!href || href === '#') return;
+                var id = decodeURIComponent(href.slice(1));
+                if (!id || !document.getElementById(id)) return;
+                e.preventDefault();
+                var smooth =
+                    window.matchMedia && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                scrollToAnchorId(id, smooth ? 'smooth' : 'auto');
+                setFragmentInUrl(id);
+                scheduleScrollRefinements(id);
+            }
+
+            document.addEventListener('click', onSamePageAnchorClick, false);
+
+            window.addEventListener('hashchange', function () {
+                if (skipHashchangeScroll) {
+                    skipHashchangeScroll = false;
+                    return;
+                }
+                var id = (location.hash || '').slice(1);
+                if (!id) return;
+                id = decodeURIComponent(id);
+                scrollToAnchorId(id, 'auto');
+                scheduleScrollRefinements(id);
+            });
+
+            window.addEventListener('popstate', function () {
+                var id = (location.hash || '').slice(1);
+                if (!id) {
+                    setScrollTop(0);
+                    return;
+                }
+                id = decodeURIComponent(id);
+                scrollToAnchorId(id, 'auto');
+                scheduleScrollRefinements(id);
+            });
+
+            function runInitialHashScroll() {
+                var id = (location.hash || '').slice(1);
+                if (!id) return;
+                id = decodeURIComponent(id);
+                function go() {
+                    scrollToAnchorId(id, 'auto');
+                    scheduleScrollRefinements(id);
+                }
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(go);
+                });
+                window.addEventListener('load', go, { once: true });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', runInitialHashScroll);
+            } else {
+                runInitialHashScroll();
+            }
+        })();
+    </script>
 
     <script>
         (function () {
-            /* ---- MODAL ---- */
-            var dialog = document.getElementById('newsletterDialog');
-            var openBtn = document.getElementById('openNewsletter');
-            var closeBtn = document.getElementById('closeNewsletter');
-            var modalForm = document.getElementById('newsletterForm');
-            var arcFormSuccess = document.getElementById('arcFormSuccess');
-            var arcSubmitButton = document.getElementById('arcSubmitButton');
-            var arcSubmitDefaultLabel =
-                arcSubmitButton && arcSubmitButton.textContent
-                    ? arcSubmitButton.textContent.trim()
-                    : 'Submit Application';
-            var arcSubmitting = false;
             var heroForm = document.getElementById('heroQuickForm');
             var heroSubmitBtn = document.getElementById('heroQuickSubmit');
             var heroEmailInput = document.getElementById('quick-email');
@@ -2481,115 +1990,6 @@
                 var v = (value || '').trim();
                 if (!v || v.length > 254) return false;
                 return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-            }
-
-            function normalizeUrlInput(value) {
-                var v = (value || '').trim();
-                if (!v) return '';
-                if (!/^https?:\/\//i.test(v)) v = 'https://' + v;
-                return v;
-            }
-
-            function isValidOptionalUrl(value) {
-                var raw = (value || '').trim();
-                if (!raw) return true;
-                var v = normalizeUrlInput(raw);
-                try {
-                    var u = new URL(v);
-                    return u.protocol === 'http:' || u.protocol === 'https:';
-                } catch (err) {
-                    return false;
-                }
-            }
-
-            function isValidRequiredUrl(value) {
-                var raw = (value || '').trim();
-                if (!raw) return false;
-                return isValidOptionalUrl(raw);
-            }
-
-            function getArcFieldWrap(el) {
-                if (!el) return null;
-                return el.closest('[data-arc-field]');
-            }
-
-            function clearArcFieldError(wrap) {
-                if (!wrap) return;
-                wrap.classList.remove('is-invalid');
-                var err = wrap.querySelector('.field-error');
-                if (err) err.textContent = '';
-                wrap.querySelectorAll('input, select, textarea').forEach(function (ctl) {
-                    ctl.removeAttribute('aria-invalid');
-                });
-            }
-
-            function setArcFieldError(wrap, message) {
-                if (!wrap) return;
-                wrap.classList.add('is-invalid');
-                var err = wrap.querySelector('.field-error');
-                if (err) err.textContent = message;
-                wrap.querySelectorAll('input, select, textarea').forEach(function (ctl) {
-                    ctl.setAttribute('aria-invalid', 'true');
-                });
-            }
-
-            function clearAllArcErrors(form) {
-                if (!form) return;
-                form.querySelectorAll('[data-arc-field].is-invalid').forEach(function (w) {
-                    clearArcFieldError(w);
-                });
-            }
-
-            function setArcSubmitError(message) {
-                var el = document.getElementById('arcFormSubmitError');
-                if (!el) return;
-                if (message) {
-                    el.textContent = message;
-                    el.hidden = false;
-                } else {
-                    el.textContent = '';
-                    el.hidden = true;
-                }
-            }
-
-            function resetArcApplicationUi() {
-                var arcDialogLead = document.getElementById('arcDialogLead');
-                if (arcDialogLead) arcDialogLead.hidden = false;
-                setArcSubmitError('');
-                arcSubmitting = false;
-                if (arcSubmitButton) {
-                    arcSubmitButton.disabled = false;
-                    arcSubmitButton.textContent = arcSubmitDefaultLabel;
-                    arcSubmitButton.removeAttribute('aria-busy');
-                }
-                if (modalForm) {
-                    modalForm.reset();
-                    clearAllArcErrors(modalForm);
-                    modalForm.hidden = false;
-                }
-                if (arcFormSuccess) arcFormSuccess.hidden = true;
-            }
-
-            function openDialog() {
-                if (dialog && typeof dialog.showModal === 'function') {
-                    dialog.showModal();
-                }
-            }
-
-            function closeDialog() {
-                if (dialog && typeof dialog.close === 'function') {
-                    dialog.close();
-                }
-            }
-
-            if (openBtn) openBtn.addEventListener('click', openDialog);
-            if (closeBtn) closeBtn.addEventListener('click', closeDialog);
-
-            if (dialog) {
-                dialog.addEventListener('click', function (e) {
-                    if (e.target === dialog) closeDialog();
-                });
-                dialog.addEventListener('close', resetArcApplicationUi);
             }
 
             /* Flow 1: hero email-only quick subscribe (MailerLite via Netlify function) */
@@ -2657,193 +2057,6 @@
                             heroEmailInput.disabled = false;
                             heroSubmitBtn.removeAttribute('aria-busy');
                             heroSubmitBtn.textContent = heroSubmitDefaultLabel;
-                        });
-                });
-            }
-
-            /* Flow 2: full ARC application in dialog */
-            if (modalForm) {
-                modalForm.addEventListener('input', function (e) {
-                    var w = getArcFieldWrap(e.target);
-                    if (w && w.classList.contains('is-invalid')) clearArcFieldError(w);
-                });
-                modalForm.addEventListener('change', function (e) {
-                    var w = getArcFieldWrap(e.target);
-                    if (w && w.classList.contains('is-invalid')) clearArcFieldError(w);
-                });
-
-                modalForm.addEventListener('submit', function (e) {
-                    e.preventDefault();
-                    clearAllArcErrors(modalForm);
-
-                    var firstnameEl = document.getElementById('arc-firstname');
-                    var emailEl = document.getElementById('arc-email');
-                    var platformEl = document.getElementById('arc-primary-platform');
-                    var profileEl = document.getElementById('arc-primary-profile');
-                    var goodreadsEl = document.getElementById('arc-goodreads');
-                    var instagramEl = document.getElementById('arc-instagram');
-                    var tiktokEl = document.getElementById('arc-tiktok');
-                    var darkRomanceEl = document.getElementById('arc-dark-romance');
-                    var releaseWeekEl = document.getElementById('arc-release-week');
-                    var matureEl = document.getElementById('arc-consent-mature');
-                    var honestEl = document.getElementById('arc-consent-honest');
-                    var noshareEl = document.getElementById('arc-consent-noshare');
-
-                    var firstInvalid = null;
-                    function flag(wrap, message) {
-                        setArcFieldError(wrap, message);
-                        if (!firstInvalid) firstInvalid = wrap;
-                    }
-
-                    var fn = firstnameEl ? firstnameEl.value.trim() : '';
-                    if (!fn) {
-                        flag(getArcFieldWrap(firstnameEl), 'Please add your first name.');
-                    }
-
-                    if (!isValidEmail(emailEl && emailEl.value)) {
-                        flag(
-                            getArcFieldWrap(emailEl),
-                            emailEl && emailEl.value.trim()
-                                ? 'That email doesn’t look quite right. A quick double-check usually fixes it.'
-                                : 'An email address is required so I can reach you if you’re selected.'
-                        );
-                    }
-
-                    var plat = platformEl ? platformEl.value.trim() : '';
-                    if (!plat) {
-                        flag(
-                            getArcFieldWrap(platformEl),
-                            'Let me know your main review platform (Amazon, social, blog; anything genuine works).'
-                        );
-                    }
-
-                    if (!isValidRequiredUrl(profileEl && profileEl.value)) {
-                        flag(
-                            getArcFieldWrap(profileEl),
-                            profileEl && profileEl.value.trim()
-                                ? 'That doesn’t look like a valid link. Pasting the full URL from your browser address bar works best.'
-                                : 'Please share a link to the profile or page where your reviews live.'
-                        );
-                    }
-
-                    if (goodreadsEl && goodreadsEl.value.trim() && !isValidOptionalUrl(goodreadsEl.value)) {
-                        flag(getArcFieldWrap(goodreadsEl), 'That Goodreads URL doesn’t look quite right. Want to try again?');
-                    }
-                    if (instagramEl && instagramEl.value.trim() && !isValidOptionalUrl(instagramEl.value)) {
-                        flag(getArcFieldWrap(instagramEl), 'That Instagram URL doesn’t look quite right. Want to try again?');
-                    }
-                    if (tiktokEl && tiktokEl.value.trim() && !isValidOptionalUrl(tiktokEl.value)) {
-                        flag(getArcFieldWrap(tiktokEl), 'That TikTok URL doesn’t look quite right. Want to try again?');
-                    }
-
-                    if (!darkRomanceEl || !darkRomanceEl.value) {
-                        flag(getArcFieldWrap(darkRomanceEl), 'Please select an option. Honesty is welcome; this just helps me gauge fit.');
-                    }
-                    if (!releaseWeekEl || !releaseWeekEl.value) {
-                        flag(
-                            getArcFieldWrap(releaseWeekEl),
-                            'Please let me know what you can commit to around release week. “Not sure” is absolutely fine.'
-                        );
-                    }
-
-                    if (!matureEl || !matureEl.checked) {
-                        flag(
-                            getArcFieldWrap(matureEl),
-                            'Please confirm you’re comfortable with mature themes and the content warnings.'
-                        );
-                    }
-                    if (!honestEl || !honestEl.checked) {
-                        flag(
-                            getArcFieldWrap(honestEl),
-                            'Please confirm you understand reviews are appreciated, not required, and always honest.'
-                        );
-                    }
-                    if (!noshareEl || !noshareEl.checked) {
-                        flag(getArcFieldWrap(noshareEl), 'Please confirm you won’t share or distribute the ARC.');
-                    }
-
-                    if (firstInvalid) {
-                        var focusEl = firstInvalid.querySelector(
-                            'input:not([type="checkbox"]), select, textarea'
-                        );
-                        if (!focusEl) focusEl = firstInvalid.querySelector('input[type="checkbox"]');
-                        if (focusEl && typeof focusEl.focus === 'function') focusEl.focus();
-                        try {
-                            firstInvalid.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-                        } catch (scrollErr) {
-                            firstInvalid.scrollIntoView(true);
-                        }
-                        return;
-                    }
-
-                    if (arcSubmitting) return;
-                    arcSubmitting = true;
-                    setArcSubmitError('');
-                    if (arcSubmitButton) {
-                        arcSubmitButton.disabled = true;
-                        arcSubmitButton.setAttribute('aria-busy', 'true');
-                        arcSubmitButton.textContent = 'Submitting…';
-                    }
-
-                    var body = new URLSearchParams(new FormData(modalForm)).toString();
-
-                    fetch('/', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: body,
-                    })
-                        .then(function (res) {
-                            if (!res.ok) throw new Error('Form submission failed');
-                            return res.text();
-                        })
-                        .then(function () {
-                            modalForm.reset();
-                            clearAllArcErrors(modalForm);
-                            setArcSubmitError('');
-                            var arcDialogLead = document.getElementById('arcDialogLead');
-                            if (arcDialogLead) arcDialogLead.hidden = true;
-                            if (arcFormSuccess) {
-                                arcFormSuccess.hidden = false;
-                                if (typeof arcFormSuccess.focus === 'function') {
-                                    try {
-                                        arcFormSuccess.focus();
-                                    } catch (focusSucc) { /* ignore */ }
-                                }
-                            }
-                            modalForm.hidden = true;
-                            var arcDialogSurface = modalForm && modalForm.closest
-                                ? modalForm.closest('.dialog-surface')
-                                : null;
-                            if (arcDialogSurface) arcDialogSurface.scrollTop = 0;
-                            if (arcFormSuccess && typeof arcFormSuccess.scrollIntoView === 'function') {
-                                try {
-                                    arcFormSuccess.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-                                } catch (scrollIntoV) {
-                                    arcFormSuccess.scrollIntoView(true);
-                                }
-                            }
-                            window.setTimeout(closeDialog, 5200);
-                        })
-                        .catch(function () {
-                            setArcSubmitError(
-                                'We couldn’t send your application just now. Your answers are still here. Please try again in a moment.'
-                            );
-                        })
-                        .then(function () {
-                            arcSubmitting = false;
-                            if (arcFormSuccess && !arcFormSuccess.hidden) {
-                                if (arcSubmitButton) {
-                                    arcSubmitButton.disabled = false;
-                                    arcSubmitButton.textContent = arcSubmitDefaultLabel;
-                                    arcSubmitButton.removeAttribute('aria-busy');
-                                }
-                                return;
-                            }
-                            if (arcSubmitButton) {
-                                arcSubmitButton.disabled = false;
-                                arcSubmitButton.textContent = arcSubmitDefaultLabel;
-                                arcSubmitButton.removeAttribute('aria-busy');
-                            }
                         });
                 });
             }
