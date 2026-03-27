@@ -1,0 +1,1618 @@
+/* ================================================================
+   RESET + CUSTOM PROPERTIES
+================================================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    overflow-x: clip; /* clip (not hidden) — does not create a scroll container, so position:sticky on header still works */
+    overflow-y: auto;
+}
+
+/* Scrollbars: match dark + cyan brand (Firefox + WebKit/Blink) */
+:root {
+    --header-block: 5.25rem;
+    /* In-page #anchors: must clear sticky header (taller than --header-block on mobile) */
+    --anchor-offset: var(--header-block);
+}
+
+html {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 195, 230, 0.5) rgba(4, 10, 16, 0.92);
+    scroll-padding-top: var(--anchor-offset);
+}
+
+html::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+html::-webkit-scrollbar-track {
+    background: rgba(4, 10, 16, 0.92);
+    border-left: 1px solid rgba(0, 200, 255, 0.07);
+}
+
+html::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+        175deg,
+        rgba(0, 215, 255, 0.42) 0%,
+        rgba(0, 140, 185, 0.34) 55%,
+        rgba(0, 100, 140, 0.28) 100%
+    );
+    border-radius: 999px;
+    border: 2px solid rgba(4, 10, 16, 0.92);
+    background-clip: padding-box;
+    box-shadow: inset 0 0 0 1px rgba(0, 235, 255, 0.12);
+}
+
+html::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+        175deg,
+        rgba(0, 235, 255, 0.58) 0%,
+        rgba(0, 175, 220, 0.46) 100%
+    );
+    border: 2px solid rgba(4, 10, 16, 0.92);
+    background-clip: padding-box;
+}
+
+html::-webkit-scrollbar-corner {
+    background: rgba(4, 10, 16, 0.92);
+}
+
+body {
+    --accent: #00ebff;
+    --accent-dim: rgba(0, 210, 255, 0.5);
+    --accent-faint: rgba(0, 200, 255, 0.18);
+    --text: #f0f0f0;
+    --text-muted: rgba(200, 215, 230, 0.72);
+    --text-faint: rgba(175, 192, 210, 0.45);
+    --bg: #000000;
+    --bg-raised: #000000;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Georgia, 'Times New Roman', serif;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    min-height: 100%;
+    min-height: 100dvh;
+}
+
+/* ================================================================
+   HEADER
+================================================================ */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-shrink: 0;
+    width: 100%;
+    padding: 1.75rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 200, 255, 0.09);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.logo {
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo-name {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #ffffff;
+}
+
+.site-nav {
+    display: flex;
+    align-items: center;
+    gap: 2.25rem;
+}
+
+.site-nav-rest {
+    display: flex;
+    align-items: center;
+    gap: 2.25rem;
+}
+
+.site-nav-cta-compact {
+    display: none;
+}
+
+.site-nav a {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-size: 0.63rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(210, 225, 240, 0.68);
+    text-decoration: none;
+    transition: color 0.18s ease;
+}
+
+.site-nav a:hover {
+    color: rgba(0, 210, 255, 0.85);
+}
+
+.site-nav a.site-nav-primary {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: rgba(0, 235, 255, 0.92);
+    padding: 0.5rem 0.85rem;
+    margin: -0.5rem -0.25rem -0.5rem 0;
+    border: 1px solid rgba(0, 210, 255, 0.5);
+    border-radius: 999px;
+    background: rgba(0, 120, 160, 0.12);
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.35) inset,
+        0 0 18px rgba(0, 200, 255, 0.08);
+    transition:
+        color 0.18s ease,
+        border-color 0.18s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.site-nav a.site-nav-primary:hover {
+    color: #ffffff;
+    border-color: rgba(0, 235, 255, 0.85);
+    background: rgba(0, 180, 220, 0.22);
+    box-shadow:
+        0 0 0 1px rgba(0, 235, 255, 0.12) inset,
+        0 0 22px rgba(0, 210, 255, 0.18);
+}
+
+/* ================================================================
+   HERO
+================================================================ */
+.hero {
+    position: relative;
+    z-index: 1;
+    overflow: visible;
+    --bf-side: 26%;
+    --hero-padding-x: clamp(1.5rem, 5vw, 4rem);
+    flex: 0 0 auto;
+    min-height: calc(100vh - var(--header-block));
+    min-height: calc(100svh - var(--header-block));
+    min-height: calc(100dvh - var(--header-block));
+    margin: 0;
+    padding: clamp(2rem, 5vw, 4rem) var(--hero-padding-x);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    box-shadow: 0 0 24px rgba(0, 200, 255, 0.2);
+}
+
+/* Broken frame: open center gaps, eye sits behind content */
+.hero-broken-frame {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.hero-broken-frame .bf {
+    position: absolute;
+    background: rgba(0, 235, 255, 0.92);
+    box-shadow:
+        0 0 6px rgba(0, 220, 255, 0.85),
+        0 0 16px rgba(0, 180, 255, 0.45),
+        0 0 32px rgba(0, 140, 255, 0.2);
+}
+
+.bf-tl { top: 0; left: 0; width: var(--bf-side); height: 1px; }
+.bf-tr { top: 0; right: 0; width: var(--bf-side); height: 1px; }
+.bf-bl { bottom: 0; left: 0; width: var(--bf-side); height: 1px; }
+.bf-br { bottom: 0; right: 0; width: var(--bf-side); height: 1px; }
+.bf-vl { top: 0; bottom: 0; left: 0; width: 1px; }
+.bf-vr { top: 0; bottom: 0; right: 0; width: 1px; }
+
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    box-shadow: inset 0 0 50px rgba(0, 100, 160, 0.08);
+}
+
+.neon-blue {
+    color: #c8f8ff;
+    text-shadow:
+        0 0 6px #00e6ff,
+        0 0 16px #00c8ff,
+        0 0 32px rgba(0, 180, 255, 0.9),
+        0 0 64px rgba(0, 140, 255, 0.5);
+}
+
+/* Eye pulse: subtle scale breathe. translate(-50%,-50%) centres on the
+   top/left anchor point set in the rule above. */
+@keyframes eye-pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50%       { transform: translate(-50%, -50%) scale(1.03); }
+}
+
+.hero-eye {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 2;
+    /* Fallback centering when animation is not running */
+    transform: translate(-50%, -50%);
+    width: auto;
+    height: 160%;
+    max-height: none;
+    max-width: min(95%, 960px);
+    object-fit: contain;
+    object-position: center;
+    background: none;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    opacity: 0.85;
+    will-change: transform;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .hero-eye {
+        animation: eye-pulse 6s ease-in-out infinite;
+    }
+}
+
+/* Smoke layer: centred on the eye (not anchored to bottom) so it reads
+   as a halo around the eye, not a second full-page smoke on top of the
+   Three.js canvas. z-index 1 keeps it strictly behind the eye (z-index 2). */
+.hero-smoke {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    transform: translateX(-50%) translateY(-50%);
+    width: 110%;
+    height: auto;
+    max-width: none;
+    background: none;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    opacity: 0.45;
+    will-change: transform;
+}
+
+/* Corner micro-labels: editorial atmosphere */
+.hero-micro {
+    position: absolute;
+    z-index: 3;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.55rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(0, 210, 255, 0.4);
+}
+
+.hero-micro-tl { top: clamp(1rem, 3vw, 2rem); left: clamp(1rem, 3vw, 2rem); }
+.hero-micro-tr { top: clamp(1rem, 3vw, 2rem); right: clamp(1rem, 3vw, 2rem); }
+.hero-micro-bl { bottom: clamp(1rem, 3vw, 2rem); left: clamp(1rem, 3vw, 2rem); }
+.hero-micro-br { bottom: clamp(1rem, 3vw, 2rem); right: clamp(1rem, 3vw, 2rem); }
+
+/* Hero content stack */
+.hero-content {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex: 1;
+    min-height: 0;
+    gap: 0;
+    width: 100%;
+}
+
+@keyframes hero-breathe {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.8; }
+}
+
+.hero-title {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-size: clamp(2.75rem, 13vw, 6.5rem);
+    font-weight: 400;
+    text-transform: uppercase;
+    margin: 0;
+    line-height: 1.05;
+    white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .hero-title {
+        animation: hero-breathe 4s ease-in-out infinite;
+    }
+}
+
+.hero-title-text {
+    display: inline-block;
+}
+
+.hero-hook {
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-size: clamp(1.1rem, 3.2vw, 1.55rem);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.35;
+    color: #d4f7ff;
+    margin: 0 0 0.2rem;
+    text-shadow:
+        0 0 4px rgba(0, 230, 255, 0.95),
+        0 0 14px rgba(0, 190, 255, 0.65),
+        0 0 28px rgba(0, 140, 255, 0.35);
+}
+
+.hero-tagline {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: rgba(200, 220, 235, 0.78);
+    margin: 0;
+    max-width: 28rem;
+}
+
+/* Hero CTA: email capture at bottom */
+.hero-cta {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-bottom: clamp(1.5rem, 3vh, 2.5rem);
+}
+
+.hero-cta-label {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(0, 200, 255, 0.45);
+}
+
+.hero-cta-form {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    max-width: 22rem;
+}
+
+/* Author `display:flex` wins over the default [hidden] rule: force hide after subscribe */
+.hero-cta-form[hidden] {
+    display: none !important;
+}
+
+.hero-cta-input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.85rem 1rem;
+    font-size: 0.9rem;
+    color: #e8eef4;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(102, 252, 241, 0.2);
+    border-right: none;
+    border-radius: 2px 0 0 2px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.hero-cta-input::placeholder { color: rgba(170, 185, 200, 0.5); }
+.hero-cta-input:hover { border-color: rgba(0, 200, 255, 0.22); }
+.hero-cta-input:focus {
+    outline: none;
+    border-color: rgba(0, 230, 255, 0.45);
+    box-shadow: 0 0 0 2px rgba(0, 200, 255, 0.1);
+}
+
+.btn-hero-cta {
+    flex-shrink: 0;
+    padding: 0.85rem 1.25rem;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #0a1218;
+    background: linear-gradient(180deg, #a8eeff 0%, #2ad4f0 100%);
+    border: 1px solid rgba(0, 230, 255, 0.45);
+    border-left: none;
+    border-radius: 0 2px 2px 0;
+    cursor: pointer;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    transition: filter 0.15s ease, box-shadow 0.15s ease;
+    white-space: nowrap;
+}
+
+.btn-hero-cta {
+    box-shadow:
+        0 0 12px rgba(0, 210, 255, 0.35),
+        0 0 28px rgba(0, 180, 255, 0.18);
+}
+
+.btn-hero-cta:hover {
+    filter: brightness(1.05);
+    box-shadow:
+        0 0 18px rgba(0, 220, 255, 0.55),
+        0 0 40px rgba(0, 180, 255, 0.28);
+}
+
+.btn-hero-cta:focus-visible {
+    outline: 2px solid rgba(0, 240, 255, 0.9);
+    outline-offset: 2px;
+}
+
+.hero-cta-form-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.65rem;
+    width: 100%;
+    max-width: 22rem;
+}
+
+.hero-cta-form-wrap .hero-cta-form {
+    max-width: none;
+    width: 100%;
+}
+
+.btn-hero-cta:disabled,
+.hero-cta-input:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.btn-hero-cta:disabled {
+    filter: none;
+    box-shadow: none;
+}
+
+.hero-cta-feedback--error {
+    margin: 0;
+    width: 100%;
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    line-height: 1.45;
+    color: rgba(255, 160, 170, 0.92);
+    text-shadow: 0 0 12px rgba(255, 100, 120, 0.25);
+}
+
+.hero-cta-success-panel {
+    width: 100%;
+    text-align: center;
+    padding: 0.85rem 1rem 0.5rem;
+    border: 1px solid rgba(0, 230, 255, 0.22);
+    border-radius: 2px;
+    background: linear-gradient(165deg, rgba(0, 40, 55, 0.55) 0%, rgba(0, 20, 30, 0.72) 100%);
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.35),
+        0 0 24px rgba(0, 200, 255, 0.08);
+}
+
+.hero-cta-success-panel .hero-cta-success-title {
+    margin: 0 0 0.35rem;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(1.15rem, 3.5vw, 1.35rem);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: rgba(200, 245, 255, 0.96);
+    text-shadow:
+        0 0 12px rgba(0, 230, 255, 0.35),
+        0 0 28px rgba(0, 180, 255, 0.2);
+}
+
+.hero-cta-success-panel .hero-cta-success-note {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(0, 200, 255, 0.5);
+    line-height: 1.5;
+}
+
+/* ================================================================
+   UTILITY
+================================================================ */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ================================================================
+   CONTENT SECTIONS: BASE
+================================================================ */
+.content-section {
+    padding: clamp(4.5rem, 11vw, 7rem) clamp(1.5rem, 5vw, 4rem);
+    border-top: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+.section-inner {
+    max-width: 42rem;
+    margin: 0 auto;
+}
+
+.text-center { text-align: center; }
+
+.section-kicker {
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: rgba(0, 200, 255, 0.5);
+    margin-bottom: 1.5rem;
+}
+
+.section-heading {
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-size: clamp(2rem, 5.5vw, 2.85rem);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: #eef4fa;
+    margin: 0 0 2.25rem;
+    line-height: 1.1;
+}
+
+/* Diamond ornament divider */
+.ornament {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin: 0 auto 2.5rem;
+    width: 100%;
+    max-width: 12rem;
+}
+
+.ornament::before,
+.ornament::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(0, 200, 255, 0.18);
+}
+
+.ornament-gem {
+    width: 5px;
+    height: 5px;
+    background: rgba(0, 200, 255, 0.45);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+}
+
+/* ================================================================
+   ABOUT THE BOOK
+================================================================ */
+.book-section {
+    background: var(--bg-raised);
+}
+
+.book-blurb {
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-size: clamp(1.2rem, 2.8vw, 1.45rem);
+    font-weight: 400;
+    line-height: 1.85;
+    color: rgba(225, 235, 245, 0.86);
+    text-align: center;
+    margin: 0 0 2.75rem;
+}
+
+.book-blurb p { margin: 0 0 1.2rem; }
+.book-blurb p:last-child { margin-bottom: 0; }
+
+.book-blurb em {
+    font-style: italic;
+    color: #d4f7ff;
+}
+
+.genre-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.genre-tag {
+    padding: 0.35rem 0.9rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.57rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(0, 200, 255, 0.62);
+    border: 1px solid rgba(0, 200, 255, 0.16);
+    border-radius: 2px;
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.genre-tag:hover {
+    color: rgba(0, 220, 255, 0.85);
+    border-color: rgba(0, 210, 255, 0.3);
+}
+
+/* ================================================================
+   WHO THIS BOOK IS FOR
+================================================================ */
+.readers-section {
+    background: var(--bg);
+}
+
+.for-you-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.for-you-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.15rem;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(1.075rem, 2.5vw, 1.28rem);
+    font-weight: 400;
+    line-height: 1.65;
+    color: rgba(220, 232, 245, 0.8);
+    padding: 1.1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+.for-you-list li:first-child {
+    border-top: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+.for-you-list li::before {
+    display: none;
+}
+
+.list-rose {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    align-self: flex-start;
+    color: rgba(0, 200, 255, 0.45);
+    padding-top: 0.28em;
+}
+
+.list-rose svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.content-notice {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: rgba(165, 180, 198, 0.48);
+    border-left: 1px solid rgba(0, 200, 255, 0.18);
+    padding-left: 1.1rem;
+}
+
+.content-notice em {
+    font-style: italic;
+    color: rgba(180, 198, 218, 0.62);
+}
+
+/* ================================================================
+   ABOUT THE AUTHOR
+================================================================ */
+.author-section {
+    background: var(--bg-raised);
+}
+
+.author-bio {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(0.9375rem, 2.2vw, 1.0625rem);
+    line-height: 1.88;
+    color: rgba(208, 222, 238, 0.78);
+    text-align: center;
+}
+
+.author-bio p { margin: 0 0 1.4rem; }
+.author-bio p:last-child { margin-bottom: 0; }
+
+.author-bio em {
+    font-style: italic;
+    color: rgba(220, 235, 250, 0.92);
+}
+
+/* ================================================================
+   FAQ
+================================================================ */
+.faq-section {
+    background: var(--bg);
+}
+
+.faq-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.faq-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.faq-item:first-child {
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 1.35rem 2.75rem 1.35rem 0;
+    cursor: pointer;
+    position: relative;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(0.9375rem, 2.2vw, 1.05rem);
+    font-weight: 400;
+    color: rgba(225, 237, 250, 0.82);
+    line-height: 1.45;
+    letter-spacing: 0.01em;
+    transition: color 0.18s ease;
+}
+
+.faq-question em {
+    font-style: italic;
+}
+
+.faq-question::after {
+    content: '+';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(0, 200, 255, 0.5);
+    font-size: 1.35rem;
+    font-weight: 300;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1;
+    transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.faq-item.open .faq-question {
+    color: #eef4fa;
+}
+
+.faq-item.open .faq-question::after {
+    content: '−';
+    color: rgba(0, 210, 255, 0.8);
+}
+
+.faq-answer {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s ease, padding-bottom 0.35s ease;
+    padding-bottom: 0;
+}
+
+.faq-item.open .faq-answer {
+    max-height: 28rem;
+    padding-bottom: 1.4rem;
+}
+
+.faq-answer-inner {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-size: clamp(0.875rem, 1.9vw, 0.9375rem);
+    line-height: 1.78;
+    color: rgba(190, 207, 226, 0.65);
+}
+
+.faq-answer-inner em {
+    font-style: italic;
+    color: rgba(208, 224, 242, 0.82);
+}
+
+.faq-answer-inner a {
+    color: rgba(0, 220, 255, 0.88);
+    text-decoration: underline;
+    text-decoration-color: rgba(0, 210, 255, 0.35);
+    text-underline-offset: 0.2em;
+    transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.faq-answer-inner a:hover {
+    color: rgba(0, 240, 255, 0.95);
+    text-decoration-color: rgba(0, 235, 255, 0.65);
+}
+
+/* ================================================================
+   ARC SECTION: private invitation
+================================================================ */
+.arc-section {
+    background: var(--bg-raised);
+}
+
+.arc-invitation {
+    max-width: 38rem;
+    margin: 0 auto;
+    text-align: center;
+    padding: clamp(2.75rem, 7vw, 4.5rem) clamp(2rem, 6vw, 4rem);
+    border: 1px solid rgba(0, 200, 255, 0.16);
+    position: relative;
+    background: linear-gradient(160deg, rgba(2, 8, 18, 0.98) 0%, rgba(0, 4, 12, 1) 100%);
+    box-shadow:
+        0 0 80px rgba(0, 0, 0, 0.45),
+        inset 0 0 90px rgba(0, 90, 160, 0.025),
+        0 0 0 1px rgba(0, 0, 0, 0.55);
+}
+
+/* Corner accent ticks */
+.arc-invitation::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-top: 1px solid rgba(0, 200, 255, 0.48);
+    border-left: 1px solid rgba(0, 200, 255, 0.48);
+}
+
+.arc-invitation::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-bottom: 1px solid rgba(0, 200, 255, 0.48);
+    border-right: 1px solid rgba(0, 200, 255, 0.48);
+}
+
+.arc-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.56rem;
+    font-weight: 600;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(0, 200, 255, 0.6);
+    border: 1px solid rgba(0, 200, 255, 0.18);
+    padding: 0.4rem 1.15rem;
+    border-radius: 999px;
+    margin-bottom: 2rem;
+}
+
+.arc-heading {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(1.75rem, 5vw, 2.45rem);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: #eef4fa;
+    margin: 0 0 1.5rem;
+    line-height: 1.15;
+}
+
+.arc-intro {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: clamp(0.875rem, 1.9vw, 0.9375rem);
+    line-height: 1.8;
+    color: rgba(195, 213, 232, 0.62);
+    margin-bottom: 2.5rem;
+}
+
+.arc-intro p { margin: 0 0 0.9rem; }
+.arc-intro p:last-child { margin-bottom: 0; }
+
+.arc-intro em {
+    font-style: italic;
+    color: rgba(212, 228, 248, 0.85);
+}
+
+.btn-arc {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.9rem clamp(1.75rem, 4.5vw, 2.5rem);
+    border: 1px solid rgba(0, 230, 255, 0.48);
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(0, 50, 72, 0.5) 0%, rgba(0, 18, 36, 0.95) 100%);
+    color: #d4f8ff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.63rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.btn-arc:hover {
+    border-color: rgba(0, 240, 255, 0.9);
+    color: #ffffff;
+    box-shadow:
+        0 0 30px rgba(0, 200, 255, 0.22),
+        inset 0 0 20px rgba(0, 180, 255, 0.05);
+}
+
+.btn-arc:focus { outline: none; }
+.btn-arc:focus-visible {
+    outline: 2px solid rgba(0, 230, 255, 0.9);
+    outline-offset: 3px;
+}
+
+/* ================================================================
+   FOOTER
+================================================================ */
+footer {
+    padding: 3rem clamp(1.5rem, 5vw, 4rem);
+    border-top: 1px solid rgba(255, 255, 255, 0.055);
+    text-align: center;
+}
+
+.footer-inner {
+    max-width: 42rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.footer-name {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(200, 215, 230, 0.22);
+}
+
+.footer-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.68rem;
+    line-height: 1.55;
+    color: rgba(165, 180, 198, 0.28);
+    letter-spacing: 0.03em;
+}
+
+.social-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(180, 198, 218, 0.3);
+    text-decoration: none;
+    transition: color 0.18s ease;
+    min-width: 44px;
+    min-height: 44px;
+}
+
+.social-link:hover {
+    color: rgba(0, 210, 255, 0.8);
+}
+
+.social-link svg {
+    display: block;
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.65;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* TikTok icon uses fill instead of stroke */
+.social-link--tiktok svg {
+    stroke: none;
+    fill: currentColor;
+}
+
+/* ================================================================
+   HERO: SOCIAL HINT
+================================================================ */
+.hero-social-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.52rem;
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    margin-top: clamp(3.5rem, 8vh, 5.5rem);
+    margin-bottom: 0.1rem;
+}
+
+.hero-social-hint a {
+    color: rgba(0, 195, 255, 0.28);
+    text-decoration: none;
+    transition: color 0.18s ease;
+    letter-spacing: 2px;
+}
+
+.hero-social-hint a:hover {
+    color: rgba(0, 215, 255, 0.65);
+}
+
+.hero-social-hint .sep {
+    color: rgba(0, 200, 255, 0.12);
+    font-weight: 300;
+    font-size: 0.48rem;
+}
+
+/* ================================================================
+   FOLLOW SECTION
+================================================================ */
+.follow-section {
+    background: var(--bg);
+}
+
+.follow-lead {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(0.9375rem, 2vw, 1.05rem);
+    line-height: 1.78;
+    color: rgba(195, 212, 230, 0.58);
+    text-align: center;
+    max-width: 32rem;
+    margin: 0 auto 3rem;
+}
+
+.channels {
+    display: flex;
+    flex-direction: column;
+}
+
+.channel-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+}
+
+.channel-row:first-child {
+    border-top: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+.channel-row:hover .channel-platform {
+    color: rgba(0, 215, 255, 0.9);
+}
+
+.channel-row:hover .channel-desc {
+    color: rgba(215, 230, 246, 0.75);
+}
+
+.channel-row:hover .channel-arrow {
+    opacity: 1;
+    transform: translateX(4px);
+}
+
+.channel-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.25rem;
+    color: rgba(0, 195, 255, 0.38);
+    transition: color 0.2s ease;
+}
+
+.channel-icon svg {
+    display: block;
+    width: 15px;
+    height: 15px;
+}
+
+.channel-row:hover .channel-icon {
+    color: rgba(0, 215, 255, 0.88);
+}
+
+.channel-row--email .channel-icon {
+    color: rgba(0, 215, 255, 0.58);
+}
+
+.channel-platform {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.57rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(0, 195, 255, 0.5);
+    flex-shrink: 0;
+    width: 5.25rem;
+    transition: color 0.2s ease;
+}
+
+.channel-rule {
+    flex: 1;
+    min-width: 1rem;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.channel-desc {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(0.875rem, 1.9vw, 0.9375rem);
+    line-height: 1.5;
+    color: rgba(185, 204, 224, 0.48);
+    flex-shrink: 0;
+    width: min(22rem, 55%);
+    transition: color 0.2s ease;
+}
+
+.channel-arrow {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.82rem;
+    color: rgba(0, 200, 255, 0.3);
+    flex-shrink: 0;
+    opacity: 0.65;
+    margin-left: auto;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Email row: slightly brighter to signal primary action */
+.channel-row--email .channel-platform {
+    color: rgba(0, 215, 255, 0.72);
+}
+
+.channel-row--email .channel-desc {
+    color: rgba(200, 218, 238, 0.62);
+}
+
+/* ================================================================
+   FOOTER IMPROVEMENTS
+================================================================ */
+.footer-social-label {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.55rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(0, 195, 255, 0.22);
+}
+
+/* ================================================================
+   RESPONSIVE
+================================================================ */
+@media (min-width: 769px) {
+    .hero-content {
+        max-width: min(42rem, calc(100vw - var(--hero-padding-x) * 2));
+        padding-inline: clamp(0.75rem, 3vw, 1.5rem);
+        /* Pin title to upper portion of hero rather than dead-centre */
+        justify-content: flex-start;
+        padding-top: clamp(1.5rem, 4vh, 2.5rem);
+    }
+
+    .hero-title {
+        font-size: clamp(2.75rem, 13vw, 6.5rem);
+        text-align: center;
+    }
+
+    .hero-title-text {
+        letter-spacing: 0.35em;
+        margin-right: -0.35em;
+    }
+
+    /* Reduce the large gap between the description and social links */
+    .hero-social-hint {
+        margin-top: clamp(1rem, 2.5vh, 1.75rem);
+    }
+
+    /* Pull the entire CTA group closer to the bottom neon frame */
+    .hero {
+        padding-bottom: clamp(1.25rem, 3vh, 2rem);
+    }
+
+    .hero-cta {
+        padding-bottom: 0.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* ── Custom property ──────────────────────────────────────────
+       Header is now one row (logo+CTA) + one compact scroll row.
+       6.5rem covers the rendered height with room to spare.
+       ─────────────────────────────────────────────────────────── */
+    :root {
+        --header-block: 6.5rem;
+    }
+
+    html {
+        scroll-padding-top: 0;
+    }
+
+    #reader-list,
+    section.content-section[id] {
+        scroll-margin-top: 0;
+    }
+
+    /* ── Header ───────────────────────────────────────────────────
+       Row 1: logo  |  Notify Me button
+       Row 2: nav links — single scrollable line, no wrapping
+       ─────────────────────────────────────────────────────────── */
+    header {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-rows: auto auto;
+        align-items: center;
+        column-gap: 0.65rem;
+        row-gap: 4px;
+        padding: 0.65rem 1rem 0.55rem;
+    }
+
+    .site-nav {
+        display: contents;
+    }
+
+    .logo {
+        grid-column: 1;
+        grid-row: 1;
+        min-width: 0;
+        justify-self: start;
+        align-self: center;
+    }
+
+    .logo-name {
+        display: block;
+        font-size: 1.05rem;
+        letter-spacing: 0.16em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+    .site-nav a {
+        font-size: 0.55rem;
+        letter-spacing: 0.14em;
+    }
+
+    .site-nav a.site-nav-primary {
+        grid-column: 2;
+        grid-row: 1;
+        justify-self: end;
+        align-self: center;
+        min-width: 0;
+        letter-spacing: 0.12em;
+        font-size: 0.64rem;
+        margin: 0;
+        padding: 0.48rem 0.75rem;
+        white-space: nowrap;
+    }
+
+    /* Single scrollable row — never wraps, never takes a second line */
+    .site-nav-rest {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 0 1.1rem;
+        padding: 0.45rem 0 0.3rem;
+        border-top: 1px solid rgba(0, 200, 255, 0.1);
+    }
+
+    .site-nav-rest::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* ── Hero: three-zone vertical layout ────────────────────────
+       Zone 1 (top ~15-20 %)  → "INDEPENDENT" title
+       Zone 2 (middle)        → eye graphic — zero overlapping text
+       Zone 3 (bottom)        → tagline + social links + form
+       ─────────────────────────────────────────────────────────── */
+
+    /* Vignette scrim: z-index 2 places it above eye (2, same level but
+       ::after paints after DOM children) and smoke (1), below text (3) */
+    .hero::after {
+        background: linear-gradient(
+            to bottom,
+            transparent 0%,
+            transparent 40%,
+            rgba(0, 0, 0, 0.4) 60%,
+            rgba(0, 0, 0, 0.82) 100%
+        );
+        box-shadow: none;
+        z-index: 2;
+    }
+
+    .hero {
+        --hero-padding-x: clamp(1rem, 4vw, 1.5rem);
+        padding: 20px var(--hero-padding-x) 20px;
+        justify-content: space-between;
+    }
+
+    /* Zone 1 — title sits a little below the very top edge */
+    .hero-content {
+        flex: 0 0 auto;
+        padding-inline: 0.75rem;
+        padding-top: 32px;
+        max-width: calc(100vw - var(--hero-padding-x) * 2);
+        position: relative;
+        z-index: 3;
+    }
+
+    /* Larger + wide letter-spacing: editorial, floating feel */
+    .hero-title {
+        font-size: clamp(1.75rem, 8vw, 4rem);
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        letter-spacing: 0.3rem;
+    }
+
+    /* Compensate trailing letter-spacing gap */
+    .hero-title-text {
+        margin-right: -0.3rem;
+    }
+
+    /* Zone 2 — eye: zoomed to 160vw, centred at top:50% */
+    .hero-eye {
+        height: auto;
+        width: 160vw;
+        max-width: none;
+        z-index: 2;
+        left: 47%;
+        top: 42%;
+        opacity: 0.85;
+    }
+
+    /* Smoke: wider than viewport, centred on the eye, behind it */
+    .hero-smoke {
+        width: 160vw;
+        max-width: none;
+        top: 42%;
+        z-index: 1;
+        opacity: 0.5;
+    }
+
+    /* Zone 3 — no box; legibility comes from the vignette above */
+    .hero-cta {
+        flex: 0 0 auto;
+        margin-top: 0;
+        padding: 0 0.5rem 1.25rem;
+        background: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        border-radius: 0;
+        position: relative;
+        z-index: 3;
+        gap: 0.4rem;
+    }
+
+    /* "Whisper" tagline: lighter weight, slightly airy letter-spacing
+       Dark pop shadow makes it readable against the smoky image */
+    .hero-hook {
+        font-size: clamp(1.05rem, 3.6vw, 1.3rem);
+        font-weight: 300;
+        line-height: 1.5;
+        letter-spacing: 0.04em;
+        margin: 0 0 0.35rem;
+    }
+
+    /* Description: compact, dark shadow for legibility */
+    .hero-tagline {
+        font-size: 0.9rem;
+        line-height: 1.65;
+        letter-spacing: 0.08em;
+        max-width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+        text-shadow: 0 0 12px rgba(0, 0, 0, 0.95), 0 0 24px rgba(0, 0, 0, 0.75);
+    }
+
+    /* Social hint: expanded tap targets */
+    .hero-social-hint {
+        gap: 0;
+        margin-top: 0.5rem;
+    }
+
+    .hero-social-hint a {
+        padding: 0.6rem 0.4rem;
+        margin: -0.6rem 0;
+    }
+
+    .hero-social-hint .sep {
+        padding: 0.6rem 0.15rem;
+    }
+
+    /* ── Content sections ─────────────────────────────────────── */
+    .content-section {
+        padding: clamp(3rem, 8vw, 4.5rem) clamp(1.25rem, 4vw, 1.75rem);
+    }
+
+    .arc-invitation { padding: 2.5rem 1.5rem; }
+
+    .channel-rule { display: none; }
+    .channel-platform { width: 5.25rem; }
+    .channel-desc { width: 100%; font-size: 0.875rem; }
+    .channel-arrow { display: none; }
+    .channel-row { flex-wrap: wrap; gap: 0.35rem 1rem; }
+
+}
+
+@media (max-width: 480px) {
+    .site-nav-cta-full {
+        display: none;
+    }
+
+    .site-nav-cta-compact {
+        display: inline;
+    }
+
+    .site-nav a.site-nav-primary {
+        font-size: 0.56rem;
+        letter-spacing: 0.08em;
+        padding: 0.48rem 0.62rem;
+    }
+
+    /* Form: collapse horizontal row into a vertical stack */
+    .hero-cta-form {
+        flex-direction: column;
+        max-width: 100%;
+    }
+
+    .hero-cta-form-wrap {
+        max-width: 100%;
+        width: 100%;
+        padding: 0 0.5rem;
+    }
+
+    .hero-cta-input {
+        border-right: 1px solid rgba(102, 252, 241, 0.2);
+        border-bottom: none;
+        border-radius: 2px 2px 0 0;
+        width: 100%;
+        min-height: 48px;
+    }
+
+    .btn-hero-cta {
+        border-left: 1px solid rgba(0, 230, 255, 0.45);
+        border-top: none;
+        border-radius: 0 0 2px 2px;
+        width: 100%;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 420px) {
+    :root {
+        --header-block: 6.5rem;
+    }
+
+    header {
+        padding: 0.6rem 0.85rem 0.5rem;
+        column-gap: 0.5rem;
+    }
+
+    .logo-name {
+        font-size: 0.92rem;
+        letter-spacing: 0.12em;
+    }
+
+    .site-nav a {
+        font-size: 0.52rem;
+        letter-spacing: 0.12em;
+    }
+
+    .site-nav-rest {
+        gap: 0 0.9rem;
+        padding: 0.4rem 0 0.25rem;
+    }
+}
+
+/* ================================================================
+   MOBILE PERFORMANCE: reduce multi-layer glow to prevent scroll lag
+   Fewer shadow layers = fewer GPU compositing passes per frame.
+================================================================ */
+@media (max-width: 768px) {
+    /* Title neon: trim from 4 layers to 2 */
+    .neon-blue {
+        text-shadow:
+            0 0 8px #00e6ff,
+            0 0 28px rgba(0, 180, 255, 0.65);
+    }
+
+    /* Tagline: dark pop + cyan backlit glow + trimmed neon */
+    .hero-hook {
+        text-shadow:
+            0 0 10px rgba(0, 0, 0, 1),
+            0 0 22px rgba(0, 0, 0, 0.88),
+            0 0 15px rgba(102, 252, 241, 0.4),
+            0 0 5px rgba(0, 230, 255, 0.75),
+            0 0 18px rgba(0, 140, 255, 0.28);
+    }
+
+    /* Broken-frame neon lines: trim from 3 layers to 2 */
+    .hero-broken-frame .bf {
+        box-shadow:
+            0 0 6px rgba(0, 220, 255, 0.85),
+            0 0 16px rgba(0, 180, 255, 0.38);
+    }
+
+    /* Hero box-shadow: a single inset is enough on small screens */
+    .hero {
+        box-shadow: none;
+    }
+}
+
+/* ================================================================
+   SMOKE CANVAS STACKING
+   Canvas sits at z-index 0. main + footer are raised to z-index 1
+   so all content renders above the smoke. Section backgrounds are
+   transparent so the fixed smoke canvas shows through them.
+================================================================ */
+main, footer {
+    position: relative;
+    z-index: 1;
+}
+
+.book-section,
+.readers-section,
+.author-section,
+.faq-section,
+.arc-section,
+.follow-section {
+    background: transparent;
+}
