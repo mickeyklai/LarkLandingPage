@@ -1,7 +1,7 @@
 /**
  * TikTok Pixel: loads after DOM ready, fires ttq.page() on load and on SPA-style navigation
  * (hashchange, popstate, history.pushState / replaceState — matches this site's scroll.js behavior).
- * Pixel ID: window.__TIKTOK_PIXEL_ID__ (injected at Netlify build from env).
+ * Pixel ID: window.__TIKTOK_PIXEL_ID__ (injected at Netlify build from TIKTOK_PIXEL_ID).
  */
 (function () {
     var PLACEHOLDER = '__TIKTOK_PIXEL_ID_PLACEHOLDER__';
