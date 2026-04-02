@@ -32,6 +32,11 @@
 
     <link rel="stylesheet" href="css/styles.css">
 
+    <!-- TikTok Pixel ID: replaced at deploy via scripts/inject-tiktok-pixel-id.cjs (TIKTOK_PIXEL_ID et al.) -->
+    <script>
+        window.__TIKTOK_PIXEL_ID__ = "__TIKTOK_PIXEL_ID_PLACEHOLDER__";
+    </script>
+
     <!-- Structured data: Author + Book + Website -->
     <script type="application/ld+json">
     {
@@ -436,6 +441,7 @@
         </div>
     </footer>
 
+    <script src="js/tiktok-pixel.js"></script>
     <script src="js/scroll.js"></script>
     <script src="js/hero-form.js"></script>
     <script src="js/faq.js"></script>

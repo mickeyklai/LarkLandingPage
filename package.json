@@ -1,0 +1,7 @@
+{
+  "name": "lark-landing-page",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/inject-tiktok-pixel-id.cjs"
+  }
+}
