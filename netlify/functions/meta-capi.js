@@ -25,6 +25,7 @@ function sha256Hex(value) {
 /**
  * Server-side Meta Conversions API — uses META_PIXEL_ID + META_ACCESS_TOKEN (never exposed to browser).
  * POST JSON: { eventName, eventId?, eventSourceUrl?, email? }
+ * eventName: CompleteRegistration | Lead | Subscribe | ViewContent
  * eventId: optional; use same value client-side with fbq('track', ..., { eventID: '...' }) for deduplication.
  */
 exports.handler = async function handler(event) {
@@ -67,7 +68,12 @@ exports.handler = async function handler(event) {
 
     const eventName =
         typeof payload.eventName === 'string' ? payload.eventName.trim() : '';
-    const allowedNames = new Set(['CompleteRegistration', 'Lead', 'Subscribe']);
+    const allowedNames = new Set([
+        'CompleteRegistration',
+        'Lead',
+        'Subscribe',
+        'ViewContent',
+    ]);
     if (!eventName || !allowedNames.has(eventName)) {
         return {
             statusCode: 400,

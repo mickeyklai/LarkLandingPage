@@ -65,6 +65,9 @@
                     if (out.res.ok && out.data && out.data.ok) {
                         heroForm.hidden = true;
                         if (heroSuccessPanel) heroSuccessPanel.hidden = false;
+                        if (typeof window.sendMetaCapiEvent === 'function') {
+                            window.sendMetaCapiEvent({ eventName: 'Lead', email: email });
+                        }
                         return;
                     }
                     var msg =

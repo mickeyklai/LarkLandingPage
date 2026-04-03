@@ -26,7 +26,7 @@ exports.handler = async function handler(event) {
     }
 
     try {
-        const client = getSanityClient();
+        const client = getSanityClient({ useCdn: false });
         const posts = await client.fetch(LIST_QUERY);
         return {
             statusCode: 200,

@@ -9,6 +9,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.sanity.io" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="/css/styles.css">
@@ -42,8 +43,10 @@
             <article id="blog-article" class="blog-article" hidden>
                 <header class="blog-article-header">
                     <p id="blog-article-meta" class="blog-article-meta"></p>
-                    <h1 id="blog-article-title" class="blog-article-title"></h1>
-                    <p id="blog-article-dek" class="blog-article-dek" hidden></p>
+                    <div class="blog-article-header-main">
+                        <h1 id="blog-article-title" class="blog-article-title"></h1>
+                        <p id="blog-article-dek" class="blog-article-dek" hidden></p>
+                    </div>
                 </header>
                 <div id="blog-prose" class="blog-prose"></div>
             </article>
@@ -54,10 +57,12 @@
         <div class="footer-inner">
             <p class="footer-name">Lark Elwood</p>
             <p class="footer-social-label">@larkelwood</p>
-            <p class="footer-text">Dark romance · <a href="/blog/">Blog</a> · <a href="/">Home</a></p>
+            <p class="footer-text">Dark romance · <a href="/blog/">Blog</a> · <a href="/privacy-policy.html">Privacy policy</a> · <a href="/">Home</a></p>
         </div>
     </footer>
 
+    <script src="/js/cookie-consent.js"></script>
+    <script src="/js/meta-capi-client.js"></script>
     <script src="/js/blog-post.js"></script>
 </body>
 </html>

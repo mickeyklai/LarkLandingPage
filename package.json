@@ -5,6 +5,7 @@
     "build": "node scripts/inject-analytics-env.cjs"
   },
   "dependencies": {
-    "@sanity/client": "^7.20.0"
+    "@sanity/client": "^7.20.0",
+    "@sanity/image-url": "^2.1.1"
   }
 }

@@ -61,7 +61,7 @@
 
     var url = '/.netlify/functions/blog-post?slug=' + encodeURIComponent(slug);
 
-    fetch(url)
+    fetch(url, { cache: 'no-store' })
         .then(function (res) {
             return res.json().then(function (data) {
                 if (res.status === 404) {
@@ -90,6 +90,27 @@
             }
 
             proseEl.innerHTML = post.bodyHtml || '';
+
+            // If HTML is missing some figures (stale cache, older deploy), append the rest from imageUrls.
+            var urls = post.imageUrls;
+            if (urls && urls.length) {
+                var nImg = proseEl.querySelectorAll('img').length;
+                for (var i = nImg; i < urls.length; i++) {
+                    var src = urls[i];
+                    if (!src) {
+                        continue;
+                    }
+                    var fig = document.createElement('figure');
+                    fig.className = 'blog-prose-figure';
+                    var img = document.createElement('img');
+                    img.src = src;
+                    img.alt = '';
+                    img.decoding = 'async';
+                    img.loading = i === 0 && nImg === 0 ? 'eager' : 'lazy';
+                    fig.appendChild(img);
+                    proseEl.appendChild(fig);
+                }
+            }
         })
         .catch(function (err) {
             showStatus(err.message || 'Could not load this post.', true);

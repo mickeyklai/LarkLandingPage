@@ -172,7 +172,11 @@
 }
 
 .blog-article-header {
-    margin-bottom: 2.25rem;
+    margin-bottom: 2.5rem;
+}
+
+.blog-article-header-main {
+    min-width: 0;
 }
 
 .blog-article-meta {
@@ -183,6 +187,35 @@
     text-transform: uppercase;
     color: rgba(0, 200, 255, 0.48);
     margin: 0 0 1rem;
+}
+
+@media (min-width: 640px) {
+    .blog-article-header {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 0.15rem 1.75rem;
+        align-items: start;
+    }
+
+    .blog-article-meta {
+        margin: 0.2rem 0 0;
+        padding-right: 0.85rem;
+        border-right: 1px solid rgba(0, 200, 255, 0.18);
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        transform: rotate(180deg);
+        align-self: stretch;
+        line-height: 1.5;
+        white-space: nowrap;
+    }
+
+    .blog-article-title {
+        margin: 0;
+    }
+
+    .blog-article-dek {
+        margin: 1rem 0 0;
+    }
 }
 
 .blog-article-title {
@@ -210,7 +243,7 @@
     font-size: clamp(0.975rem, 2.1vw, 1.0625rem);
     line-height: 1.88;
     color: rgba(208, 222, 238, 0.82);
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     padding-top: 2rem;
 }
 
@@ -239,8 +272,35 @@
     font-size: 1.1rem;
 }
 
+.blog-prose > h2:first-child,
+.blog-prose > h3:first-child,
+.blog-prose > h4:first-child {
+    margin-top: 0;
+}
+
 .blog-prose p {
     margin: 0 0 1.15rem;
+}
+
+.blog-prose figure,
+.blog-prose .blog-prose-figure {
+    margin: 1.75rem 0;
+    padding: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 200, 255, 0.14);
+    background: rgba(0, 24, 32, 0.35);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.04) inset,
+        0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+.blog-prose figure img,
+.blog-prose .blog-prose-figure img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
 }
 
 .blog-prose a {
@@ -296,12 +356,3 @@
     margin-bottom: 0.35rem;
 }
 
-.footer-text a {
-    color: rgba(0, 200, 255, 0.42);
-    text-decoration: none;
-    transition: color 0.18s ease;
-}
-
-.footer-text a:hover {
-    color: rgba(0, 230, 255, 0.88);
-}

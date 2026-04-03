@@ -1,5 +1,6 @@
 'use strict';
 
+const { createImageUrlBuilder } = require('@sanity/image-url');
 const { getSanityClient } = require('../../lib/sanity');
 
 const DETAIL_QUERY = `
@@ -8,13 +9,29 @@ const DETAIL_QUERY = `
     "slug": slug.current,
     publishedAt,
     excerpt,
-    body
+    body[]{
+      ...,
+      _type == "image" => {
+        ...,
+        asset->{
+          _id,
+          url,
+          metadata {
+            dimensions {
+              width,
+              height
+            }
+          }
+        }
+      }
+    }
   }
 `;
 
 const headers = {
     'Content-Type': 'application/json',
-    'Cache-Control': 'public, max-age=60, s-maxage=300',
+    // Avoid stale JSON at the edge/browser after schema or serializer changes (images in body).
+    'Cache-Control': 'public, max-age=0, must-revalidate, s-maxage=60',
 };
 
 function escapeHtml(s) {
@@ -37,7 +54,7 @@ function wrapMarks(text, marks, markDefs) {
             out = `<del>${out}</del>`;
         } else if (mark === 'code') {
             out = `<code>${out}</code>`;
-        } else if (mark === 'u') {
+        } else if (mark === 'u' || mark === 'underline') {
             out = `<u>${out}</u>`;
         } else {
             const def = (markDefs || []).find((m) => m._key === mark);
@@ -67,13 +84,97 @@ function serializeSpans(children, markDefs) {
         .join('');
 }
 
-/** Minimal Portable Text → HTML (paragraphs, headings, blockquote, basic marks, links). */
-function portableTextToHtml(blocks) {
+function imageBlockUrl(block, builder) {
+    const asset = block && block.asset;
+    if (!asset || typeof asset !== 'object') {
+        return '';
+    }
+
+    let url = '';
+    if (builder) {
+        try {
+            url = builder.image(block).width(1400).auto('format').url();
+        } catch (_) {
+            /* malformed crop/ref — try direct asset URL below */
+        }
+    }
+
+    if (!url && typeof asset.url === 'string' && /^https?:\/\//i.test(asset.url)) {
+        const base = asset.url.split('?')[0];
+        url = `${base}?w=1400&auto=format`;
+    }
+
+    return url || '';
+}
+
+function imgDimensionAttrs(block) {
+    const d = block && block.asset && block.asset.metadata && block.asset.metadata.dimensions;
+    if (!d || typeof d.width !== 'number' || typeof d.height !== 'number') {
+        return '';
+    }
+    const w = Math.round(d.width);
+    const h = Math.round(d.height);
+    if (w <= 0 || h <= 0) {
+        return '';
+    }
+    return ` width="${w}" height="${h}"`;
+}
+
+function imageBlockToHtml(url, loadingAttr, block) {
+    if (!url) {
+        return '';
+    }
+    const loading = loadingAttr === 'eager' ? 'eager' : 'lazy';
+    const dim = imgDimensionAttrs(block);
+    return (
+        '<figure class="blog-prose-figure">' +
+        `<img src="${escapeHtml(url)}" alt="" loading="${loading}" decoding="async"${dim} />` +
+        '</figure>'
+    );
+}
+
+function collectImageUrls(blocks, { projectId, dataset } = {}) {
+    if (!Array.isArray(blocks)) {
+        return [];
+    }
+    const builder =
+        projectId && String(projectId).trim()
+            ? createImageUrlBuilder({ projectId: String(projectId).trim(), dataset: dataset || 'production' })
+            : null;
+    const urls = [];
+    for (const block of blocks) {
+        if (block && block._type === 'image') {
+            const u = imageBlockUrl(block, builder);
+            if (u) {
+                urls.push(u);
+            }
+        }
+    }
+    return urls;
+}
+
+/** Minimal Portable Text → HTML (paragraphs, headings, blockquote, images, basic marks, links). */
+function portableTextToHtml(blocks, { projectId, dataset } = {}) {
     if (!Array.isArray(blocks)) {
         return '';
     }
+    const builder =
+        projectId && String(projectId).trim()
+            ? createImageUrlBuilder({ projectId: String(projectId).trim(), dataset: dataset || 'production' })
+            : null;
+    let imageIndex = 0;
     const parts = [];
     for (const block of blocks) {
+        if (block && block._type === 'image') {
+            const url = imageBlockUrl(block, builder);
+            imageIndex += 1;
+            const loadingAttr = imageIndex === 1 ? 'eager' : 'lazy';
+            const imgHtml = imageBlockToHtml(url, loadingAttr, block);
+            if (imgHtml) {
+                parts.push(imgHtml);
+            }
+            continue;
+        }
         if (!block || block._type !== 'block' || !block.children) {
             continue;
         }
@@ -119,7 +220,7 @@ exports.handler = async function handler(event) {
     }
 
     try {
-        const client = getSanityClient();
+        const client = getSanityClient({ useCdn: false });
         const doc = await client.fetch(DETAIL_QUERY, { slug });
         if (!doc) {
             return {
@@ -129,12 +230,17 @@ exports.handler = async function handler(event) {
             };
         }
 
-        const bodyHtml = portableTextToHtml(doc.body);
+        const imageOpts = {
+            projectId: process.env.SANITY_PROJECT_ID,
+            dataset: process.env.SANITY_DATASET || 'production',
+        };
+        const bodyHtml = portableTextToHtml(doc.body, imageOpts);
+        const imageUrls = collectImageUrls(doc.body, imageOpts);
         const { body, ...rest } = doc;
         return {
             statusCode: 200,
             headers,
-            body: JSON.stringify({ ...rest, bodyHtml }),
+            body: JSON.stringify({ ...rest, bodyHtml, imageUrls }),
         };
     } catch (err) {
         console.error('blog-post:', err);

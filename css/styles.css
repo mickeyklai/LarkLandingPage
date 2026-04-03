@@ -1019,6 +1019,137 @@ footer {
     letter-spacing: 0.03em;
 }
 
+.footer-text a {
+    color: rgba(0, 200, 255, 0.42);
+    text-decoration: none;
+    transition: color 0.18s ease;
+}
+
+.footer-text a:hover {
+    color: rgba(0, 230, 255, 0.88);
+}
+
+/* ================================================================
+   COOKIE CONSENT
+================================================================ */
+.cookie-consent {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 250;
+    padding: 0.75rem clamp(1rem, 4vw, 2rem) calc(0.75rem + env(safe-area-inset-bottom, 0));
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+.cookie-consent.cookie-consent--visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.cookie-consent[hidden] {
+    display: none !important;
+}
+
+.cookie-consent-inner {
+    pointer-events: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.25rem;
+    max-width: 52rem;
+    width: 100%;
+    padding: 0.85rem 1.1rem;
+    background: rgba(4, 10, 18, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(0, 200, 255, 0.1);
+    border-radius: 10px;
+    box-shadow:
+        0 -4px 28px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(0, 0, 43, 0.25) inset;
+}
+
+.cookie-consent-text {
+    flex: 1 1 12rem;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: rgba(210, 220, 235, 0.88);
+    letter-spacing: 0.02em;
+}
+
+.cookie-consent-text a {
+    color: rgba(0, 210, 255, 0.75);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 200, 255, 0.25);
+    transition: color 0.18s ease, border-color 0.18s ease;
+}
+
+.cookie-consent-text a:hover {
+    color: rgba(0, 235, 255, 0.95);
+    border-bottom-color: rgba(0, 230, 255, 0.45);
+}
+
+.cookie-consent-accept {
+    flex-shrink: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.55rem 1.15rem;
+    color: #041018;
+    background: linear-gradient(
+        175deg,
+        rgba(0, 235, 255, 0.95) 0%,
+        rgba(0, 175, 220, 0.88) 100%
+    );
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.12) inset;
+    transition: filter 0.18s ease, transform 0.12s ease;
+}
+
+.cookie-consent-accept:hover {
+    filter: brightness(1.06);
+}
+
+.cookie-consent-accept:active {
+    transform: scale(0.98);
+}
+
+.cookie-consent-accept:focus {
+    outline: none;
+}
+
+.cookie-consent-accept:focus-visible {
+    outline: 2px solid rgba(0, 230, 255, 0.9);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cookie-consent {
+        transition: none;
+    }
+
+    .cookie-consent-accept {
+        transition: none;
+    }
+
+    .cookie-consent-accept:active {
+        transform: none;
+    }
+}
+
 .social-links {
     display: flex;
     align-items: center;
@@ -1615,4 +1746,78 @@ main, footer {
 .arc-section,
 .follow-section {
     background: transparent;
+}
+
+/* ================================================================
+   LEGAL / STATIC PAGES (e.g. privacy policy)
+================================================================ */
+.legal-page {
+    flex: 1 0 auto;
+    width: 100%;
+}
+
+.legal-main {
+    padding: clamp(2.5rem, 6vw, 4rem) clamp(1.5rem, 5vw, 4rem)
+        clamp(4rem, 10vw, 6rem);
+    max-width: 40rem;
+    margin: 0 auto;
+}
+
+.legal-main .section-heading {
+    margin-bottom: 1rem;
+}
+
+.legal-updated {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+    margin-bottom: 2.75rem;
+}
+
+.legal-section {
+    margin-bottom: 2.5rem;
+}
+
+.legal-section:last-child {
+    margin-bottom: 0;
+}
+
+.legal-section h2 {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(0, 200, 255, 0.55);
+    margin: 0 0 1rem;
+}
+
+.legal-section p,
+.legal-section ul {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(0.9375rem, 2vw, 1.02rem);
+    line-height: 1.75;
+    color: rgba(195, 212, 230, 0.72);
+    margin: 0 0 1rem;
+}
+
+.legal-section ul {
+    padding-left: 1.25rem;
+}
+
+.legal-section li {
+    margin-bottom: 0.4rem;
+}
+
+.legal-section a {
+    color: rgba(0, 215, 255, 0.75);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 200, 255, 0.28);
+    transition: color 0.18s ease, border-color 0.18s ease;
+}
+
+.legal-section a:hover {
+    color: rgba(0, 235, 255, 0.95);
+    border-bottom-color: rgba(0, 230, 255, 0.45);
 }
