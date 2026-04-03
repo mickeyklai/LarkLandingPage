@@ -2,3 +2,9 @@
   command = "npm run build"
   publish = "."
   functions = "netlify/functions"
+
+# Pretty URLs: /blog/my-post serves post.html; slug is read client-side from the path.
+[[redirects]]
+  from = "/blog/*"
+  to = "/blog/post.html"
+  status = 200

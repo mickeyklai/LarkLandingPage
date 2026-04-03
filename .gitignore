@@ -1,0 +1,16 @@
+# Local Netlify folder
+.netlify
+
+# Dependencies — install with `npm install` (Netlify does this on deploy)
+node_modules/
+
+# Local secrets — never push these
+.env
+.env.local
+.env.*.local
+
+# OS / editor noise
+.DS_Store
+
+# Stray Deno lockfile (this project uses npm only)
+deno.lock
