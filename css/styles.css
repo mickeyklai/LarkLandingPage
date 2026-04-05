@@ -1182,8 +1182,9 @@ footer {
     stroke-linejoin: round;
 }
 
-/* TikTok icon uses fill instead of stroke */
-.social-link--tiktok svg {
+/* TikTok + Pinterest icons use fill instead of stroke */
+.social-link--tiktok svg,
+.social-link--pinterest svg {
     stroke: none;
     fill: currentColor;
 }

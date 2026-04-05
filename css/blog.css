@@ -356,3 +356,177 @@
     margin-bottom: 0.35rem;
 }
 
+/* ================================================================
+   MOBILE: readability, safe areas, touch targets
+================================================================ */
+
+@media (max-width: 768px) {
+    .blog-main {
+        padding-top: max(env(safe-area-inset-top, 0px), clamp(1.75rem, 5vw, 3rem));
+        padding-bottom: max(env(safe-area-inset-bottom, 0px), clamp(3rem, 9vw, 5rem));
+        padding-left: max(env(safe-area-inset-left, 0px), clamp(1.1rem, 4.5vw, 2rem));
+        padding-right: max(env(safe-area-inset-right, 0px), clamp(1.1rem, 4.5vw, 2rem));
+    }
+
+    .blog-page .section-kicker {
+        letter-spacing: 0.32em;
+        margin-bottom: 1.15rem;
+    }
+
+    .blog-list-title {
+        font-size: clamp(1.85rem, 6.5vw, 2.45rem);
+        text-wrap: balance;
+    }
+
+    .blog-list-lead {
+        max-width: none;
+        font-size: clamp(1rem, 2.35vw, 1.05rem);
+        line-height: 1.78;
+        margin-bottom: 2.25rem;
+    }
+
+    .blog-ornament {
+        margin-bottom: 2rem;
+    }
+
+    .blog-back {
+        min-height: 44px;
+        padding: 0.35rem 0;
+        margin: 0 0 1.5rem;
+        -webkit-tap-highlight-color: rgba(0, 200, 255, 0.12);
+    }
+
+    .blog-card {
+        padding: 1.5rem 0;
+        -webkit-tap-highlight-color: rgba(0, 200, 255, 0.1);
+    }
+
+    .blog-card-meta {
+        letter-spacing: 0.22em;
+        line-height: 1.45;
+    }
+
+    .blog-card-title {
+        font-size: clamp(1.25rem, 4.2vw, 1.42rem);
+        overflow-wrap: anywhere;
+        hyphens: auto;
+    }
+
+    .blog-card-excerpt {
+        font-size: 1rem;
+        line-height: 1.68;
+    }
+
+    .blog-card-arrow {
+        margin-top: 0.75rem;
+    }
+
+    .blog-status {
+        font-size: 0.875rem;
+        line-height: 1.5;
+        margin-bottom: 1.15rem;
+    }
+
+    .blog-article-header {
+        margin-bottom: 2rem;
+    }
+
+    .blog-article-meta {
+        letter-spacing: 0.22em;
+        line-height: 1.5;
+        margin-bottom: 0.85rem;
+    }
+
+    .blog-article-title {
+        font-size: clamp(1.65rem, 7vw, 2.15rem);
+        line-height: 1.12;
+        text-wrap: balance;
+        overflow-wrap: anywhere;
+        hyphens: auto;
+    }
+
+    .blog-article-dek {
+        margin-top: 1rem;
+        font-size: clamp(1.05rem, 2.8vw, 1.18rem);
+    }
+
+    .blog-prose {
+        font-size: clamp(1rem, 2.35vw, 1.05rem);
+        line-height: 1.9;
+        padding-top: 1.65rem;
+    }
+
+    .blog-prose h1 {
+        font-size: clamp(1.45rem, 5vw, 1.6rem);
+    }
+
+    .blog-prose h2 {
+        font-size: clamp(1.28rem, 4.2vw, 1.42rem);
+    }
+
+    .blog-prose h3 {
+        font-size: clamp(1.12rem, 3.5vw, 1.22rem);
+    }
+
+    .blog-prose h4 {
+        font-size: 1.05rem;
+    }
+
+    .blog-prose blockquote {
+        margin: 1.25rem 0;
+        padding-left: 1rem;
+        font-size: 0.98em;
+    }
+
+    .blog-prose ul,
+    .blog-prose ol {
+        margin-left: 1.1rem;
+        padding-left: 0.15rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .blog-main {
+        padding-left: max(env(safe-area-inset-left, 0px), 1rem);
+        padding-right: max(env(safe-area-inset-right, 0px), 1rem);
+    }
+
+    .blog-page .section-kicker {
+        font-size: 0.54rem;
+        letter-spacing: 0.28em;
+    }
+
+    .blog-card-meta {
+        font-size: 0.52rem;
+        letter-spacing: 0.18em;
+    }
+
+    .blog-article-meta {
+        font-size: 0.52rem;
+        letter-spacing: 0.18em;
+    }
+
+    .blog-prose figure,
+    .blog-prose .blog-prose-figure {
+        --blog-bleed-l: max(env(safe-area-inset-left, 0px), 1rem);
+        --blog-bleed-r: max(env(safe-area-inset-right, 0px), 1rem);
+        margin-left: calc(-1 * var(--blog-bleed-l));
+        margin-right: calc(-1 * var(--blog-bleed-r));
+        width: calc(100% + var(--blog-bleed-l) + var(--blog-bleed-r));
+        max-width: none;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+
+    .blog-prose pre {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 0.75rem 0.85rem;
+        font-size: 0.82rem;
+        border-radius: 4px;
+        background: rgba(0, 28, 38, 0.55);
+        border: 1px solid rgba(0, 200, 255, 0.12);
+    }
+}
+
