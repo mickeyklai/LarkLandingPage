@@ -139,9 +139,15 @@
             <div class="hero-content">
                 <h1 class="hero-title neon-blue"><span class="hero-title-text">Independent</span></h1>
             </div>
-            <div class="hero-cta" id="reader-list" aria-labelledby="reader-list-heading">
-                <p class="hero-hook">I wasn't his type. I was his target.</p>
-                <p class="hero-tagline">A dark romance of obsession, power, and the price of losing control.</p>
+            <div class="hero-cta hero-newsletter" id="reader-list" aria-labelledby="reader-list-heading">
+                <p class="hero-newsletter-head" id="reader-list-heading">I wasn't his type. I was his target.</p>
+                <p class="hero-newsletter-sub">
+                    <span class="hero-newsletter-sub-desktop">but now you can know his name... and hear his song.</span>
+                    <span class="hero-newsletter-sub-mobile">
+                        <span class="hero-newsletter-sub-line">Now you can know his name...</span>
+                        <span class="hero-newsletter-sub-line">and hear his song.</span>
+                    </span>
+                </p>
                 <p class="hero-social-hint" aria-label="Follow @larkelwood">
                     <a href="https://www.tiktok.com/@larkelwood" target="_blank" rel="noopener noreferrer">TikTok</a>
                     <span class="sep" aria-hidden="true">·</span>
@@ -153,7 +159,6 @@
                     <span class="sep" aria-hidden="true">·</span>
                     <a href="https://x.com/larkelwood" target="_blank" rel="noopener noreferrer">X</a>
                 </p>
-                <p class="hero-cta-label" id="reader-list-heading">Release updates &amp; early access</p>
                 <div class="hero-cta-form-wrap">
                     <form class="hero-cta-form" id="heroQuickForm" action="#" method="post" aria-label="Join the reader list" novalidate>
                         <label class="visually-hidden" for="quick-email">Email address</label>
@@ -164,15 +169,17 @@
                             class="hero-cta-input"
                             autocomplete="email"
                             required
-                            placeholder="Enter your email"
+                            placeholder="your email for his name and song"
                             inputmode="email"
                             maxlength="254"
                         >
                         <button type="submit" class="btn-hero-cta" id="heroQuickSubmit">Join the reader list</button>
                     </form>
                     <div class="hero-cta-success-panel" id="heroCtaSuccess" role="status" aria-live="polite" hidden>
-                        <p class="hero-cta-success-title">You're on the list</p>
-                        <p class="hero-cta-success-note">Watch your inbox for release news, bonuses, and early access.</p>
+                        <p class="hero-cta-success-title">you're in. check your inbox now.</p>
+                        <p class="hero-cta-success-note hero-cta-success-spam">
+                            <span style="color: #ff4d4d; font-weight: bold;">Check your SPAM folder—move it to Primary so you don't lose him.</span>
+                        </p>
                     </div>
                     <p class="hero-cta-feedback hero-cta-feedback--error" id="heroCtaError" role="alert" aria-live="assertive" hidden></p>
                 </div>

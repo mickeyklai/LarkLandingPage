@@ -354,7 +354,8 @@ header {
     display: inline-block;
 }
 
-.hero-hook {
+/* Newsletter hook: same neon cyan treatment as original .hero-hook */
+.hero-newsletter-head {
     font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
     font-size: clamp(1.1rem, 3.2vw, 1.55rem);
     font-style: italic;
@@ -362,20 +363,41 @@ header {
     line-height: 1.35;
     color: #d4f7ff;
     margin: 0 0 0.2rem;
+    max-width: 28rem;
     text-shadow:
         0 0 4px rgba(0, 230, 255, 0.95),
         0 0 14px rgba(0, 190, 255, 0.65),
         0 0 28px rgba(0, 140, 255, 0.35);
 }
 
-.hero-tagline {
+.hero-newsletter-sub {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     font-size: clamp(0.8rem, 1.8vw, 0.9rem);
     font-weight: 400;
     letter-spacing: 0.08em;
+    line-height: 1.5;
     color: rgba(200, 220, 235, 0.78);
     margin: 0;
     max-width: 28rem;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.75);
+}
+
+.hero-newsletter-sub-desktop {
+    display: block;
+    text-transform: lowercase;
+}
+
+.hero-newsletter-sub-mobile {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    text-transform: none;
+    letter-spacing: 0.06em;
+}
+
+.hero-newsletter-sub-line {
+    display: block;
 }
 
 /* Hero CTA: email capture at bottom */
@@ -389,15 +411,6 @@ header {
     gap: 0.5rem;
     margin-top: auto;
     padding-bottom: clamp(1.5rem, 3vh, 2.5rem);
-}
-
-.hero-cta-label {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 0.6rem;
-    font-weight: 500;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: rgba(0, 200, 255, 0.45);
 }
 
 .hero-cta-form {
@@ -426,7 +439,9 @@ header {
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.hero-cta-input::placeholder { color: rgba(170, 185, 200, 0.5); }
+.hero-cta-input::placeholder {
+    color: rgba(170, 185, 200, 0.5);
+}
 .hero-cta-input:hover { border-color: rgba(0, 200, 255, 0.22); }
 .hero-cta-input:focus {
     outline: none;
@@ -484,6 +499,14 @@ header {
     width: 100%;
 }
 
+/* Wider row on desktop so long placeholder fits beside the CTA button */
+@media (min-width: 769px) {
+    .hero-newsletter .hero-cta-form-wrap,
+    .hero-newsletter .hero-cta-form {
+        max-width: min(40rem, calc(100vw - 2.5rem));
+    }
+}
+
 .btn-hero-cta:disabled,
 .hero-cta-input:disabled {
     opacity: 0.55;
@@ -528,6 +551,7 @@ header {
     font-weight: 500;
     letter-spacing: 0.06em;
     color: rgba(200, 245, 255, 0.96);
+    text-transform: lowercase;
     text-shadow:
         0 0 12px rgba(0, 230, 255, 0.35),
         0 0 28px rgba(0, 180, 255, 0.2);
@@ -535,12 +559,12 @@ header {
 
 .hero-cta-success-panel .hero-cta-success-note {
     margin: 0;
+    line-height: 1.55;
+}
+
+.hero-cta-success-panel .hero-cta-success-spam {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 0.72rem;
-    font-weight: 400;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: rgba(0, 200, 255, 0.5);
+    font-size: clamp(0.72rem, 2vw, 0.82rem);
     line-height: 1.5;
 }
 
@@ -1570,18 +1594,17 @@ footer {
         gap: 0.4rem;
     }
 
-    /* "Whisper" tagline: lighter weight, slightly airy letter-spacing
-       Dark pop shadow makes it readable against the smoky image */
-    .hero-hook {
+    /* Newsletter hook: whisper + neon (matches former .hero-hook mobile) */
+    .hero-newsletter-head {
         font-size: clamp(1.05rem, 3.6vw, 1.3rem);
         font-weight: 300;
         line-height: 1.5;
         letter-spacing: 0.04em;
         margin: 0 0 0.35rem;
+        max-width: 90%;
     }
 
-    /* Description: compact, dark shadow for legibility */
-    .hero-tagline {
+    .hero-newsletter-sub {
         font-size: 0.9rem;
         line-height: 1.65;
         letter-spacing: 0.08em;
@@ -1589,6 +1612,14 @@ footer {
         margin-left: auto;
         margin-right: auto;
         text-shadow: 0 0 12px rgba(0, 0, 0, 0.95), 0 0 24px rgba(0, 0, 0, 0.75);
+    }
+
+    .hero-newsletter-sub-desktop {
+        display: none;
+    }
+
+    .hero-newsletter-sub-mobile {
+        display: flex;
     }
 
     /* Social hint: expanded tap targets */
@@ -1706,8 +1737,7 @@ footer {
             0 0 28px rgba(0, 180, 255, 0.65);
     }
 
-    /* Tagline: dark pop + cyan backlit glow + trimmed neon */
-    .hero-hook {
+    .hero-newsletter-head {
         text-shadow:
             0 0 10px rgba(0, 0, 0, 1),
             0 0 22px rgba(0, 0, 0, 0.88),

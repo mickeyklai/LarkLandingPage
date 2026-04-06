@@ -35,7 +35,7 @@
             var email = heroEmailInput.value.trim();
             if (!isValidEmail(email)) {
                 heroEmailInput.focus();
-                setHeroError('Please enter a valid email address.');
+                setHeroError('please enter a valid email address.');
                 return;
             }
 
@@ -73,11 +73,11 @@
                     var msg =
                         out.data && out.data.error
                             ? out.data.error
-                            : 'Something went wrong. Please try again.';
+                            : 'something went wrong. please try again.';
                     setHeroError(msg);
                 })
                 .catch(function () {
-                    setHeroError('Something went wrong. Please try again.');
+                    setHeroError('something went wrong. please try again.');
                 })
                 .then(function () {
                     heroSubmitting = false;
