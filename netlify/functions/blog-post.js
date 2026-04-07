@@ -1,6 +1,5 @@
 'use strict';
 
-const { createImageUrlBuilder } = require('@sanity/image-url');
 const { getSanityClient } = require('../../lib/sanity');
 
 const DETAIL_QUERY = `
@@ -133,12 +132,12 @@ function imageBlockToHtml(url, loadingAttr, block) {
     );
 }
 
-function collectImageUrls(blocks, { projectId, dataset } = {}) {
+function collectImageUrls(blocks, { projectId, dataset, createImageUrlBuilder } = {}) {
     if (!Array.isArray(blocks)) {
         return [];
     }
     const builder =
-        projectId && String(projectId).trim()
+        projectId && String(projectId).trim() && typeof createImageUrlBuilder === 'function'
             ? createImageUrlBuilder({ projectId: String(projectId).trim(), dataset: dataset || 'production' })
             : null;
     const urls = [];
@@ -154,12 +153,12 @@ function collectImageUrls(blocks, { projectId, dataset } = {}) {
 }
 
 /** Minimal Portable Text → HTML (paragraphs, headings, blockquote, images, basic marks, links). */
-function portableTextToHtml(blocks, { projectId, dataset } = {}) {
+function portableTextToHtml(blocks, { projectId, dataset, createImageUrlBuilder } = {}) {
     if (!Array.isArray(blocks)) {
         return '';
     }
     const builder =
-        projectId && String(projectId).trim()
+        projectId && String(projectId).trim() && typeof createImageUrlBuilder === 'function'
             ? createImageUrlBuilder({ projectId: String(projectId).trim(), dataset: dataset || 'production' })
             : null;
     let imageIndex = 0;
@@ -230,9 +229,11 @@ exports.handler = async function handler(event) {
             };
         }
 
+        const { createImageUrlBuilder } = await import('@sanity/image-url');
         const imageOpts = {
             projectId: process.env.SANITY_PROJECT_ID,
             dataset: process.env.SANITY_DATASET || 'production',
+            createImageUrlBuilder,
         };
         const bodyHtml = portableTextToHtml(doc.body, imageOpts);
         const imageUrls = collectImageUrls(doc.body, imageOpts);
