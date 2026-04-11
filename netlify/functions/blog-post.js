@@ -3,7 +3,7 @@
 const { getSanityClient } = require('../../lib/sanity');
 
 const DETAIL_QUERY = `
-  *[_type == "post" && slug.current == $slug][0] {
+  *[_type == "post" && !(_id in path("drafts.**")) && slug.current == $slug][0] {
     title,
     "slug": slug.current,
     publishedAt,
@@ -20,6 +20,34 @@ const DETAIL_QUERY = `
               width,
               height
             }
+          }
+        }
+      },
+      _type == "patternDownload" => {
+        _key,
+        _type,
+        description,
+        linkText,
+        "fileUrl": file.asset->url,
+        "fileName": file.asset->originalFilename,
+        file {
+          asset->{
+            url,
+            originalFilename
+          }
+        }
+      },
+      _type == "object" && defined(file) && file._type == "file" => {
+        _key,
+        _type,
+        description,
+        linkText,
+        "fileUrl": file.asset->url,
+        "fileName": file.asset->originalFilename,
+        file {
+          asset->{
+            url,
+            originalFilename
           }
         }
       }
@@ -119,15 +147,90 @@ function imgDimensionAttrs(block) {
     return ` width="${w}" height="${h}"`;
 }
 
+function patternDownloadFileUrl(block) {
+    if (!block || typeof block !== 'object') {
+        return '';
+    }
+    const direct = typeof block.fileUrl === 'string' ? block.fileUrl.trim() : '';
+    if (direct && /^https?:\/\//i.test(direct)) {
+        return direct;
+    }
+    const asset = block.file && block.file.asset;
+    if (asset && typeof asset === 'object' && typeof asset.url === 'string') {
+        const u = asset.url.trim();
+        if (u && /^https?:\/\//i.test(u)) {
+            return u;
+        }
+    }
+    return '';
+}
+
+function patternDownloadFileName(block) {
+    if (!block || typeof block !== 'object') {
+        return '';
+    }
+    const direct = typeof block.fileName === 'string' ? block.fileName.trim() : '';
+    if (direct) {
+        return direct;
+    }
+    const asset = block.file && block.file.asset;
+    if (asset && typeof asset === 'object' && typeof asset.originalFilename === 'string') {
+        return asset.originalFilename.trim();
+    }
+    return '';
+}
+
+function patternDownloadToHtml(block) {
+    const url = patternDownloadFileUrl(block);
+    if (!url) {
+        return '';
+    }
+    const linkRaw =
+        block && typeof block.linkText === 'string' && block.linkText.trim()
+            ? block.linkText.trim()
+            : 'Download pattern PDF';
+    const descRaw =
+        block && typeof block.description === 'string' ? block.description.trim() : '';
+    const desc =
+        descRaw === ''
+            ? ''
+            : `<p class="blog-pattern-pdf-desc">${escapeHtml(descRaw)}</p>`;
+    const fileNameRaw = patternDownloadFileName(block);
+    const fileHint =
+        fileNameRaw !== '' ? escapeHtml(fileNameRaw) : '';
+    const ariaLabel = fileHint ? `${escapeHtml(linkRaw)} (${fileHint})` : escapeHtml(linkRaw);
+    return (
+        '<aside class="blog-pattern-pdf">' +
+        desc +
+        '<a class="blog-pattern-pdf-link" href="' +
+        escapeHtml(url) +
+        '" download' +
+        ' target="_blank" rel="noopener noreferrer"' +
+        (fileHint ? ` aria-label="${ariaLabel}"` : '') +
+        '>' +
+        escapeHtml(linkRaw) +
+        '</a>' +
+        '</aside>'
+    );
+}
+
 function imageBlockToHtml(url, loadingAttr, block) {
     if (!url) {
         return '';
     }
     const loading = loadingAttr === 'eager' ? 'eager' : 'lazy';
     const dim = imgDimensionAttrs(block);
+    const altRaw = block && typeof block.alt === 'string' ? block.alt : '';
+    const alt = escapeHtml(altRaw);
+    const capRaw = block && typeof block.caption === 'string' ? block.caption.trim() : '';
+    const caption =
+        capRaw === ''
+            ? ''
+            : `<figcaption class="blog-prose-caption">${escapeHtml(capRaw)}</figcaption>`;
     return (
         '<figure class="blog-prose-figure">' +
-        `<img src="${escapeHtml(url)}" alt="" loading="${loading}" decoding="async"${dim} />` +
+        `<img src="${escapeHtml(url)}" alt="${alt}" loading="${loading}" decoding="async"${dim} />` +
+        caption +
         '</figure>'
     );
 }
@@ -171,6 +274,21 @@ function portableTextToHtml(blocks, { projectId, dataset, createImageUrlBuilder 
             const imgHtml = imageBlockToHtml(url, loadingAttr, block);
             if (imgHtml) {
                 parts.push(imgHtml);
+            }
+            continue;
+        }
+        const isPatternDownload =
+            block &&
+            (block._type === 'patternDownload' ||
+                (block._type === 'object' &&
+                    block.file &&
+                    typeof block.file === 'object' &&
+                    block.file._type === 'file' &&
+                    block.file.asset));
+        if (isPatternDownload) {
+            const cardHtml = patternDownloadToHtml(block);
+            if (cardHtml) {
+                parts.push(cardHtml);
             }
             continue;
         }

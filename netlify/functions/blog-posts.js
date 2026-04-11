@@ -3,7 +3,7 @@
 const { getSanityClient } = require('../../lib/sanity');
 
 const LIST_QUERY = `
-  *[_type == "post" && defined(slug.current)] | order(coalesce(publishedAt, _updatedAt) desc) {
+  *[_type == "post" && !(_id in path("drafts.**")) && defined(slug.current)] | order(coalesce(publishedAt, _updatedAt) desc) {
     title,
     "slug": slug.current,
     publishedAt,

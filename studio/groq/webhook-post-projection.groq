@@ -1,0 +1,10 @@
+{
+  _id,
+  _type,
+  title,
+  "slug": slug.current,
+  "postUrl": select(defined(slug.current) => "https://larkelwood.com/blog/" + slug.current),
+  "mainImageCdnUrl": mainImage.asset->url,
+  publishedAt,
+  excerpt
+}
