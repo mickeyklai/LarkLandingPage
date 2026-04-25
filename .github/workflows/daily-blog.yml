@@ -24,8 +24,9 @@ name: Daily blog
 
 on:
   schedule:
-    # Every day at 15:15 UTC (~7:15 PT same-day standard time). Edit minutes/hour as needed.
-    - cron: '15 15 * * *'
+    # רץ בכל יום ב-00:15 UTC 
+    # זה יוצא 20:15 בערב בניו יורק (EST) ו-03:15 לפנות בוקר בישראל
+    - cron: '15 0 * * *'
   workflow_dispatch:
 
 permissions:
@@ -68,5 +69,6 @@ jobs:
           BLOG_CTA_LINE_AFTER: ${{ vars.BLOG_CTA_LINE_AFTER }}
           BLOG_MAINIMAGE_WEBHOOK_DELAY_MS: ${{ vars.BLOG_MAINIMAGE_WEBHOOK_DELAY_MS }}
           BLOG_MAINIMAGE_PIN_PATCHES: ${{ vars.BLOG_MAINIMAGE_PIN_PATCHES }}
+          BLOG_MAINIMAGE_PIN_PATCH_COUNT: ${{ vars.BLOG_MAINIMAGE_PIN_PATCH_COUNT }}
           BLOG_MULTIPLE_PER_DAY: ${{ vars.BLOG_MULTIPLE_PER_DAY }}
         run: npm run publish:daily-blog

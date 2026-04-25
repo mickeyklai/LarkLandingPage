@@ -3,13 +3,13 @@
  * Daily blog pipeline: one published Sanity `post` per run with Portable Text body
  * and at least one image block (required by the public site). Groq copy is tuned for SEO,
  * Lark Elwood / Independent / dark romance brand, Pinterest-adjacent angles, and a soft funnel to the site and book.
- * Hero images: Groq supplies heroImages[3] (alt, caption, prompt each). Body embeds all three; mainImage
- * starts as hero 1, then two patches (delay BLOG_MAINIMAGE_WEBHOOK_DELAY_MS) for Make/Pinterest webhooks.
- * Filenames: lark-elwood-dark-romance-blog-{slug}-mood-{1|2|3}.jpg
+ * Hero images: Groq supplies heroImages[3] (alt, caption, prompt each). Body embeds those three; mainImage
+ * starts as hero 1, then rotates through additional images for Make/Pinterest webhooks.
+ * Filenames: lark-elwood-dark-romance-blog-{slug}-mood-{1..N}.jpg
  *
  * Image strategy (first match wins):
  * - HF_TOKEN — @huggingface/inference + FLUX.1-schnell (Inference Providers, provider "auto").
- *   Groq supplies `imagePrompt` (faceless dark-romance mood, Pinterest-friendly); JPEG → Sanity.
+ *   Groq supplies `imagePrompt` (dark-romance mood, Pinterest-friendly); JPEG → Sanity.
  * - Else PEXELS_API_KEY — stock photo → Sanity upload.
  * - Else BLOG_IMAGE_POOL_REFS — comma-separated Sanity image asset _id values (Studio uploads).
  *
@@ -41,7 +41,8 @@
  *   BLOG_READER_LIST_URL — optional full signup URL override (default: BLOG_PUBLIC_URL + /#reader-list)
  *   BLOG_NEWSLETTER_LINK_TEXT — anchor text for the auto-appended CTA link (default: "Join the reader list")
  *   BLOG_CTA_LINE_BEFORE / BLOG_CTA_LINE_AFTER — optional prose around that link in the CTA paragraph
- *   BLOG_MAINIMAGE_WEBHOOK_DELAY_MS — ms between mainImage patches 2 and 3 (default 8000); set 0 to patch back-to-back
+ *   BLOG_MAINIMAGE_WEBHOOK_DELAY_MS — ms between mainImage patches (default 10000); set 0 to patch back-to-back
+ *   BLOG_MAINIMAGE_PIN_PATCH_COUNT — total mainImage states per post, including the initial create image (default 10)
  *   BLOG_MAINIMAGE_PIN_PATCHES — set to "0" or "false" to skip mainImage patches (only first image as main)
  *
  * Flags:
@@ -107,27 +108,36 @@ const crypto = require('crypto');
 const { createClient } = require('@sanity/client');
 
 const TOPIC_SLUGS = [
-    'whispers-in-the-shadows',
-    'morally-grey-hearts',
-    'enemies-to-lovers',
-    'obsession-and-devotion',
-    'forbidden-rooms',
-    'villains-who-love-hard',
-    'dark-academia-notes',
-    'tension-on-the-page',
-    'independent-deep-dives',
-    'reader-list-secrets',
-    'candlelight-confessions',
-    'after-midnight-drafts',
-    'pinterest-dark-mood',
+    'dark-romance-cupcakes',
+    'dark-romance-dessert-table',
+    'dark-romance-dresses',
+    'gothic-date-night-styling',
+    'dark-romance-hair-moodboard',
+    'dark-romance-nails-aesthetic',
+    'dark-romance-home-styling',
+    'gothic-bedroom-and-library-atmosphere',
+    'enemies-to-lovers-guide',
+    'best-dark-romance-tropes',
+    'forbidden-love-trope-deep-dive',
+    'morally-grey-hero-obsession',
+    'villain-gets-the-girl-analysis',
+    'dark-romance-bookshelf-curation',
+    'independent-book-club-notes',
     'romance-trope-watch',
-    'velvet-aesthetic-notes',
-    'books-that-sting',
+    'dark-academia-reading-corner',
     'midnight-kitchen-mood',
+    'dark-romance-party-ideas',
+    'dark-romance-reader-list-journal',
 ];
 
 const DEFAULT_PEXELS_QUERIES = [
-    'dark moody candles velvet no people',
+    'dark romance couple hands close up moody',
+    'gothic fashion black dress dramatic lighting',
+    'dark cupcakes chocolate dessert moody',
+    'dark manicure nails black burgundy aesthetic',
+    'romantic candlelight dinner black table setting',
+    'cozy gothic home decor candles books',
+    'dark hair styling waves dramatic portrait crop',
     'gothic window rain night interior',
     'red roses black background still life',
     'abandoned mansion chandelier darkness',
@@ -258,12 +268,13 @@ function pexelsQueries() {
 }
 
 /**
- * Lark blog / Pinterest hero images only: faceless mood scenes (no people, no faces).
- * Strong composition and contrast so the thumbnail reads in a feed; dark romance vibe.
+ * Lark blog / Pinterest hero images: sensual dark-romance mood with body language allowed.
+ * Strong composition and contrast so the thumbnail reads in a feed; avoid full identifiable faces.
  */
 const HF_STYLE_PREFIX =
     'Pinterest-worthy ultra sharp editorial photograph, dark romance aesthetic, ' +
-    'NO people NO faces NO human figures anywhere in frame, environment and objects only, ' +
+    'people and sensual interaction allowed (hands, eyes, torsos, lips-to-bottom framing), ' +
+    'AVOID full identifiable faces and direct portrait framing, ' +
     'single bold focal point readable at tiny thumbnail size, seductive mysterious mood, ' +
     'velvet crimson ink-black and bruised-plum palette, dramatic cinematic lighting on surfaces and textures, ' +
     'luxury gothic thriller mood curiosity hook, ' +
@@ -274,8 +285,8 @@ const HF_STYLE_SUFFIX =
     'scroll-stopping composition, tasteful sensual darkness without explicit content';
 
 const HF_NEGATIVE_PROMPT =
-    'person, people, human, man, woman, couple, body, face, faces, portrait, eyes, ' +
-    'silhouette of person, crowd, selfie, skin, hands holding face, ' +
+    'full face, fully visible face, centered portrait, frontal portrait, close-up face, identifiable face, selfie, ' +
+    'silhouette of person, crowd, group crowd, ' +
     'old, elderly, cartoon, anime, illustration, painting, drawing, sketch, ' +
     'blurry, low quality, low resolution, pixelated, ' +
     'text, watermark, logo, typography, bright pastel, cheerful, ' +
@@ -286,7 +297,7 @@ const HF_NEGATIVE_PROMPT =
 function enhanceImagePrompt(raw) {
     const core =
         String(raw || '').trim() ||
-        'empty velvet-draped chaise by a rain-streaked gothic window, single guttering candle, open book with worn spine, no people';
+        'rain-streaked gothic window, velvet chaise, a couple from lips to waist with clasped hands, single guttering candle, open book with worn spine, no full face visible';
     return `${HF_STYLE_PREFIX}${core}${HF_STYLE_SUFFIX}`;
 }
 
@@ -333,7 +344,7 @@ async function generateHfImageJpeg(imagePrompt) {
     throw new Error(`Hugging Face image generation failed after retries: ${lastErr && lastErr.message}`);
 }
 
-/** Sanity asset originalFilename: slug + brand + slot for CDN SEO. slotIndex 1–3 for three heroes. */
+/** Sanity asset originalFilename: slug + brand + slot for CDN SEO. */
 function seoBlogImageFilename(slugCurrent, ext, slotIndex) {
     const safe = String(slugCurrent || 'post')
         .toLowerCase()
@@ -342,8 +353,7 @@ function seoBlogImageFilename(slugCurrent, ext, slotIndex) {
         .replace(/^-|-$/g, '')
         .slice(0, 72);
     const e = (ext || 'jpg').replace(/^\./, '').toLowerCase();
-    const slot =
-        typeof slotIndex === 'number' && slotIndex >= 1 && slotIndex <= 3 ? `-mood-${slotIndex}` : '';
+    const slot = typeof slotIndex === 'number' && slotIndex >= 1 ? `-mood-${slotIndex}` : '';
     return `lark-elwood-dark-romance-blog-${safe}${slot}.${e}`;
 }
 
@@ -379,31 +389,58 @@ function dryHeroSlot(i, alt) {
     };
 }
 
-/** Three distinct assets for body + mainImage rotation. Pool: use ≥3 refs for three unique pins. */
-async function resolveThreeHeroImageSlots(client, runDate, dryRun, meta, heroSpecs) {
+function heroSpecForSlot(heroSpecs, idx, total, context) {
+    const base = heroSpecs[idx % heroSpecs.length] || {};
+    const n = idx + 1;
+    const seedTitle = String((context && context.postTitle) || '').trim();
+    const seedTopic = String((context && context.topicSlug) || '').trim().replace(/-/g, ' ');
+    const altBase = String(base.imageAlt || `Lark Elwood dark romance · Independent mood`).replace(/\(\d+\s+of\s+\d+\)$/i, '').trim();
+    const capBase = String(base.imageCaption || `Lark Elwood · Independent · mood`).trim();
+    const promptBase = String(base.imagePrompt || '').trim();
+    const cycle = Math.floor(idx / heroSpecs.length);
+    const anchor = [seedTitle, seedTopic].filter(Boolean).join(' | ');
+    const prompt =
+        cycle > 0
+            ? `${promptBase}; keep the same article theme${anchor ? ` (${anchor})` : ''}; variation ${
+                  cycle + 1
+              }: same core subject and props, fresh angle/composition/lighting/palette, sensual body-language allowed, no full identifiable faces`
+            : promptBase;
+    return {
+        imageAlt: `${altBase} (${n} of ${total})`,
+        imageCaption: `${capBase} · mood ${n}`,
+        imagePrompt: prompt,
+    };
+}
+
+/** N distinct/rotating assets for body + mainImage rotation. Pool refs can repeat if fewer than N are available. */
+async function resolveHeroImageSlots(client, runDate, dryRun, meta, heroSpecs, slotCount) {
     const pool = parsePoolRefs();
     const hf = process.env.HF_TOKEN && String(process.env.HF_TOKEN).trim();
     const pexelsKey = process.env.PEXELS_API_KEY && String(process.env.PEXELS_API_KEY).trim();
     const slugCurrent = (meta.slugCurrent && String(meta.slugCurrent).trim()) || `post-${runDate}`;
     const postTitle = meta.postTitle && String(meta.postTitle).trim();
+    const topicSlug = meta.topicSlug && String(meta.topicSlug).trim();
+    const totalSlots = Math.max(3, Number(slotCount) || 3);
 
-    if (!Array.isArray(heroSpecs) || heroSpecs.length !== 3) {
-        throw new Error('heroSpecs must be an array of length 3');
+    if (!Array.isArray(heroSpecs) || heroSpecs.length < 1) {
+        throw new Error('heroSpecs must be a non-empty array');
     }
 
     if (hf && dryRun) {
         return {
-            slots: [dryHeroSlot(0, heroSpecs[0].imageAlt), dryHeroSlot(1, heroSpecs[1].imageAlt), dryHeroSlot(2, heroSpecs[2].imageAlt)],
+            slots: Array.from({ length: totalSlots }, (_, i) =>
+                dryHeroSlot(i, heroSpecForSlot(heroSpecs, i, totalSlots, { postTitle, topicSlug }).imageAlt),
+            ),
         };
     }
 
     if (hf && !dryRun) {
         const slots = [];
-        for (let i = 0; i < 3; i += 1) {
-            const spec = heroSpecs[i];
+        for (let i = 0; i < totalSlots; i += 1) {
+            const spec = heroSpecForSlot(heroSpecs, i, totalSlots, { postTitle, topicSlug });
             const promptFor =
                 (spec.imagePrompt && String(spec.imagePrompt).trim()) ||
-                'storm beyond tall arched windows, dripping wax candle, stacked antique books, black lace on marble, empty chair, no people';
+                'storm beyond tall arched windows, dripping wax candle, stacked antique books, black lace on marble, close framing from lips to waist, no full identifiable face';
             const buf = await generateHfImageJpeg(promptFor);
             const filename = seoBlogImageFilename(slugCurrent, 'jpg', i + 1);
             const doc = await client.assets.upload('image', buf, { filename });
@@ -418,16 +455,26 @@ async function resolveThreeHeroImageSlots(client, runDate, dryRun, meta, heroSpe
 
     if (pexelsKey && dryRun && !pool.length && !hf) {
         return {
-            slots: [dryHeroSlot(0, heroSpecs[0].imageAlt), dryHeroSlot(1, heroSpecs[1].imageAlt), dryHeroSlot(2, heroSpecs[2].imageAlt)],
+            slots: Array.from({ length: totalSlots }, (_, i) =>
+                dryHeroSlot(i, heroSpecForSlot(heroSpecs, i, totalSlots, { postTitle, topicSlug }).imageAlt),
+            ),
         };
     }
 
     if (pexelsKey && !dryRun) {
         const queries = pexelsQueries();
-        const q = queries[topicIndexForDate(runDate) % queries.length];
+        const specSeed = heroSpecForSlot(heroSpecs, 0, totalSlots, { postTitle, topicSlug });
+        const promptWords = String(specSeed.imagePrompt || '')
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, ' ')
+            .split(/\s+/)
+            .filter((w) => w && w.length > 3 && !['with', 'from', 'that', 'this', 'dark', 'romance'].includes(w))
+            .slice(0, 6);
+        const dynamicQuery = promptWords.join(' ').trim();
+        const q = dynamicQuery || queries[topicIndexForDate(runDate) % queries.length];
         const url = new URL('https://api.pexels.com/v1/search');
         url.searchParams.set('query', q);
-        url.searchParams.set('per_page', '3');
+        url.searchParams.set('per_page', String(Math.min(80, totalSlots)));
         url.searchParams.set('orientation', 'landscape');
         const res = await fetch(url.toString(), {
             headers: { Authorization: pexelsKey },
@@ -437,12 +484,12 @@ async function resolveThreeHeroImageSlots(client, runDate, dryRun, meta, heroSpe
             throw new Error(`Pexels API error ${res.status}: ${t.slice(0, 200)}`);
         }
         const data = await res.json();
-        const photos = (data.photos || []).slice(0, 3);
-        if (photos.length < 3) {
-            throw new Error('Pexels returned fewer than 3 photos; widen query or try another day');
+        const photos = (data.photos || []).slice(0, totalSlots);
+        if (photos.length < totalSlots) {
+            throw new Error(`Pexels returned fewer than ${totalSlots} photos; widen query or try another day`);
         }
         const slots = [];
-        for (let i = 0; i < 3; i += 1) {
+        for (let i = 0; i < totalSlots; i += 1) {
             const photo = photos[i];
             const srcUrl = photo.src.large2x || photo.src.large || photo.src.original;
             const imgRes = await fetch(srcUrl);
@@ -460,7 +507,7 @@ async function resolveThreeHeroImageSlots(client, runDate, dryRun, meta, heroSpe
                     : ph && typeof ph.name === 'string'
                       ? ph.name.trim()
                       : '';
-            const spec = heroSpecs[i];
+            const spec = heroSpecForSlot(heroSpecs, i, totalSlots, { postTitle, topicSlug });
             slots.push({
                 assetId: doc._id,
                 attribution: figureCaptionFromMeta(spec.imageCaption, postTitle, {
@@ -476,9 +523,9 @@ async function resolveThreeHeroImageSlots(client, runDate, dryRun, meta, heroSpe
     if (pool.length) {
         const slots = [];
         const start = topicIndexForDate(runDate) % pool.length;
-        for (let i = 0; i < 3; i += 1) {
+        for (let i = 0; i < totalSlots; i += 1) {
             const ref = pool[(start + i) % pool.length];
-            const spec = heroSpecs[i];
+            const spec = heroSpecForSlot(heroSpecs, i, totalSlots, { postTitle, topicSlug });
             slots.push({
                 assetId: ref,
                 attribution: figureCaptionFromMeta(spec.imageCaption, postTitle, { source: 'pool' }),
@@ -490,12 +537,14 @@ async function resolveThreeHeroImageSlots(client, runDate, dryRun, meta, heroSpe
 
     if (dryRun) {
         return {
-            slots: [dryHeroSlot(0, heroSpecs[0].imageAlt), dryHeroSlot(1, heroSpecs[1].imageAlt), dryHeroSlot(2, heroSpecs[2].imageAlt)],
+            slots: Array.from({ length: totalSlots }, (_, i) =>
+                dryHeroSlot(i, heroSpecForSlot(heroSpecs, i, totalSlots, { postTitle, topicSlug }).imageAlt),
+            ),
         };
     }
 
     throw new Error(
-        'Set HF_TOKEN, or PEXELS_API_KEY, or BLOG_IMAGE_POOL_REFS (≥1 ref; ≥3 distinct refs recommended for three pins).',
+        `Set HF_TOKEN, or PEXELS_API_KEY, or BLOG_IMAGE_POOL_REFS (≥1 ref; ≥${totalSlots} distinct refs recommended for unique mainImage patches).`,
     );
 }
 
@@ -504,24 +553,31 @@ async function patchMainImageForPinWebhooks(client, docId, slots) {
     if (off === '0' || off === 'false' || String(off || '').toLowerCase() === 'no') {
         return;
     }
-    if (!slots || slots.length < 3) {
+    if (!slots || slots.length < 2) {
+        return;
+    }
+    const countRaw = process.env.BLOG_MAINIMAGE_PIN_PATCH_COUNT;
+    const countParsed = Number(countRaw);
+    const totalStates = Number.isFinite(countParsed) && countParsed >= 1 ? Math.floor(countParsed) : 10;
+    const rotationSlots = slots.slice(0, totalStates);
+    if (rotationSlots.length < 2) {
         return;
     }
     const raw = process.env.BLOG_MAINIMAGE_WEBHOOK_DELAY_MS;
-    const ms = raw === '' || raw === undefined ? 8000 : Number(raw);
-    const delay = Number.isFinite(ms) && ms >= 0 ? ms : 8000;
+    const ms = raw === '' || raw === undefined ? 10000 : Number(raw);
+    const delay = Number.isFinite(ms) && ms >= 0 ? ms : 10000;
 
-    let previousRef = String(slots[0].assetId || '');
-    for (let i = 1; i < 3; i += 1) {
+    let previousRef = String(rotationSlots[0].assetId || '');
+    for (let i = 1; i < rotationSlots.length; i += 1) {
         if (delay > 0) {
             await new Promise((r) => setTimeout(r, delay));
         }
-        const s = slots[i];
+        const s = rotationSlots[i];
         const nextRef = String(s.assetId || '');
         if (nextRef && nextRef === previousRef) {
             // eslint-disable-next-line no-console
             console.warn(
-                `mainImage patch ${i + 1}/3 skipped: same asset as previous (use ≥3 distinct BLOG_IMAGE_POOL_REFS for three Pin webhooks).`,
+                `mainImage patch ${i + 1}/${rotationSlots.length} skipped: same asset as previous (use ≥${rotationSlots.length} distinct BLOG_IMAGE_POOL_REFS for unique webhooks).`,
             );
             continue;
         }
@@ -537,7 +593,7 @@ async function patchMainImageForPinWebhooks(client, docId, slots) {
             .commit();
         previousRef = nextRef;
         // eslint-disable-next-line no-console
-        console.log(`mainImage → hero ${i + 1}/3 (${s.assetId})`);
+        console.log(`mainImage → hero ${i + 1}/${rotationSlots.length} (${s.assetId})`);
     }
 }
 
@@ -566,7 +622,7 @@ function normalizeHeroImages(parsed, title) {
         return {
             imagePrompt:
                 ip ||
-                'velvet darkness, guttering candle, rain-streaked gothic window, ink and sealed letter, no people',
+                'velvet darkness, guttering candle, rain-streaked gothic window, ink and sealed letter, sensual hands and body language, no full identifiable face',
             imageAlt:
                 ia ||
                 `${t} — Lark Elwood dark romance · Independent mood (${idx + 1} of 3)`,
@@ -594,19 +650,19 @@ async function generateCopy({ runDate, topicSlug, stub }) {
                     imageAlt: 'Velvet and storm glass — Lark Elwood dark romance blog (1 of 3)',
                     imageCaption: 'Dark romance aesthetic · Lark Elwood · Independent — candlelit mood',
                     imagePrompt:
-                        'rain hammering a leaded glass window above a clawfoot desk, single candle, ink bottle and sealed letter, torn silk ribbon, velvet darkness, no people',
+                        'rain hammering a leaded glass window above a clawfoot desk, single candle, ink bottle and sealed letter, torn silk ribbon, velvet darkness, two hands intertwined, framed lips-to-waist',
                 },
                 {
                     imageAlt: 'Crimson roses and black lace — Lark Elwood Independent mood (2 of 3)',
                     imageCaption: 'Gothic romance still life · Lark Elwood · Independent',
                     imagePrompt:
-                        'wilted deep red roses on black marble beside a tarnished silver dagger prop, single taper candle, velvet drape, no people',
+                        'wilted deep red roses on black marble beside a tarnished silver dagger prop, single taper candle, velvet drape, black lace sleeve and hand on marble, no full face visible',
                 },
                 {
                     imageAlt: 'Midnight library — dark romance reads · Lark Elwood (3 of 3)',
                     imageCaption: 'Books and shadows · Lark Elwood dark romance',
                     imagePrompt:
-                        'towering shelves of leather-bound books, single reading lamp pool of warm light, empty wingback chair, storm outside tall windows, no people',
+                        'towering shelves of leather-bound books, single reading lamp pool of warm light, wingback chair with crossed legs and hand holding open book, storm outside tall windows, face out of frame',
                 },
             ],
         };
@@ -632,11 +688,15 @@ Site & newsletter (context only—do NOT paste URLs in paragraphs):
 
 Brand & SEO (natural language—never keyword stuffing):
 - Weave discoverable phrases where they belong: dark romance, Lark Elwood, Independent (novel), morally grey romance, forbidden tension, tropes, reader community, newsletter / reader list.
+- Cover broad search intent around dark-romance lifestyle + fandom: dresses, cupcakes/desserts, home styling, nails, hair, bookshelves/libraries, trope explainers.
 - Title + excerpt: strong hook for Google and Pinterest saves.
 - One clear angle per post; reader should want your site and the book.
+- Include naturally varied long-tail phrasing from the selected angle (for example: "dark romance cupcakes", "dark romance dress ideas", "enemies to lovers tropes", "dark romance home decor", "gothic library atmosphere") without sounding robotic.
 
 Content angles (pick what fits "${themeHuman}"; stay flexible):
-- Pinterest-adjacent on-brand: aesthetics, velvet / goth mood, food-as-mood, bookshelves, trope essays, villain hunger in fiction—always your dark-romance lens.
+- Pinterest-adjacent on-brand: aesthetics, velvet / goth mood, food-as-mood, style/beauty, bookshelves/libraries, trope essays, villain hunger in fiction—always your dark-romance lens.
+- Category rotation is expected across days: food, dresses/style, hair, nails, interiors/home, reading culture, trope education, and emotional relationship dynamics.
+- Even when category-led, keep a direct bridge to Lark Elwood and Independent in the title, excerpt, and body.
 
 Voice: step into the darkness; literary but readable; sensual tension without explicit porn. Pick second OR first person and hold it.
 
@@ -647,10 +707,12 @@ Editorial anchor: ${runDate}. Seed theme: "${themeHuman}".
 OUTPUT CONTRACT (must all be true):
 1) "paragraphs" is an array of at least 6 non-empty strings (each roughly 2–5 sentences). No bullet lists. No HTML.
 2) "heroImages" is an array of exactly 3 objects. Each object has exactly these keys: "imageAlt", "imageCaption", "imagePrompt" (all strings, non-empty after trim).
-3) Each imagePrompt: 25–45 words, one faceless scene (no people, no faces, no silhouettes of humans), object/environment only, cinematic dark romance mood. Image 1 / 2 / 3 must describe clearly different scenes (different props, room, weather, or palette)—not three near-duplicates.
-4) Each imageAlt: ≤200 chars, includes Lark Elwood + dark romance + Independent where it still sounds natural for screen readers. No vendor/tool/stock/AI names.
-5) Each imageCaption: ≤220 chars, Pinterest-friendly line for under the image; brand + book; no vendor/tool names.
-6) Last paragraph: emotional CTA toward reader list / newsletter idea only—no http, no pasted domain.
+3) Each imagePrompt: 25–45 words, cinematic dark romance mood. People and sexy interaction are allowed (hands, eyes, body language), but avoid full identifiable faces; cropped framing (e.g., lips-to-bottom) is preferred.
+4) Image-topic alignment is mandatory: each imagePrompt must depict the concrete subject of the post (if the post is about dark-romance cupcakes, show cupcakes/table serving details; if about dresses, show dress/fabric/styling details; if about enemies-to-lovers tropes, show symbolic scene cues that match that trope angle).
+5) Image 1 / 2 / 3 must stay on the same article theme but use clearly different compositions (different props, room, weather, camera angle, or palette)—not near-duplicates.
+6) Each imageAlt: ≤200 chars, includes Lark Elwood + dark romance + Independent where it still sounds natural for screen readers. No vendor/tool/stock/AI names.
+7) Each imageCaption: ≤220 chars, Pinterest-friendly line for under the image; brand + book; no vendor/tool names.
+8) Last paragraph: emotional CTA toward reader list / newsletter idea only—no http, no pasted domain.
 
 Return a single JSON object ONLY (no markdown, no prose outside the object). Shape and key order:
 {
@@ -661,17 +723,17 @@ Return a single JSON object ONLY (no markdown, no prose outside the object). Sha
     {
       "imageAlt": "Example: Storm glass and ink — Lark Elwood dark romance blog · Independent mood (1 of 3)",
       "imageCaption": "Example: Candlelit desk, gothic rain — Lark Elwood · Independent",
-      "imagePrompt": "Example: Rain hammering tall leaded windows above a clawfoot desk, guttering candle, sealed letter and black wax, velvet drape pooling on floorboards, empty chair, no people"
+      "imagePrompt": "Example: Rain hammering tall leaded windows above a clawfoot desk, guttering candle, sealed letter and black wax, velvet drape pooling on floorboards, two hands touching, lips-to-waist framing"
     },
     {
       "imageAlt": "Example: Crimson roses on marble — Lark Elwood dark romance (2 of 3)",
       "imageCaption": "Example: Still life, obsession in objects — Lark Elwood · Independent",
-      "imagePrompt": "Example: Deep red roses on black marble beside tarnished silver and torn ribbon, single taper flame, ink smear on parchment corner, bruised-plum shadows, no people"
+      "imagePrompt": "Example: Deep red roses on black marble beside tarnished silver and torn ribbon, single taper flame, ink smear on parchment corner, bruised-plum shadows, lace-covered hand resting on stone"
     },
     {
       "imageAlt": "Example: Midnight library glow — dark romance reads · Lark Elwood (3 of 3)",
       "imageCaption": "Example: Shelves and storm light — Lark Elwood",
-      "imagePrompt": "Example: Floor-to-ceiling leather books, one brass reading lamp pool of gold, wingback chair empty, thunder beyond tall windows, dust in light beams, no people"
+      "imagePrompt": "Example: Floor-to-ceiling leather books, one brass reading lamp pool of gold, wingback chair, crossed legs and one hand turning a page, thunder beyond tall windows, face out of frame"
     }
   ]
 }
@@ -870,16 +932,23 @@ async function main() {
     );
 
     const copy = await generateCopy({ runDate, topicSlug, stub });
-    const { slots } = await resolveThreeHeroImageSlots(client || {}, runDate, dryRun, {
+    const bodyImageCount = 3;
+    const countRaw = process.env.BLOG_MAINIMAGE_PIN_PATCH_COUNT;
+    const parsedCount = Number(countRaw);
+    const mainImageRotationCount = Number.isFinite(parsedCount) && parsedCount >= 1 ? Math.floor(parsedCount) : 10;
+    const heroSlotCount = Math.max(bodyImageCount, mainImageRotationCount);
+    const { slots } = await resolveHeroImageSlots(client || {}, runDate, dryRun, {
         slugCurrent,
         postTitle: copy.title,
-    }, copy.heroImages);
+        topicSlug,
+    }, copy.heroImages, heroSlotCount);
 
     const ctaUrl = readerListCtaUrl();
     const allDrySlots = slots.every((s) => String(s.assetId).startsWith('('));
+    const bodySlots = slots.slice(0, bodyImageCount);
     const body =
         copy.paragraphs.length >= 6
-            ? buildBodyThreeImages(copy.paragraphs, slots, ctaUrl)
+            ? buildBodyThreeImages(copy.paragraphs, bodySlots, ctaUrl)
             : [
                   textBlock(copy.paragraphs[0] || 'Intro'),
                   textBlock(copy.paragraphs[1] || 'More'),

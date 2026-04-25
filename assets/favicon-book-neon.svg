@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" overflow="visible" role="img" aria-labelledby="title desc">
+  <title id="title">Three neon stars icon</title>
+  <desc id="desc">Three neon blue stars with black outlines on a transparent background.</desc>
+  <defs>
+    <path id="star" fill="#3fd7ff" stroke="#000000" stroke-width="10" stroke-linejoin="round" d="M0 -68 l28 66 66 28 -66 28 -28 66 -28 -66 -66 -28 66 -28z"/>
+    <filter id="neonGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g filter="url(#neonGlow)">
+    <use href="#star" transform="translate(256, 142)"/>
+    <use href="#star" transform="translate(148, 308)"/>
+    <use href="#star" transform="translate(364, 308)"/>
+  </g>
+</svg>
