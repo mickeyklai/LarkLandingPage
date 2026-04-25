@@ -1,0 +1,72 @@
+# Automated daily blog post (Sanity `post`).
+#
+# Schedule: this workflow runs automatically every day at the UTC time in `on.schedule` below.
+# Requirements: (1) merge this file to your repo’s default branch, (2) enable GitHub Actions for the repo,
+# (3) add the secrets listed under the job — scheduled runs use the same env as manual runs.
+# Cron is always UTC on GitHub-hosted runners (convert your local “morning” time to UTC).
+#
+# Rotate topics: edit TOPIC_SLUGS in scripts/publish-daily-blog.cjs (order + length changes which
+# theme pairs with each calendar day). Optional: set BLOG_RUN_DATE=YYYY-MM-DD when invoking manually
+# to backfill or override the slug date.
+#
+# Disable the job:
+# - Remove the `schedule` block under `on:` (keep `workflow_dispatch` for manual runs), or
+# - Disable the workflow in GitHub → Actions → Daily blog → … → Disable workflow.
+#
+# Required repository secrets: SANITY_PROJECT_ID, SANITY_API_WRITE_TOKEN, GROQ_API_KEY
+# Plus image source (same order as script): HF_TOKEN and/or PEXELS_API_KEY and/or BLOG_IMAGE_POOL_REFS
+#
+# Optional secrets/vars: SANITY_DATASET, GROQ_MODEL, HF_IMAGE_*, BLOG_PEXELS_QUERIES, BLOG_IMAGE_POOL_REFS,
+#   BLOG_PUBLIC_URL, BLOG_READER_LIST_URL (defaults in script: larkelwood.com / …/#reader-list)
+#   BLOG_MULTIPLE_PER_DAY — repo var "true" if each run should take the next slug when the base exists (same-day extras)
+
+name: Daily blog
+
+on:
+  schedule:
+    # Every day at 15:15 UTC (~7:15 PT same-day standard time). Edit minutes/hour as needed.
+    - cron: '15 15 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: daily-blog-pipeline
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Publish post to Sanity
+        env:
+          SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID }}
+          SANITY_DATASET: ${{ vars.SANITY_DATASET }}
+          SANITY_API_WRITE_TOKEN: ${{ secrets.SANITY_API_WRITE_TOKEN }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_MODEL: ${{ vars.GROQ_MODEL }}
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_IMAGE_MODEL: ${{ vars.HF_IMAGE_MODEL }}
+          HF_IMAGE_PROVIDER: ${{ vars.HF_IMAGE_PROVIDER }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          BLOG_IMAGE_POOL_REFS: ${{ secrets.BLOG_IMAGE_POOL_REFS }}
+          BLOG_PUBLIC_URL: ${{ vars.BLOG_PUBLIC_URL }}
+          BLOG_READER_LIST_URL: ${{ vars.BLOG_READER_LIST_URL }}
+          BLOG_NEWSLETTER_LINK_TEXT: ${{ vars.BLOG_NEWSLETTER_LINK_TEXT }}
+          BLOG_CTA_LINE_BEFORE: ${{ vars.BLOG_CTA_LINE_BEFORE }}
+          BLOG_CTA_LINE_AFTER: ${{ vars.BLOG_CTA_LINE_AFTER }}
+          BLOG_MAINIMAGE_WEBHOOK_DELAY_MS: ${{ vars.BLOG_MAINIMAGE_WEBHOOK_DELAY_MS }}
+          BLOG_MAINIMAGE_PIN_PATCHES: ${{ vars.BLOG_MAINIMAGE_PIN_PATCHES }}
+          BLOG_MULTIPLE_PER_DAY: ${{ vars.BLOG_MULTIPLE_PER_DAY }}
+        run: npm run publish:daily-blog

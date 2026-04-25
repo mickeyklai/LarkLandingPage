@@ -8,6 +8,19 @@ const DETAIL_QUERY = `
     "slug": slug.current,
     publishedAt,
     excerpt,
+    mainImage {
+      ...,
+      asset->{
+        _id,
+        url,
+        metadata {
+          dimensions {
+            width,
+            height
+          }
+        }
+      }
+    },
     body[]{
       ...,
       _type == "image" => {
@@ -235,6 +248,44 @@ function imageBlockToHtml(url, loadingAttr, block) {
     );
 }
 
+function pickOgImageBlock(doc) {
+    if (doc && doc.mainImage && doc.mainImage.asset) {
+        return doc.mainImage;
+    }
+    if (doc && Array.isArray(doc.body)) {
+        const first = doc.body.find((b) => b && b._type === 'image' && b.asset);
+        if (first) {
+            return first;
+        }
+    }
+    return null;
+}
+
+function ogImageFields(doc, imageOpts) {
+    const block = pickOgImageBlock(doc);
+    if (!block) {
+        return { ogImage: '', ogImageWidth: null, ogImageHeight: null };
+    }
+    const builder =
+        imageOpts.projectId &&
+        String(imageOpts.projectId).trim() &&
+        typeof imageOpts.createImageUrlBuilder === 'function'
+            ? imageOpts.createImageUrlBuilder({
+                  projectId: String(imageOpts.projectId).trim(),
+                  dataset: imageOpts.dataset || 'production',
+              })
+            : null;
+    let url = imageBlockUrl(block, builder);
+    if (!url && block.asset && typeof block.asset.url === 'string') {
+        const base = block.asset.url.split('?')[0];
+        url = `${base}?w=1200&auto=format`;
+    }
+    const d = block.asset && block.asset.metadata && block.asset.metadata.dimensions;
+    const w = d && typeof d.width === 'number' ? d.width : null;
+    const h = d && typeof d.height === 'number' ? d.height : null;
+    return { ogImage: url || '', ogImageWidth: w, ogImageHeight: h };
+}
+
 function collectImageUrls(blocks, { projectId, dataset, createImageUrlBuilder } = {}) {
     if (!Array.isArray(blocks)) {
         return [];
@@ -355,11 +406,21 @@ exports.handler = async function handler(event) {
         };
         const bodyHtml = portableTextToHtml(doc.body, imageOpts);
         const imageUrls = collectImageUrls(doc.body, imageOpts);
+        const og = ogImageFields(doc, imageOpts);
         const { body, ...rest } = doc;
         return {
             statusCode: 200,
             headers,
-            body: JSON.stringify({ ...rest, bodyHtml, imageUrls }),
+            body: JSON.stringify({
+                ...rest,
+                bodyHtml,
+                imageUrls,
+                ogTitle: doc.title || '',
+                ogDescription: doc.excerpt || '',
+                ogImage: og.ogImage,
+                ogImageWidth: og.ogImageWidth,
+                ogImageHeight: og.ogImageHeight,
+            }),
         };
     } catch (err) {
         console.error('blog-post:', err);

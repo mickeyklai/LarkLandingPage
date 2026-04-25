@@ -32,6 +32,75 @@
         return decodeURIComponent(last);
     }
 
+    function metaByProperty(prop) {
+        var el = document.head.querySelector('meta[property="' + prop + '"]');
+        if (!el) {
+            el = document.createElement('meta');
+            el.setAttribute('property', prop);
+            document.head.appendChild(el);
+        }
+        return el;
+    }
+
+    function metaByName(name) {
+        var el = document.head.querySelector('meta[name="' + name + '"]');
+        if (!el) {
+            el = document.createElement('meta');
+            el.setAttribute('name', name);
+            document.head.appendChild(el);
+        }
+        return el;
+    }
+
+    function setOgFromPost(post) {
+        if (!post) {
+            return;
+        }
+        var absUrl = function (u) {
+            if (!u) {
+                return '';
+            }
+            try {
+                return new URL(u, window.location.origin).href;
+            } catch (_) {
+                return u;
+            }
+        };
+
+        var desc = (post.excerpt || '').trim() || 'Read the latest from Lark Elwood.';
+        var pageUrl = window.location.href.split('#')[0];
+
+        metaByName('description').setAttribute('content', desc);
+
+        metaByProperty('og:type').setAttribute('content', 'article');
+        metaByProperty('og:title').setAttribute('content', post.title || 'Blog');
+        metaByProperty('og:description').setAttribute('content', desc);
+        metaByProperty('og:url').setAttribute('content', pageUrl);
+
+        if (post.ogImage) {
+            metaByProperty('og:image').setAttribute('content', absUrl(post.ogImage));
+            if (post.ogImageWidth) {
+                metaByProperty('og:image:width').setAttribute('content', String(post.ogImageWidth));
+            }
+            if (post.ogImageHeight) {
+                metaByProperty('og:image:height').setAttribute('content', String(post.ogImageHeight));
+            }
+            metaByName('twitter:card').setAttribute('content', 'summary_large_image');
+            metaByName('twitter:image').setAttribute('content', absUrl(post.ogImage));
+        }
+
+        metaByName('twitter:title').setAttribute('content', post.title || 'Blog');
+        metaByName('twitter:description').setAttribute('content', desc);
+
+        var link = document.head.querySelector('link[rel="canonical"]');
+        if (!link) {
+            link = document.createElement('link');
+            link.setAttribute('rel', 'canonical');
+            document.head.appendChild(link);
+        }
+        link.setAttribute('href', pageUrl);
+    }
+
     function formatDate(iso) {
         if (!iso) {
             return '';
@@ -77,6 +146,8 @@
             hideStatus();
             document.title =
                 (post.title ? post.title + ' | ' : '') + 'Lark Elwood | Blog';
+
+            setOgFromPost(post);
 
             titleEl.textContent = post.title || 'Untitled';
             metaEl.textContent = formatDate(post.publishedAt) || 'Journal';

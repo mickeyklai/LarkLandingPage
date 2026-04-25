@@ -3,6 +3,10 @@
   publish = "."
   functions = "netlify/functions"
 
+[[edge_functions]]
+  path = "/blog/*"
+  function = "inject-blog-og"
+
 # Pretty URLs: /blog/my-post serves post.html; slug is read client-side from the path.
 [[redirects]]
   from = "/blog/*"
