@@ -268,13 +268,13 @@ function pexelsQueries() {
 }
 
 /**
- * Lark blog / Pinterest hero images: sensual dark-romance mood with body language allowed.
- * Strong composition and contrast so the thumbnail reads in a feed; avoid full identifiable faces.
+ * Lark blog / Pinterest hero images: sensual dark-romance mood with coherent people in frame.
+ * Strong composition and contrast for thumbnails; prefer full humans with natural faces (no disembodied limbs).
  */
 const HF_STYLE_PREFIX =
     'Pinterest-worthy ultra sharp editorial photograph, dark romance aesthetic, ' +
-    'people and sensual interaction allowed (hands, eyes, torsos, lips-to-bottom framing), ' +
-    'AVOID full identifiable faces and direct portrait framing, ' +
+    'whenever people appear show one or two coherent full humans in frame with natural visible faces and complete anatomy, ' +
+    'anatomically correct hands with exactly five fingers per hand, hands attached to visible arms and bodies, ' +
     'single bold focal point readable at tiny thumbnail size, seductive mysterious mood, ' +
     'velvet crimson ink-black and bruised-plum palette, dramatic cinematic lighting on surfaces and textures, ' +
     'luxury gothic thriller mood curiosity hook, ' +
@@ -285,7 +285,9 @@ const HF_STYLE_SUFFIX =
     'scroll-stopping composition, tasteful sensual darkness without explicit content';
 
 const HF_NEGATIVE_PROMPT =
-    'full face, fully visible face, centered portrait, frontal portrait, close-up face, identifiable face, selfie, ' +
+    'disembodied hands, floating hands, severed limbs, isolated boots or shoes, boots without legs, feet without body, ' +
+    'hands without body or face in frame, body-part collage, random limbs, cropped to only hands or only feet, ' +
+    'six fingers, extra fingers, polydactyly, malformed hands, wrong finger count, fused fingers, ' +
     'silhouette of person, crowd, group crowd, ' +
     'old, elderly, cartoon, anime, illustration, painting, drawing, sketch, ' +
     'blurry, low quality, low resolution, pixelated, ' +
@@ -297,7 +299,7 @@ const HF_NEGATIVE_PROMPT =
 function enhanceImagePrompt(raw) {
     const core =
         String(raw || '').trim() ||
-        'rain-streaked gothic window, velvet chaise, a couple from lips to waist with clasped hands, single guttering candle, open book with worn spine, no full face visible';
+        'rain-streaked gothic window, velvet chaise, a couple seated together with natural faces visible, clasped hands with five fingers each, single guttering candle, open book with worn spine';
     return `${HF_STYLE_PREFIX}${core}${HF_STYLE_SUFFIX}`;
 }
 
@@ -403,7 +405,7 @@ function heroSpecForSlot(heroSpecs, idx, total, context) {
         cycle > 0
             ? `${promptBase}; keep the same article theme${anchor ? ` (${anchor})` : ''}; variation ${
                   cycle + 1
-              }: same core subject and props, fresh angle/composition/lighting/palette, sensual body-language allowed, no full identifiable faces`
+              }: same core subject and props, fresh angle/composition/lighting/palette, coherent people with visible natural faces and correct five-finger hands whenever humans appear`
             : promptBase;
     return {
         imageAlt: `${altBase} (${n} of ${total})`,
@@ -440,7 +442,7 @@ async function resolveHeroImageSlots(client, runDate, dryRun, meta, heroSpecs, s
             const spec = heroSpecForSlot(heroSpecs, i, totalSlots, { postTitle, topicSlug });
             const promptFor =
                 (spec.imagePrompt && String(spec.imagePrompt).trim()) ||
-                'storm beyond tall arched windows, dripping wax candle, stacked antique books, black lace on marble, close framing from lips to waist, no full identifiable face';
+                'storm beyond tall arched windows, dripping wax candle, stacked antique books, black lace on marble, a woman in gothic dress with natural face visible, correct five-finger hands resting on marble';
             const buf = await generateHfImageJpeg(promptFor);
             const filename = seoBlogImageFilename(slugCurrent, 'jpg', i + 1);
             const doc = await client.assets.upload('image', buf, { filename });
@@ -622,7 +624,7 @@ function normalizeHeroImages(parsed, title) {
         return {
             imagePrompt:
                 ip ||
-                'velvet darkness, guttering candle, rain-streaked gothic window, ink and sealed letter, sensual hands and body language, no full identifiable face',
+                'velvet darkness, guttering candle, rain-streaked gothic window, ink and sealed letter, a couple with natural faces and full figures, sensual body language, five fingers on each visible hand',
             imageAlt:
                 ia ||
                 `${t} — Lark Elwood dark romance · Independent mood (${idx + 1} of 3)`,
@@ -650,19 +652,19 @@ async function generateCopy({ runDate, topicSlug, stub }) {
                     imageAlt: 'Velvet and storm glass — Lark Elwood dark romance blog (1 of 3)',
                     imageCaption: 'Dark romance aesthetic · Lark Elwood · Independent — candlelit mood',
                     imagePrompt:
-                        'rain hammering a leaded glass window above a clawfoot desk, single candle, ink bottle and sealed letter, torn silk ribbon, velvet darkness, two hands intertwined, framed lips-to-waist',
+                        'rain hammering a leaded glass window above a clawfoot desk, single candle, ink bottle and sealed letter, torn silk ribbon, velvet darkness, two people with natural faces visible, intertwined hands with five fingers each',
                 },
                 {
                     imageAlt: 'Crimson roses and black lace — Lark Elwood Independent mood (2 of 3)',
                     imageCaption: 'Gothic romance still life · Lark Elwood · Independent',
                     imagePrompt:
-                        'wilted deep red roses on black marble beside a tarnished silver dagger prop, single taper candle, velvet drape, black lace sleeve and hand on marble, no full face visible',
+                        'wilted deep red roses on black marble beside a tarnished silver dagger prop, single taper candle, velvet drape, a woman in black lace with natural face, graceful hand with five fingers on marble',
                 },
                 {
                     imageAlt: 'Midnight library — dark romance reads · Lark Elwood (3 of 3)',
                     imageCaption: 'Books and shadows · Lark Elwood dark romance',
                     imagePrompt:
-                        'towering shelves of leather-bound books, single reading lamp pool of warm light, wingback chair with crossed legs and hand holding open book, storm outside tall windows, face out of frame',
+                        'towering shelves of leather-bound books, single reading lamp pool of warm light, wingback chair, reader with natural face visible, crossed legs, hand with five fingers on an open book, storm outside tall windows',
                 },
             ],
         };
@@ -707,7 +709,7 @@ Editorial anchor: ${runDate}. Seed theme: "${themeHuman}".
 OUTPUT CONTRACT (must all be true):
 1) "paragraphs" is an array of at least 6 non-empty strings (each roughly 2–5 sentences). No bullet lists. No HTML.
 2) "heroImages" is an array of exactly 3 objects. Each object has exactly these keys: "imageAlt", "imageCaption", "imagePrompt" (all strings, non-empty after trim).
-3) Each imagePrompt: 25–45 words, cinematic dark romance mood. People and sexy interaction are allowed (hands, eyes, body language), but avoid full identifiable faces; cropped framing (e.g., lips-to-bottom) is preferred.
+3) Each imagePrompt: 25–45 words, cinematic dark romance mood. When people appear, describe one or two coherent full humans with natural visible faces (not faceless crops), complete bodies or waist-up with face in frame, and explicitly correct hands with exactly five fingers—never isolated hands, boots, or limbs without a body.
 4) Image-topic alignment is mandatory: each imagePrompt must depict the concrete subject of the post (if the post is about dark-romance cupcakes, show cupcakes/table serving details; if about dresses, show dress/fabric/styling details; if about enemies-to-lovers tropes, show symbolic scene cues that match that trope angle).
 5) Image 1 / 2 / 3 must stay on the same article theme but use clearly different compositions (different props, room, weather, camera angle, or palette)—not near-duplicates.
 6) Each imageAlt: ≤200 chars, includes Lark Elwood + dark romance + Independent where it still sounds natural for screen readers. No vendor/tool/stock/AI names.
@@ -723,17 +725,17 @@ Return a single JSON object ONLY (no markdown, no prose outside the object). Sha
     {
       "imageAlt": "Example: Storm glass and ink — Lark Elwood dark romance blog · Independent mood (1 of 3)",
       "imageCaption": "Example: Candlelit desk, gothic rain — Lark Elwood · Independent",
-      "imagePrompt": "Example: Rain hammering tall leaded windows above a clawfoot desk, guttering candle, sealed letter and black wax, velvet drape pooling on floorboards, two hands touching, lips-to-waist framing"
+      "imagePrompt": "Example: Rain hammering tall leaded windows above a clawfoot desk, guttering candle, sealed letter and black wax, velvet drape pooling on floorboards, two people with natural faces, reaching toward each other with five-finger hands"
     },
     {
       "imageAlt": "Example: Crimson roses on marble — Lark Elwood dark romance (2 of 3)",
       "imageCaption": "Example: Still life, obsession in objects — Lark Elwood · Independent",
-      "imagePrompt": "Example: Deep red roses on black marble beside tarnished silver and torn ribbon, single taper flame, ink smear on parchment corner, bruised-plum shadows, lace-covered hand resting on stone"
+      "imagePrompt": "Example: Deep red roses on black marble beside tarnished silver and torn ribbon, single taper flame, ink smear on parchment corner, bruised-plum shadows, a woman with natural face in lace, one elegant five-finger hand on stone"
     },
     {
       "imageAlt": "Example: Midnight library glow — dark romance reads · Lark Elwood (3 of 3)",
       "imageCaption": "Example: Shelves and storm light — Lark Elwood",
-      "imagePrompt": "Example: Floor-to-ceiling leather books, one brass reading lamp pool of gold, wingback chair, crossed legs and one hand turning a page, thunder beyond tall windows, face out of frame"
+      "imagePrompt": "Example: Floor-to-ceiling leather books, one brass reading lamp pool of gold, wingback chair, reader with natural face, crossed legs, five-finger hand turning a page, thunder beyond tall windows"
     }
   ]
 }
