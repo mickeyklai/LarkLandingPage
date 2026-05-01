@@ -35,7 +35,7 @@ export const post = defineType({
       name: 'excerpt',
       title: 'Excerpt',
       description:
-        'Short summary used as the meta description fallback and the card lead. ~140–180 characters works best for Google snippets.',
+        'Teaser shown on cards and feeds. List-style posts work best (~140 chars): hint the hook + vibe + Independent bridge.',
       type: 'text',
       rows: 4,
       group: 'content',
@@ -126,6 +126,36 @@ export const post = defineType({
       type: 'boolean',
       group: 'seo',
       initialValue: false,
+    }),
+    defineField({
+      name: 'relatedAuthorsBooks',
+      title: 'Related authors / comparable books',
+      description:
+        'For roundup posts list all five spotlight titles as "**Title by Author**" strings (same titles as prose). Stored for JSON-LD; helps Pinterest + search entity mapping. Editorial comparison—not endorsement.',
+      type: 'array',
+      group: 'seo',
+      of: [{ type: 'string' }],
+      options: { layout: 'tags' },
+      validation: (Rule) => Rule.max(12),
+    }),
+    defineField({
+      name: 'targetTrope',
+      title: 'Target trope',
+      description:
+        'Primary romance trope this post is about—mafiaromance, enemies-to-lovers, bully romance, forbidden, dark academia, obsessive / possessive, etc. Powers topical signals in JSON-LD.',
+      type: 'string',
+      group: 'seo',
+      validation: (Rule) => Rule.max(80),
+    }),
+    defineField({
+      name: 'seoSnippet',
+      title: 'SEO / AI snippet',
+      description:
+        'Ultra-short punchy summary (ideal for AI overviews / featured snippets). If set, feeds meta description fallback and BlogPosting "abstract". Keep under ~220 chars.',
+      type: 'text',
+      rows: 3,
+      group: 'seo',
+      validation: (Rule) => Rule.max(280),
     }),
   ],
   preview: {

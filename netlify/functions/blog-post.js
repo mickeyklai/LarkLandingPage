@@ -11,9 +11,12 @@ const DETAIL_QUERY = `
     excerpt,
     seoTitle,
     seoDescription,
+    seoSnippet,
     keywords,
     focusKeyword,
     noindex,
+    targetTrope,
+    relatedAuthorsBooks,
     seoImage {
       ...,
       asset->{
@@ -87,6 +90,11 @@ const DETAIL_QUERY = `
   }
 `;
 
+const IMG_BODY_MAX_W = 1400;
+const IMG_OG_W = 1200;
+/** WebP + bounded width keeps LCP reasonable and improves Core Web Vitals vs full-size JPEG originals. */
+const IMG_QUALITY = 82;
+
 const headers = {
     'Content-Type': 'application/json',
     // Avoid stale JSON at the edge/browser after schema or serializer changes (images in body).
@@ -143,7 +151,7 @@ function serializeSpans(children, markDefs) {
         .join('');
 }
 
-function imageBlockUrl(block, builder) {
+function sanityWebpUrl(block, builder, maxWidth) {
     const asset = block && block.asset;
     if (!asset || typeof asset !== 'object') {
         return '';
@@ -152,7 +160,13 @@ function imageBlockUrl(block, builder) {
     let url = '';
     if (builder) {
         try {
-            url = builder.image(block).width(1400).auto('format').url();
+            url = builder
+                .image(block)
+                .width(Math.max(320, Math.min(maxWidth, 2048)))
+                .fit('max')
+                .quality(IMG_QUALITY)
+                .format('webp')
+                .url();
         } catch (_) {
             /* malformed crop/ref — try direct asset URL below */
         }
@@ -160,23 +174,27 @@ function imageBlockUrl(block, builder) {
 
     if (!url && typeof asset.url === 'string' && /^https?:\/\//i.test(asset.url)) {
         const base = asset.url.split('?')[0];
-        url = `${base}?w=1400&auto=format`;
+        const w = Math.max(320, Math.min(maxWidth, 2048));
+        url = `${base}?w=${w}&fm=webp&q=${IMG_QUALITY}&fit=max`;
     }
 
     return url || '';
 }
 
-function imgDimensionAttrs(block) {
+/** width/height reflect the resized column width (~IMG_BODY_MAX_W) for CLS, not necessarily full asset px. */
+function imgDimensionScaled(block, maxDisplayWidth) {
     const d = block && block.asset && block.asset.metadata && block.asset.metadata.dimensions;
     if (!d || typeof d.width !== 'number' || typeof d.height !== 'number') {
         return '';
     }
-    const w = Math.round(d.width);
-    const h = Math.round(d.height);
-    if (w <= 0 || h <= 0) {
+    const wNat = Math.round(d.width);
+    const hNat = Math.round(d.height);
+    if (wNat <= 0 || hNat <= 0) {
         return '';
     }
-    return ` width="${w}" height="${h}"`;
+    const wOut = Math.min(maxDisplayWidth, wNat);
+    const hOut = Math.round((hNat * wOut) / wNat);
+    return ` width="${wOut}" height="${hOut}"`;
 }
 
 function patternDownloadFileUrl(block) {
@@ -251,7 +269,7 @@ function imageBlockToHtml(url, loadingAttr, block) {
         return '';
     }
     const loading = loadingAttr === 'eager' ? 'eager' : 'lazy';
-    const dim = imgDimensionAttrs(block);
+    const dim = imgDimensionScaled(block, IMG_BODY_MAX_W);
     const altRaw = block && typeof block.alt === 'string' ? block.alt : '';
     const alt = escapeHtml(altRaw);
     const capRaw = block && typeof block.caption === 'string' ? block.caption.trim() : '';
@@ -261,7 +279,7 @@ function imageBlockToHtml(url, loadingAttr, block) {
             : `<figcaption class="blog-prose-caption">${escapeHtml(capRaw)}</figcaption>`;
     return (
         '<figure class="blog-prose-figure">' +
-        `<img src="${escapeHtml(url)}" alt="${alt}" loading="${loading}" decoding="async"${dim} />` +
+        `<img src="${escapeHtml(url)}" alt="${alt}" loading="${loading}" decoding="async"${dim} sizes="(max-width: 900px) 100vw, 860px" />` +
         caption +
         '</figure>'
     );
@@ -297,10 +315,10 @@ function ogImageFields(doc, imageOpts) {
                   dataset: imageOpts.dataset || 'production',
               })
             : null;
-    let url = imageBlockUrl(block, builder);
+    let url = sanityWebpUrl(block, builder, IMG_OG_W);
     if (!url && block.asset && typeof block.asset.url === 'string') {
         const base = block.asset.url.split('?')[0];
-        url = `${base}?w=1200&auto=format`;
+        url = `${base}?w=${IMG_OG_W}&fm=webp&q=${IMG_QUALITY}&fit=max`;
     }
     const d = block.asset && block.asset.metadata && block.asset.metadata.dimensions;
     const w = d && typeof d.width === 'number' ? d.width : null;
@@ -319,7 +337,7 @@ function collectImageUrls(blocks, { projectId, dataset, createImageUrlBuilder } 
     const urls = [];
     for (const block of blocks) {
         if (block && block._type === 'image') {
-            const u = imageBlockUrl(block, builder);
+            const u = sanityWebpUrl(block, builder, IMG_BODY_MAX_W);
             if (u) {
                 urls.push(u);
             }
@@ -341,7 +359,7 @@ function portableTextToHtml(blocks, { projectId, dataset, createImageUrlBuilder 
     const parts = [];
     for (const block of blocks) {
         if (block && block._type === 'image') {
-            const url = imageBlockUrl(block, builder);
+            const url = sanityWebpUrl(block, builder, IMG_BODY_MAX_W);
             imageIndex += 1;
             const loadingAttr = imageIndex === 1 ? 'eager' : 'lazy';
             const imgHtml = imageBlockToHtml(url, loadingAttr, block);
@@ -430,12 +448,36 @@ exports.handler = async function handler(event) {
         const imageUrls = collectImageUrls(doc.body, imageOpts);
         const og = ogImageFields(doc, imageOpts);
         const { body, ...rest } = doc;
+
         const seoTitle = (doc.seoTitle && String(doc.seoTitle).trim()) || '';
-        const seoDescription =
-            (doc.seoDescription && String(doc.seoDescription).trim()) || '';
-        const keywords = Array.isArray(doc.keywords)
-            ? doc.keywords.map((k) => String(k).trim()).filter(Boolean)
-            : [];
+        const seoDescription = (doc.seoDescription && String(doc.seoDescription).trim()) || '';
+        const seoSnippet = (doc.seoSnippet && String(doc.seoSnippet).trim()) || '';
+        const metaDescription =
+            seoDescription || seoSnippet || (doc.excerpt && String(doc.excerpt).trim()) || '';
+
+        const mergedKeywords = (() => {
+            const out = [];
+            const seen = new Set();
+            function add(s) {
+                const x = String(s || '').trim();
+                if (!x) return;
+                const k = x.toLowerCase();
+                if (seen.has(k)) return;
+                seen.add(k);
+                out.push(x);
+            }
+            if (Array.isArray(doc.keywords)) {
+                doc.keywords.forEach((item) => add(item));
+            }
+            if (doc.targetTrope) {
+                add(doc.targetTrope);
+            }
+            if (Array.isArray(doc.relatedAuthorsBooks)) {
+                doc.relatedAuthorsBooks.forEach((item) => add(item));
+            }
+            return out.slice(0, 24);
+        })();
+
         return {
             statusCode: 200,
             headers,
@@ -444,13 +486,14 @@ exports.handler = async function handler(event) {
                 bodyHtml,
                 imageUrls,
                 ogTitle: seoTitle || doc.title || '',
-                ogDescription: seoDescription || doc.excerpt || '',
+                ogDescription: metaDescription,
                 ogImage: og.ogImage,
                 ogImageWidth: og.ogImageWidth,
                 ogImageHeight: og.ogImageHeight,
                 seoTitle,
                 seoDescription,
-                keywords,
+                seoSnippet,
+                keywords: mergedKeywords.length ? mergedKeywords : doc.keywords || [],
                 noindex: doc.noindex === true,
             }),
         };

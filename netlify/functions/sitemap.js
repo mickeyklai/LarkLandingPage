@@ -79,7 +79,7 @@ function imageEntry(post) {
     }
     const url = post.imageUrl.includes('?')
         ? post.imageUrl
-        : `${post.imageUrl}?w=1200&auto=format`;
+        : `${post.imageUrl}?w=1200&fm=webp&q=82&fit=max`;
     const caption =
         post.imageAlt ||
         post.title ||

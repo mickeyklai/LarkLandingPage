@@ -55,11 +55,12 @@ function postUrl(slug) {
     return `${SITE_ORIGIN}/blog/${encodeURIComponent(slug)}`;
 }
 
+/** JPEG Sanity CDN params — matches <enclosure type="image/jpeg"> for RSS consumers (Make/Pinterest). */
 function imageUrl(raw) {
     if (!raw) {
         return '';
     }
-    return raw.includes('?') ? raw : `${raw}?w=1200&auto=format`;
+    return raw.includes('?') ? raw : `${raw}?w=1200&fm=jpg&q=82&fit=max`;
 }
 
 function itemBlock(post) {
@@ -121,10 +122,10 @@ exports.handler = async function handler(event) {
         '     xmlns:media="http://search.yahoo.com/mrss/"',
         '     xmlns:dc="http://purl.org/dc/elements/1.1/">',
         '  <channel>',
-        '    <title>Lark Elwood — Dark Romance Journal</title>',
+        '    <title>Lark Elwood — Five-Book Dark Romance Lists</title>',
         `    <link>${escapeXml(SITE_ORIGIN + '/blog/')}</link>`,
         `    <atom:link href="${escapeXml(SITE_ORIGIN + '/feed.xml')}" rel="self" type="application/rss+xml" />`,
-        '    <description>The official journal of Lark Elwood, dark romance author of the debut novel Independent. Tropes, character deep-dives, and atmosphere from behind the writing desk.</description>',
+        '    <description>Official five-book dark romance reading lists by Lark Elwood, author of Independent. Real comps per trope, spicy obsession energy, bridges for readers bingeing morally grey villains.</description>',
         '    <language>en-us</language>',
         '    <copyright>© Lark Elwood</copyright>',
         '    <category>Dark Romance</category>',
@@ -135,7 +136,7 @@ exports.handler = async function handler(event) {
         `    <generator>larkelwood.com</generator>`,
         '    <image>',
         '      <url>https://larkelwood.com/assets/og-lark-elwood.jpg</url>',
-        '      <title>Lark Elwood — Dark Romance Journal</title>',
+        '      <title>Lark Elwood — Dark Romance Reading Lists</title>',
         `      <link>${escapeXml(SITE_ORIGIN + '/blog/')}</link>`,
         '    </image>',
     ];

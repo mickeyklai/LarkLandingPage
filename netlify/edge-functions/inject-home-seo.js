@@ -8,8 +8,8 @@
  *   2. Inject an ItemList JSON-LD with those posts so Google understands
  *      the homepage carries the journal feed.
  *
- * Only triggers on `/` and `/index.html`. Pulls from Sanity Content API CDN
- * (apicdn) so it stays fast and is independent of the Netlify function.
+ * Only triggers on `/` and `/index.html`. Uses the primary Sanity API (not apicdn)
+ * so the latest posts match what serverless functions return right after publish.
  *
  * Requires SANITY_PROJECT_ID (and optional SANITY_DATASET, SANITY_API_VERSION).
  */
@@ -64,7 +64,7 @@ async function fetchLatestPosts(projectId, dataset, apiVersion) {
         publishedAt
       }`;
     const u = new URL(
-        `https://${projectId}.apicdn.sanity.io/v${apiVersion}/data/query/${dataset}`,
+        `https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}`,
     );
     u.searchParams.set('query', query);
     try {
@@ -115,11 +115,11 @@ function buildLatestPostsHtml(posts) {
     return (
         `<section class="home-journal-section content-section" id="journal" aria-labelledby="journal-heading">` +
         `<div class="section-inner">` +
-        `<span class="section-kicker">From the journal</span>` +
-        `<h2 class="section-heading text-center" id="journal-heading">Latest from the dark romance journal</h2>` +
-        `<p class="home-journal-lead">New entries from Lark Elwood: dark romance tropes, character deep-dives, mood, and notes from behind <em>Independent</em>.</p>` +
+        `<span class="section-kicker">Book roundups</span>` +
+        `<h2 class="section-heading text-center" id="journal-heading">Five-book dark romance reading lists</h2>` +
+        `<p class="home-journal-lead">New five-novel stacks from Lark Elwood: comps, tropes, spice, and obsession—each list nudges you toward debut <em>Independent</em> if today's picks own your ribs.</p>` +
         `<div class="home-journal-grid">${cards}</div>` +
-        `<p class="home-journal-more"><a class="home-journal-more-link" href="/blog/">Read every dark romance journal entry &rarr;</a></p>` +
+        `<p class="home-journal-more"><a class="home-journal-more-link" href="/blog/">All reading lists &amp; vibes &rarr;</a></p>` +
         `</div>` +
         `</section>`
     );
@@ -148,7 +148,7 @@ function buildItemListJsonLd(posts) {
     const obj = {
         '@context': 'https://schema.org',
         '@type': 'ItemList',
-        name: 'Lark Elwood — Latest dark romance journal entries',
+        name: 'Lark Elwood — Latest five-book dark romance roundups',
         itemListElement: items,
     };
     return `<script type="application/ld+json">${JSON.stringify(obj).replace(/</g, '\\u003c')}</script>`;

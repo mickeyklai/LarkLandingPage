@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 /**
  * Daily blog pipeline: one published Sanity `post` per run with Portable Text body
- * and at least one image block (required by the public site). Groq copy is tuned for SEO,
- * Lark Elwood / Independent / dark romance brand, Pinterest-adjacent angles, and a soft funnel to the site and book.
+ * and at least one image block (required by the public site). Content is oriented as Pinterest-friendly
+ * "5-book" dark romance recommendation roundups: if you loved these reads you'll want Independent —
+ * Lark Elwood / Independent / morally grey obsessive romance funnel.
  * Hero images: Groq supplies heroImages[3] (alt, caption, prompt each). Body embeds those three; mainImage
  * starts as hero 1, then rotates through additional images for Make/Pinterest webhooks.
  * Filenames: lark-elwood-dark-romance-blog-{slug}-mood-{1..N}.jpg
@@ -107,41 +108,39 @@ loadEnvFiles();
 const crypto = require('crypto');
 const { createClient } = require('@sanity/client');
 
+/** Themes for "five dark romance books" roundup posts (rotates by calendar day). */
 const TOPIC_SLUGS = [
-    'dark-romance-cupcakes',
-    'dark-romance-dessert-table',
-    'dark-romance-dresses',
-    'gothic-date-night-styling',
-    'dark-romance-hair-moodboard',
-    'dark-romance-nails-aesthetic',
-    'dark-romance-home-styling',
-    'gothic-bedroom-and-library-atmosphere',
-    'enemies-to-lovers-guide',
-    'best-dark-romance-tropes',
-    'forbidden-love-trope-deep-dive',
-    'morally-grey-hero-obsession',
-    'villain-gets-the-girl-analysis',
-    'dark-romance-bookshelf-curation',
-    'independent-book-club-notes',
-    'romance-trope-watch',
-    'dark-academia-reading-corner',
-    'midnight-kitchen-mood',
-    'dark-romance-party-ideas',
-    'dark-romance-reader-list-journal',
+    'five-enemies-to-lovers-dark-romance-books',
+    'five-spiciest-dark-romance-books-to-binge-at-midnight',
+    'five-mafia-and-underworld-dark-romance-books',
+    'five-morally-grey-hero-obsession-books',
+    'five-books-like-corrupt-but-darker',
+    'five-possessive-hero-dark-romance-reads',
+    'five-angsty-dark-romance-for-grumpy-sunshine-fans',
+    'five-campus-and-bully-tinged-dark-romance-books',
+    'five-slow-burn-dark-romance-that-goes-incendiary',
+    'five-forbidden-love-and-age-gap-tone-dark-romance',
+    'five-dark-academia-romance-crossover-reads',
+    'five-twisted-fairy-tale-and-gothic-dark-romance',
+    'five-bodyguard-and-power-imbalance-dark-romance',
+    'five-captive-and-kidnap-tinged-books-readers-argue-about',
+    'five-dark-romance-with-unhinged-but-loyal-heroes',
+    'five-books-if-you-loved-haunting-adeline-energy',
+    'five-dark-romance-with-villain-coded-heroes',
+    'five-reads-before-you-queue-independent-novel',
+    'five-independent-spirit-heroines-in-dark-romance',
+    'five-arranged-or-marriage-contract-dark-romance-books',
 ];
 
 const DEFAULT_PEXELS_QUERIES = [
-    'dark romance couple hands close up moody',
-    'gothic fashion black dress dramatic lighting',
-    'dark cupcakes chocolate dessert moody',
-    'dark manicure nails black burgundy aesthetic',
-    'romantic candlelight dinner black table setting',
-    'cozy gothic home decor candles books',
-    'dark hair styling waves dramatic portrait crop',
-    'gothic window rain night interior',
-    'red roses black background still life',
-    'abandoned mansion chandelier darkness',
-    'stormy ocean night dramatic sky',
+    'dark academia library bookshelf moody candlelit',
+    'stack leather books bedside lamp aesthetic night',
+    'woman reading vintage books rain window cozy',
+    'gothic desk journal fountain pen stacks books moody',
+    'red wine and books dark romantic table cinematic',
+    'cozy chair tall bookshelves reading nook dramatic light',
+    'hands holding paperback books dark mood romantic',
+    'stormy loft books floor lamp warm glow atmospheric',
 ];
 
 function randomKey() {
@@ -272,7 +271,7 @@ function pexelsQueries() {
  * Strong composition and contrast for thumbnails; prefer full humans with natural faces (no disembodied limbs).
  */
 const HF_STYLE_PREFIX =
-    'Pinterest-worthy ultra sharp editorial photograph, dark romance aesthetic, ' +
+    'Pinterest-worthy ultra sharp editorial photograph, dark romance book-list aesthetic, towering leather bookshelves steaming mugs journaling reader mood, anonymous book spines blur only no legible typography, ' +
     'whenever people appear show one or two coherent full humans in frame with natural visible faces and complete anatomy, ' +
     'anatomically correct hands with exactly five fingers per hand, hands attached to visible arms and bodies, ' +
     'single bold focal point readable at tiny thumbnail size, seductive mysterious mood, ' +
@@ -291,6 +290,7 @@ const HF_NEGATIVE_PROMPT =
     'silhouette of person, crowd, group crowd, ' +
     'old, elderly, cartoon, anime, illustration, painting, drawing, sketch, ' +
     'blurry, low quality, low resolution, pixelated, ' +
+    'readable book cover typography, fake bestseller cover clones, legible author names on spines, recognizable commercial cover art duplicates, ' +
     'text, watermark, logo, typography, bright pastel, cheerful, ' +
     'children, childish, ' +
     'nudity, nude, naked, NSFW, explicit, pornographic, sexual act, ' +
@@ -635,48 +635,60 @@ function normalizeHeroImages(parsed, title) {
 
 async function generateCopy({ runDate, topicSlug, stub }) {
     if (stub) {
-        const t = `Journal note — ${runDate}`;
+        const t = `Five dark romance reads — stub ${runDate}`;
         return {
             title: t,
-            excerpt: 'Stub excerpt for dry run. Replace with real keys to generate copy via Groq.',
-            seoTitle: 'Dark Romance Journal — Stub Run',
+            excerpt:
+                'Stub roundup: five dark romance books for readers obsessed with morally grey obsession—then Independent by Lark Elwood.',
+            seoTitle: '5 Dark Romance Books — Stub Roundup',
             seoDescription:
-                'A dry-run dark romance journal entry from Lark Elwood. Replace with real keys to generate live SEO copy via Groq.',
-            focusKeyword: 'dark romance journal',
+                'Stub SEO: five dark romance book picks themed for Pinterest + reader discovery. Replace with Groq.',
+            seoSnippet:
+                'Stub: five morally grey obsessive dark romance picks for your TBR—from Lark Elwood, author of Independent.',
+            focusKeyword: 'dark romance book recommendations',
+            targetTrope: 'dark romance roundup',
+            relatedAuthorsBooks: [
+                'Haunting Adeline by H.D. Carlton',
+                'Birthday Girl by Penelope Douglas',
+                'Twisted Love by Ana Huang',
+                'Vicious by L.J. Shen',
+                'Credence by Penelope Douglas',
+            ],
             keywords: [
                 'dark romance',
-                'dark romance blog',
-                'dark romance journal',
+                'dark romance recommendations',
+                'books like corrupt',
+                'enemies to lovers dark romance',
                 'lark elwood',
                 'independent novel',
                 'morally grey hero',
             ],
             paragraphs: [
-                'This paragraph is placeholder text for a dry run with --stub.',
-                'Live posts blend Pinterest-adjacent hooks—style, food, books, tropes—with Lark Elwood’s dark romance brand and Independent.',
-                'Copy is tuned for search: author name, dark romance, and the novel woven in naturally, ending with a soft path to the site and the book.',
-                'Another beat about atmosphere and trope energy without breaking the intimate, dangerous tone.',
-                'A fifth paragraph keeps rhythm before the sign-off beat.',
-                'A closing thematic beat—no raw URLs here; the pipeline appends a proper linked sign-off.',
+                'This is stub copy for --stub dry runs only. Live posts come from Groq as “five-books” roundup posts for Lark Elwood.',
+                'In production, paragraphs two and three would spotlight paired picks—always real published novels named by title and author for reader trust.',
+                'Mid-roundup pacing keeps energy high: visceral vibes, morally grey sparks, obsessive tension—all without spoilers.',
+                'Near the landing, Independent appears as “if you tore through today’s pile, Independent was written with you in mind.” Editorial comparison tone only.',
+                'One more thematic beat reinforcing the roundup angle from the seeded topic slug before the scripted reader-list CTA line.',
+                'Closing thematic beat—the pipeline appends a linked reader-list CTA separately; never paste raw URLs in paragraphs.',
             ],
             heroImages: [
                 {
-                    imageAlt: 'Velvet and storm glass — Lark Elwood dark romance blog (1 of 3)',
-                    imageCaption: 'Dark romance aesthetic · Lark Elwood · Independent — candlelit mood',
+                    imageAlt: 'Candlelit reading nook — Lark Elwood dark romance book list · Independent (1 of 3)',
+                    imageCaption: 'Stacks, shadows, obsessive reads · Lark Elwood · Independent',
                     imagePrompt:
-                        'rain hammering a leaded glass window above a clawfoot desk, single candle, ink bottle and sealed letter, torn silk ribbon, velvet darkness, two people with natural faces visible, intertwined hands with five fingers each',
+                        'floor-to-ceiling leather bookshelves, steaming mug beside anonymous stacked hardcovers with worn spines unreadable typography, brass reading lamp, reader with visible natural face in cozy chair, manicured hand with exactly five fingers on top book, storm teal sky through loft window moody noir palette',
                 },
                 {
-                    imageAlt: 'Crimson roses and black lace — Lark Elwood Independent mood (2 of 3)',
-                    imageCaption: 'Gothic romance still life · Lark Elwood · Independent',
+                    imageAlt: 'Gothic bedside book stack mood — Lark Elwood dark romance (2 of 3)',
+                    imageCaption: 'Rain night and paperbacks · Lark Elwood Independent energy',
                     imagePrompt:
-                        'wilted deep red roses on black marble beside a tarnished silver dagger prop, single taper candle, velvet drape, a woman in black lace with natural face, graceful hand with five fingers on marble',
+                        "lace-trim robe sleeve, bedside table overflowing with paperback blocks with blurred generic spines never legible branded covers, bedside candle dripping wax, muted burgundy duvet, woman's natural face cropped soft focus reading with five fingers on page gutter",
                 },
                 {
-                    imageAlt: 'Midnight library — dark romance reads · Lark Elwood (3 of 3)',
-                    imageCaption: 'Books and shadows · Lark Elwood dark romance',
+                    imageAlt: 'Writer desk journaling TBR pile — Lark Elwood (3 of 3)',
+                    imageCaption: 'Ink, annotations, obsessive TBR energy · Lark Elwood',
                     imagePrompt:
-                        'towering shelves of leather-bound books, single reading lamp pool of warm light, wingback chair, reader with natural face visible, crossed legs, hand with five fingers on an open book, storm outside tall windows',
+                        "antique mahogany desk cluttered with handwritten reading notes, annotated sticky tabs, feather quill resting on open planner, blurred neutral book stacks framing frame edges, teal candle smoke ribbon, woman's natural face pondering list with five fingers on pen posture",
                 },
             ],
         };
@@ -691,46 +703,53 @@ async function generateCopy({ runDate, topicSlug, stub }) {
     const themeHuman = topicSlug.replace(/-/g, ' ');
     const siteOrigin = blogPublicUrl();
     const newsletterUrl = readerListCtaUrl();
-    const prompt = `You are Lark Elwood, author of the dark romance novel Independent. You write journal-style posts for larkelwood.com that grow the author brand and pull readers toward the book.
+    const prompt = `You are Lark Elwood, author of the dark romance novel Independent. You publish READING LISTS for larkelwood.com: Pinterest-friendly "five dark romance books" roundups for readers who binge morally grey, obsessive, high-stakes romance. Every post compares the genre to your debut novel Independent with a warm "if you crushed this stack, you'll want Independent next" bridge—editorial comparison ONLY, never imply another author endorses you.
 
 Your output is consumed by strict automation: invalid JSON, fewer than 6 paragraphs, or fewer than 3 heroImages objects will be rejected. Count before you answer.
 
 Site & newsletter (context only—do NOT paste URLs in paragraphs):
 - Public site home: ${siteOrigin}
-- Reader list / newsletter lives on the homepage (fans get email updates, release news, extras around Independent).
-- Do not include ${newsletterUrl} or any raw https:// string in "paragraphs". A signup link is appended automatically. End on warmth and invitation—no URLs, no markdown links.
+- Reader list / newsletter lives on the homepage (release news, ARC crumbs, extras).
+- Do not include ${newsletterUrl} or any raw https:// string in "paragraphs". A signup link is appended automatically. End with invitation to stay close—still no URLs.
 
-Brand & SEO (natural language—never keyword stuffing):
-- Weave discoverable phrases where they belong: dark romance, Lark Elwood, Independent (novel), morally grey romance, forbidden tension, tropes, reader community, newsletter / reader list.
-- Cover broad search intent around dark-romance lifestyle + fandom: dresses, cupcakes/desserts, home styling, nails, hair, bookshelves/libraries, trope explainers.
-- Title + excerpt: strong hook for Google and Pinterest saves.
-- One clear angle per post; reader should want your site and the book.
-- Include naturally varied long-tail phrasing from the selected angle (for example: "dark romance cupcakes", "dark romance dress ideas", "enemies to lovers tropes", "dark romance home decor", "gothic library atmosphere") without sounding robotic.
+Post format (every post):
+- **Title** must read like a listicle: include the number FIVE and the angle (e.g. "Five Dark Romance Reads If You Crave Morally Grey Obsession" or "Five Spicy Enemies-to-Lovers Dark Romances for Your TBR").
+- **Paragraphs (≥6 prose blocks, no bullets, no HTML)** follow this arc:
+  • Paragraph 1 — Hook: name the trope/mood from seed theme "${themeHuman}" in reader language; promise exactly five picks and who this list is for (adult readers, dark romance comfort zone).
+  • Paragraphs 2–3 — Spotlight the first two books: each must name **real published title + author** plus 2–4 sentences on vibe/heat/trope without plot spoilers; keep tone excited and trustworthy.
+  • Paragraphs 4–5 — Spotlight the next three books (you may pair two in one paragraph then one solo, or split logically) so all **five** picks are covered with **title + author** when first mentioned.
+  • Paragraph 6 — Bridge from the whole list to **Independent** by Lark Elwood: who will love it based on THIS list; one clear line that it is your debut; NO comparing quality or "better than"—affinity only. Close with emotional pull toward your reader community/newsletter idea (no URL).
 
-Content angles (pick what fits "${themeHuman}"; stay flexible):
-- Pinterest-adjacent on-brand: aesthetics, velvet / goth mood, food-as-mood, style/beauty, bookshelves/libraries, trope essays, villain hunger in fiction—always your dark-romance lens.
-- Category rotation is expected across days: food, dresses/style, hair, nails, interiors/home, reading culture, trope education, and emotional relationship dynamics.
-- Even when category-led, keep a direct bridge to Lark Elwood and Independent in the title, excerpt, and body.
+Pinterest & discovery:
+- Imagery is book-list / reading-aesthetic: towering shelves, annotated TBR notes, candles, rain glass, steam mugs, moody reading nooks—not lifestyle baking or outfit-of-the-day anymore unless the seed theme explicitly ties reading to a setting.
+- **Titles, excerpts, seo fields** should include long-tail reader searches: "dark romance book recommendations", "books like [famous comp]", "morally grey romance", "spicy dark romance", tropes from the seed theme.
 
-Voice: step into the darkness; literary but readable; sensual tension without explicit porn. Pick second OR first person and hold it.
+Seed theme (editorial anchor ${runDate}): "${themeHuman}" — shape the five picks and prose to match WITHOUT inventing fake books. Only recommend **real traditionally or indie published novels** you are confident exist; if unsure, substitute a different well-known verified title.
 
-Reader arc: open with atmosphere and curiosity; middle deepens stakes or craft; last paragraph turns toward belonging (newsletter / staying close)—still no URLs.
+SEO & comparators:
+- "relatedAuthorsBooks" MUST list the **same five** novels as in prose, each string exactly in the format "**Title by Author Full Name**" matching the order readers meet them in paragraphs 2–5.
+- Mentions of comps (Rina Kent, Penelope Douglas, Ana Huang, etc.) are acceptable as **additional** context in prose or keywords, but your five picks must be named books + authors.
 
-Editorial anchor: ${runDate}. Seed theme: "${themeHuman}".
+IMAGE SAFETY (critical for Pinterest pins + IP):
+- Describe **anonymous** book stacks—worn leather spines and paper edges with **no readable cover branding, no fake reproduction of real cover art, no legible author names on spines**—or reading props (mug, journal, pen).
+- When a person appears: one or two coherent humans, natural visible faces, waist-up or full context, **five fingers per hand**, no disembodied limbs.
 
 OUTPUT CONTRACT (must all be true):
-1) "paragraphs" is an array of at least 6 non-empty strings (each roughly 2–5 sentences). No bullet lists. No HTML.
-2) "heroImages" is an array of exactly 3 objects. Each object has exactly these keys: "imageAlt", "imageCaption", "imagePrompt" (all strings, non-empty after trim).
-3) Each imagePrompt: 25–45 words, cinematic dark romance mood. When people appear, describe one or two coherent full humans with natural visible faces (not faceless crops), complete bodies or waist-up with face in frame, and explicitly correct hands with exactly five fingers—never isolated hands, boots, or limbs without a body.
-4) Image-topic alignment is mandatory: each imagePrompt must depict the concrete subject of the post (if the post is about dark-romance cupcakes, show cupcakes/table serving details; if about dresses, show dress/fabric/styling details; if about enemies-to-lovers tropes, show symbolic scene cues that match that trope angle).
-5) Image 1 / 2 / 3 must stay on the same article theme but use clearly different compositions (different props, room, weather, camera angle, or palette)—not near-duplicates.
-6) Each imageAlt: ≤200 chars, includes Lark Elwood + dark romance + Independent where it still sounds natural for screen readers. No vendor/tool/stock/AI names.
-7) Each imageCaption: ≤220 chars, Pinterest-friendly line for under the image; brand + book; no vendor/tool names.
-8) Last paragraph: emotional CTA toward reader list / newsletter idea only—no http, no pasted domain.
-9) "seoTitle": ≤60 chars. Lead with the strongest dark-romance long-tail keyword for this post (e.g. "Dark Romance Cupcakes — Velvet Crumb Mood"). Do NOT append "Lark Elwood" or "Dark Romance" yourself; the site appends a brand suffix.
-10) "seoDescription": 140–160 chars meta description. Must read naturally for Google snippets, include 1–2 dark-romance keywords plus a hook to read more, and reference Lark Elwood / Independent only when it fits.
-11) "keywords": array of 6–10 lowercase string tags. Mix the post's specific topic (e.g. "dark romance cupcakes", "gothic baking") with evergreen brand terms ("dark romance", "Lark Elwood", "Independent novel", "morally grey hero", "obsessive romance"). No hashtags.
-12) "focusKeyword": one short phrase (the search query you most want to rank for, e.g. "dark romance cupcakes").
+1) "paragraphs" is an array of at least 6 non-empty strings as specified above (roughly 2–5 sentences each). No numbered lists, bullets, or HTML.
+2) "heroImages": exactly 3 objects; keys "imageAlt", "imageCaption", "imagePrompt" (all non-empty strings).
+3) Each imagePrompt: 28–48 words; reading-nook / bookshelf / journal / storm-window mood matching the seed theme; obey IMAGE SAFETY rules.
+4) Images 1–3: clearly different scenes (shelf vs bedside vs desk vs window) not near-duplicates.
+5) imageAlt ≤200 chars — include Lark Elwood + dark romance + Independent when natural. imageCaption ≤220 chars Pinterest-friendly. No vendor/tool/AI/stock language in user-facing strings.
+6) Last paragraph: bridge to Independent + reader community; no http, no raw domain.
+7) "title" — listicle style with FIVE picks + trope hook.
+8) "excerpt" — 1–2 sentences; tease the list + hint Independent for fans of this trope.
+9) "seoTitle" ≤62 chars; front-load search intent (e.g. "Five Enemies-to-Lovers Dark Romances").
+10) "seoDescription" 145–165 chars; mention five picks + morally grey / dark romance + Independent softly.
+11) "seoSnippet" ≤200 chars single sentence for AI answers; must say "five books" or "five reads" + trope + Lark Elwood / Independent once.
+12) "keywords": 7–12 lowercase tags (tropes + "dark romance recommendations" + comps + "Independent novel" + "Lark Elwood"). No hashtags.
+13) "focusKeyword": one phrase (e.g. "dark romance book recommendations enemies to lovers").
+14) "targetTrope": ONE label ≤60 chars distilled from the seed theme (e.g. "enemies to lovers", "mafia dark romance", "spicy possessive hero").
+15) "relatedAuthorsBooks": array of exactly 5 strings "**Title by Author**" for the five spotlighted novels (must align with body copy).
 
 Return a single JSON object ONLY (no markdown, no prose outside the object). Shape and key order:
 {
@@ -738,7 +757,10 @@ Return a single JSON object ONLY (no markdown, no prose outside the object). Sha
   "excerpt": "…",
   "seoTitle": "…",
   "seoDescription": "…",
+  "seoSnippet": "…",
   "focusKeyword": "…",
+  "targetTrope": "…",
+  "relatedAuthorsBooks": ["…","…","…","…","…"],
   "keywords": ["…","…","…","…","…","…"],
   "paragraphs": ["…","…","…","…","…","…"],
   "heroImages": [
@@ -811,6 +833,8 @@ Replace every Example with your own original copy for this post (do not copy the
 
     const seoTitle = String(parsed.seoTitle || '').trim().slice(0, 70);
     const seoDescription = String(parsed.seoDescription || '').trim().slice(0, 320);
+    const seoSnippet = String(parsed.seoSnippet || '').trim().slice(0, 280);
+    const targetTrope = String(parsed.targetTrope || '').trim().slice(0, 80);
     const focusKeyword = String(parsed.focusKeyword || '').trim().slice(0, 80);
     const keywords = Array.isArray(parsed.keywords)
         ? parsed.keywords
@@ -818,13 +842,43 @@ Replace every Example with your own original copy for this post (do not copy the
               .filter((k) => k && k.length <= 60)
               .slice(0, 12)
         : [];
+    const ROUNDUP_BOOK_PAD = [
+        'Haunting Adeline by H.D. Carlton',
+        'Birthday Girl by Penelope Douglas',
+        'Twisted Love by Ana Huang',
+        'Credence by Penelope Douglas',
+        'Vicious by L.J. Shen',
+    ];
+    let relatedAuthorsBooks = [];
+    if (Array.isArray(parsed.relatedAuthorsBooks)) {
+        relatedAuthorsBooks = [
+            ...new Set(parsed.relatedAuthorsBooks.map((x) => String(x || '').trim()).filter(Boolean)),
+        ];
+    }
+    if (relatedAuthorsBooks.length > 5) {
+        relatedAuthorsBooks = relatedAuthorsBooks.slice(0, 5);
+    }
+    if (relatedAuthorsBooks.length < 5) {
+        const seenLow = new Set(relatedAuthorsBooks.map((x) => x.toLowerCase()));
+        for (const cand of ROUNDUP_BOOK_PAD) {
+            if (relatedAuthorsBooks.length >= 5) break;
+            const k = cand.toLowerCase();
+            if (!seenLow.has(k)) {
+                seenLow.add(k);
+                relatedAuthorsBooks.push(cand);
+            }
+        }
+    }
 
     return {
         title,
         excerpt: String(parsed.excerpt || '').trim(),
         seoTitle,
         seoDescription,
+        seoSnippet: seoSnippet || String(parsed.seoDescription || '').trim().slice(0, 200),
+        targetTrope: targetTrope || focusKeyword.slice(0, 60),
         focusKeyword,
+        relatedAuthorsBooks,
         keywords,
         paragraphs,
         heroImages,
@@ -999,6 +1053,8 @@ async function main() {
         const out = [];
         for (const raw of [
             ...(Array.isArray(copy.keywords) ? copy.keywords : []),
+            ...(copy.targetTrope ? [copy.targetTrope] : []),
+            ...(Array.isArray(copy.relatedAuthorsBooks) ? copy.relatedAuthorsBooks : []),
             ...evergreenKeywords,
         ]) {
             const k = String(raw || '').trim();
@@ -1007,7 +1063,7 @@ async function main() {
             if (seen.has(norm)) continue;
             seen.add(norm);
             out.push(k);
-            if (out.length >= 14) break;
+            if (out.length >= 22) break;
         }
         return out;
     })();
@@ -1019,6 +1075,11 @@ async function main() {
         excerpt: copy.excerpt,
         ...(copy.seoTitle ? { seoTitle: copy.seoTitle } : {}),
         ...(copy.seoDescription ? { seoDescription: copy.seoDescription } : {}),
+        ...(copy.seoSnippet ? { seoSnippet: copy.seoSnippet } : {}),
+        ...(copy.targetTrope ? { targetTrope: copy.targetTrope } : {}),
+        ...(Array.isArray(copy.relatedAuthorsBooks) && copy.relatedAuthorsBooks.length
+            ? { relatedAuthorsBooks: copy.relatedAuthorsBooks }
+            : {}),
         ...(copy.focusKeyword ? { focusKeyword: copy.focusKeyword } : {}),
         ...(mergedKeywords.length ? { keywords: mergedKeywords } : {}),
         ...(skipImageRef

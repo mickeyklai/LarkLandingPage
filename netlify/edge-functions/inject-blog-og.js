@@ -37,19 +37,23 @@ async function fetchSanityPostMeta(projectId, dataset, apiVersion, slug) {
     const query = `*[_type == "post" && !(_id in path("drafts.**")) && slug.current == $slug][0]{
     title,
     excerpt,
+    seoSnippet,
     "slug": slug.current,
     publishedAt,
     _updatedAt,
     seoTitle,
     seoDescription,
     keywords,
+    targetTrope,
+    relatedAuthorsBooks,
     noindex,
     "ogUrl": coalesce(seoImage.asset->url, mainImage.asset->url, body[_type=="image"][0].asset->url),
     "ogW": coalesce(seoImage.asset->metadata.dimensions.width, mainImage.asset->metadata.dimensions.width, body[_type=="image"][0].asset->metadata.dimensions.width),
     "ogH": coalesce(seoImage.asset->metadata.dimensions.height, mainImage.asset->metadata.dimensions.height, body[_type=="image"][0].asset->metadata.dimensions.height),
     "ogAlt": coalesce(seoImage.alt, mainImage.alt, body[_type=="image"][0].alt)
   }`;
-    const u = new URL(`https://${projectId}.apicdn.sanity.io/v${apiVersion}/data/query/${dataset}`);
+    // Use api (not apicdn) so new posts + image patches are visible to crawlers immediately.
+    const u = new URL(`https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}`);
     u.searchParams.set('query', query);
     u.searchParams.set('$slug', slug);
     try {
@@ -69,17 +73,85 @@ function ogImageUrl(raw) {
         return '';
     }
     const base = raw.split('?')[0];
-    return `${base}?w=1200&auto=format`;
+    // Pinterest / Facebook crawlers are more reliable with JPEG og:image than WebP.
+    return `${base}?w=1200&fm=jpg&q=82&fit=max`;
+}
+
+/** Merge Sanity keywords + trope + related names for meta + JSON-LD (deduped). */
+function mergedKeywordList(meta) {
+    const seen = new Set();
+    const out = [];
+    function add(val) {
+        const x = String(val ?? '').trim();
+        if (!x) return;
+        const k = x.toLowerCase();
+        if (seen.has(k)) return;
+        seen.add(k);
+        out.push(x);
+    }
+    if (Array.isArray(meta.keywords)) {
+        meta.keywords.forEach(add);
+    }
+    if (meta.targetTrope) add(meta.targetTrope);
+    if (Array.isArray(meta.relatedAuthorsBooks)) {
+        meta.relatedAuthorsBooks.forEach(add);
+    }
+    return out.slice(0, 24);
+}
+
+function mentionsFromRelated(meta) {
+    if (!Array.isArray(meta.relatedAuthorsBooks)) {
+        return [];
+    }
+    const clean = [
+        ...new Set(meta.relatedAuthorsBooks.map((x) => String(x || '').trim()).filter(Boolean)),
+    ].slice(0, 14);
+    return clean.map((name) => ({
+        '@type': 'Thing',
+        name,
+        description: 'Editorial genre comparison / reader discovery — Lark Elwood dark romance.',
+    }));
+}
+
+function aboutEntities(meta) {
+    const about = [
+        {
+            '@type': 'Book',
+            '@id': `${SITE_ORIGIN}/#book`,
+            name: 'Independent',
+            author: { '@id': `${SITE_ORIGIN}/#author` },
+            genre: ['Dark Romance'],
+        },
+    ];
+    const trope = meta.targetTrope && String(meta.targetTrope).trim();
+    if (trope) {
+        about.push({
+            '@type': 'DefinedTerm',
+            name: trope,
+            inDefinedTermSet: {
+                '@type': 'DefinedTermSet',
+                name: 'Romance fiction tropes',
+            },
+        });
+    }
+    return about;
 }
 
 function buildArticleJsonLd(meta, canonicalUrl, ogUrl) {
+    const fullDesc =
+        (meta.seoDescription && String(meta.seoDescription).trim()) ||
+        (meta.seoSnippet && String(meta.seoSnippet).trim()) ||
+        (meta.excerpt && String(meta.excerpt).trim()) ||
+        'Dark romance journal entry from Lark Elwood, author of Independent.';
+    const snippet = (meta.seoSnippet && String(meta.seoSnippet).trim()) || '';
+    const kwList = mergedKeywordList(meta);
+
     const obj = {
         '@context': 'https://schema.org',
         '@type': 'BlogPosting',
         mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
         headline: (meta.title || 'Lark Elwood').slice(0, 110),
-        description: (meta.seoDescription || meta.excerpt || '').trim() ||
-            'Dark romance journal entry from Lark Elwood, author of Independent.',
+        description: fullDesc.slice(0, 500),
         author: {
             '@type': 'Person',
             '@id': `${SITE_ORIGIN}/#author`,
@@ -100,14 +172,16 @@ function buildArticleJsonLd(meta, canonicalUrl, ogUrl) {
         },
         inLanguage: 'en',
         articleSection: 'Dark Romance',
-        about: {
-            '@type': 'Book',
-            '@id': `${SITE_ORIGIN}/#book`,
-            name: 'Independent',
-            author: { '@id': `${SITE_ORIGIN}/#author` },
-        },
+        about: aboutEntities(meta),
         isPartOf: { '@id': `${SITE_ORIGIN}/blog/#blog` },
     };
+    if (snippet) {
+        obj.abstract = snippet.slice(0, 320);
+    }
+    const mentions = mentionsFromRelated(meta);
+    if (mentions.length) {
+        obj.mentions = mentions;
+    }
     if (meta.publishedAt) {
         obj.datePublished = new Date(meta.publishedAt).toISOString();
     }
@@ -116,8 +190,8 @@ function buildArticleJsonLd(meta, canonicalUrl, ogUrl) {
     } else if (meta.publishedAt) {
         obj.dateModified = new Date(meta.publishedAt).toISOString();
     }
-    if (Array.isArray(meta.keywords) && meta.keywords.length) {
-        obj.keywords = meta.keywords.join(', ');
+    if (kwList.length) {
+        obj.keywords = kwList.join(', ');
     }
     if (ogUrl) {
         obj.image = {
@@ -136,7 +210,7 @@ function buildBreadcrumbJsonLd(meta, canonicalUrl) {
         '@type': 'BreadcrumbList',
         itemListElement: [
             { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_ORIGIN + '/' },
-            { '@type': 'ListItem', position: 2, name: 'Dark Romance Journal', item: SITE_ORIGIN + '/blog/' },
+            { '@type': 'ListItem', position: 2, name: 'Dark romance reading lists', item: SITE_ORIGIN + '/blog/' },
             { '@type': 'ListItem', position: 3, name: meta.title || 'Post', item: canonicalUrl },
         ],
     };
@@ -149,9 +223,10 @@ function injectHead(html, meta, canonicalUrl) {
         (meta.title ? String(meta.title).trim() : '');
     const title = seoTitleRaw
         ? `${seoTitleRaw} — Lark Elwood (Dark Romance)`
-        : 'Dark Romance Journal — Lark Elwood';
+        : 'Dark romance reading lists — Lark Elwood';
     const desc = (
         (meta.seoDescription && String(meta.seoDescription).trim()) ||
+        (meta.seoSnippet && String(meta.seoSnippet).trim()) ||
         (meta.excerpt && String(meta.excerpt).trim()) ||
         'Dark romance journal entry by Lark Elwood, author of Independent.'
     ).slice(0, 320);
@@ -163,10 +238,10 @@ function injectHead(html, meta, canonicalUrl) {
     const robots = noindex
         ? 'noindex, nofollow'
         : 'index, follow, max-image-preview:large, max-snippet:-1';
-    const keywordsArr =
-        Array.isArray(meta.keywords) && meta.keywords.length
-            ? meta.keywords
-            : ['dark romance', 'Lark Elwood', 'Independent novel', 'morally grey hero'];
+    let keywordsArr = mergedKeywordList(meta);
+    if (!keywordsArr.length) {
+        keywordsArr = ['dark romance', 'Lark Elwood', 'Independent novel', 'morally grey hero'];
+    }
     const keywords = keywordsArr.join(', ');
 
     const articleJsonLd = buildArticleJsonLd(meta, canonicalUrl, ogUrl);
@@ -181,7 +256,7 @@ function injectHead(html, meta, canonicalUrl) {
         `<meta property="og:type" content="article">` +
         `<meta property="og:site_name" content="Lark Elwood">` +
         `<meta property="og:locale" content="en_US">` +
-        `<meta property="og:title" content="${escAttr(meta.title || 'Lark Elwood — Dark Romance Journal')}">` +
+        `<meta property="og:title" content="${escAttr(meta.title || 'Five dark romance picks — Lark Elwood')}">` +
         `<meta property="og:description" content="${escAttr(desc)}">` +
         `<meta property="og:url" content="${escAttr(canonicalUrl)}">` +
         (ogUrl
@@ -200,20 +275,20 @@ function injectHead(html, meta, canonicalUrl) {
         `<meta property="article:author" content="${escAttr(SITE_ORIGIN + '/#author')}">` +
         `<meta property="article:section" content="Dark Romance">` +
         keywordsArr
-            .slice(0, 8)
+            .slice(0, 12)
             .map((k) => `<meta property="article:tag" content="${escAttr(k)}">`)
             .join('') +
         `<meta name="twitter:card" content="summary_large_image">` +
         `<meta name="twitter:site" content="@larkelwood">` +
         `<meta name="twitter:creator" content="@larkelwood">` +
-        `<meta name="twitter:title" content="${escAttr(meta.title || 'Lark Elwood — Dark Romance Journal')}">` +
+        `<meta name="twitter:title" content="${escAttr(meta.title || 'Five dark romance picks — Lark Elwood')}">` +
         `<meta name="twitter:description" content="${escAttr(desc)}">` +
         (ogUrl
             ? `<meta name="twitter:image" content="${escAttr(ogUrl)}">` +
               `<meta name="twitter:image:alt" content="${escAttr(ogAlt)}">`
             : '') +
         `<link rel="canonical" href="${escAttr(canonicalUrl)}">` +
-        `<link rel="alternate" type="application/rss+xml" title="Lark Elwood — Dark Romance Journal" href="${escAttr(SITE_ORIGIN + '/feed.xml')}">` +
+        `<link rel="alternate" type="application/rss+xml" title="Lark Elwood — Five-Book Dark Romance Lists" href="${escAttr(SITE_ORIGIN + '/feed.xml')}">` +
         `<script type="application/ld+json">${escJson(articleJsonLd)}</script>` +
         `<script type="application/ld+json">${escJson(breadcrumbJsonLd)}</script>`;
 

@@ -64,6 +64,74 @@
         document.head.appendChild(s);
     }
 
+    function mergedKeywordStrings(post) {
+        var seen = {};
+        var out = [];
+        function add(val) {
+            var x = String(val || '').trim();
+            if (!x) return;
+            var k = x.toLowerCase();
+            if (seen[k]) return;
+            seen[k] = true;
+            out.push(x);
+        }
+        if (Array.isArray(post.keywords)) {
+            post.keywords.forEach(add);
+        }
+        if (post.targetTrope) {
+            add(post.targetTrope);
+        }
+        if (Array.isArray(post.relatedAuthorsBooks)) {
+            post.relatedAuthorsBooks.forEach(add);
+        }
+        return out.slice(0, 24);
+    }
+
+    function aboutEntitiesClient(post) {
+        var book = {
+            '@type': 'Book',
+            '@id': 'https://larkelwood.com/#book',
+            name: 'Independent',
+            author: { '@id': 'https://larkelwood.com/#author' },
+            genre: ['Dark Romance'],
+        };
+        var tropeRaw = post.targetTrope && String(post.targetTrope).trim();
+        if (!tropeRaw) {
+            return [book];
+        }
+        return [
+            book,
+            {
+                '@type': 'DefinedTerm',
+                name: tropeRaw,
+                inDefinedTermSet: {
+                    '@type': 'DefinedTermSet',
+                    name: 'Romance fiction tropes',
+                },
+            },
+        ];
+    }
+
+    function mentionsClient(post) {
+        if (!Array.isArray(post.relatedAuthorsBooks)) {
+            return [];
+        }
+        return post.relatedAuthorsBooks
+            .map(function (x) {
+                return String(x || '').trim();
+            })
+            .filter(Boolean)
+            .slice(0, 14)
+            .map(function (name) {
+                return {
+                    '@type': 'Thing',
+                    name: name,
+                    description:
+                        'Editorial genre comparison / reader discovery — Lark Elwood dark romance.',
+                };
+            });
+    }
+
     function setOgFromPost(post) {
         if (!post) {
             return;
@@ -81,13 +149,16 @@
 
         var desc =
             (post.seoDescription && String(post.seoDescription).trim()) ||
+            (post.seoSnippet && String(post.seoSnippet).trim()) ||
             (post.excerpt && String(post.excerpt).trim()) ||
             'Dark romance journal entry by Lark Elwood, author of Independent.';
+        var snippet = post.seoSnippet && String(post.seoSnippet).trim();
         var pageUrl = window.location.href.split('#')[0];
-        var titleForOg = post.seoTitle || post.title || 'Lark Elwood — Dark Romance Journal';
+        var titleForOg = post.seoTitle || post.title || 'Lark Elwood — dark romance reading lists';
+        var kwArr = mergedKeywordStrings(post);
         var keywords =
-            Array.isArray(post.keywords) && post.keywords.length
-                ? post.keywords.join(', ')
+            kwArr.length > 0
+                ? kwArr.join(', ')
                 : 'dark romance, Lark Elwood, Independent novel, morally grey hero';
         var noindex = post.noindex === true;
         var robots = noindex
@@ -158,16 +229,12 @@
             '@type': 'BlogPosting',
             mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
             headline: (post.title || 'Lark Elwood').slice(0, 110),
-            description: desc,
+            description: desc.slice(0, 500),
             inLanguage: 'en',
             articleSection: 'Dark Romance',
             keywords: keywords,
             isPartOf: { '@id': 'https://larkelwood.com/blog/#blog' },
-            about: {
-                '@type': 'Book',
-                '@id': 'https://larkelwood.com/#book',
-                name: 'Independent',
-            },
+            about: aboutEntitiesClient(post),
             author: {
                 '@type': 'Person',
                 '@id': 'https://larkelwood.com/#author',
@@ -195,6 +262,13 @@
         } else if (post.publishedAt) {
             article.dateModified = new Date(post.publishedAt).toISOString();
         }
+        if (snippet) {
+            article.abstract = snippet.slice(0, 320);
+        }
+        var m = mentionsClient(post);
+        if (m.length > 0) {
+            article.mentions = m;
+        }
         if (post.ogImage) {
             article.image = {
                 '@type': 'ImageObject',
@@ -213,7 +287,7 @@
                 {
                     '@type': 'ListItem',
                     position: 2,
-                    name: 'Dark Romance Journal',
+                    name: 'Dark romance reading lists',
                     item: 'https://larkelwood.com/blog/',
                 },
                 { '@type': 'ListItem', position: 3, name: post.title || 'Post', item: pageUrl },
@@ -272,9 +346,12 @@
             titleEl.textContent = post.title || 'Untitled';
             metaEl.textContent = formatDate(post.publishedAt) || 'Journal';
 
-            if (post.excerpt) {
+            var dek =
+                (post.excerpt && String(post.excerpt).trim()) ||
+                (post.seoSnippet && String(post.seoSnippet).trim());
+            if (dek) {
                 dekEl.hidden = false;
-                dekEl.textContent = post.excerpt;
+                dekEl.textContent = dek;
             } else {
                 dekEl.hidden = true;
                 dekEl.textContent = '';
