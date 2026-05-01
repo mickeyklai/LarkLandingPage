@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /.netlify/
+Disallow: /studio/
+
+# Sitemaps
+Sitemap: https://larkelwood.com/sitemap.xml
+
+# Host (canonical)
+Host: https://larkelwood.com

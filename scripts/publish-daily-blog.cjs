@@ -639,6 +639,18 @@ async function generateCopy({ runDate, topicSlug, stub }) {
         return {
             title: t,
             excerpt: 'Stub excerpt for dry run. Replace with real keys to generate copy via Groq.',
+            seoTitle: 'Dark Romance Journal — Stub Run',
+            seoDescription:
+                'A dry-run dark romance journal entry from Lark Elwood. Replace with real keys to generate live SEO copy via Groq.',
+            focusKeyword: 'dark romance journal',
+            keywords: [
+                'dark romance',
+                'dark romance blog',
+                'dark romance journal',
+                'lark elwood',
+                'independent novel',
+                'morally grey hero',
+            ],
             paragraphs: [
                 'This paragraph is placeholder text for a dry run with --stub.',
                 'Live posts blend Pinterest-adjacent hooks—style, food, books, tropes—with Lark Elwood’s dark romance brand and Independent.',
@@ -715,11 +727,19 @@ OUTPUT CONTRACT (must all be true):
 6) Each imageAlt: ≤200 chars, includes Lark Elwood + dark romance + Independent where it still sounds natural for screen readers. No vendor/tool/stock/AI names.
 7) Each imageCaption: ≤220 chars, Pinterest-friendly line for under the image; brand + book; no vendor/tool names.
 8) Last paragraph: emotional CTA toward reader list / newsletter idea only—no http, no pasted domain.
+9) "seoTitle": ≤60 chars. Lead with the strongest dark-romance long-tail keyword for this post (e.g. "Dark Romance Cupcakes — Velvet Crumb Mood"). Do NOT append "Lark Elwood" or "Dark Romance" yourself; the site appends a brand suffix.
+10) "seoDescription": 140–160 chars meta description. Must read naturally for Google snippets, include 1–2 dark-romance keywords plus a hook to read more, and reference Lark Elwood / Independent only when it fits.
+11) "keywords": array of 6–10 lowercase string tags. Mix the post's specific topic (e.g. "dark romance cupcakes", "gothic baking") with evergreen brand terms ("dark romance", "Lark Elwood", "Independent novel", "morally grey hero", "obsessive romance"). No hashtags.
+12) "focusKeyword": one short phrase (the search query you most want to rank for, e.g. "dark romance cupcakes").
 
 Return a single JSON object ONLY (no markdown, no prose outside the object). Shape and key order:
 {
   "title": "…",
   "excerpt": "…",
+  "seoTitle": "…",
+  "seoDescription": "…",
+  "focusKeyword": "…",
+  "keywords": ["…","…","…","…","…","…"],
   "paragraphs": ["…","…","…","…","…","…"],
   "heroImages": [
     {
@@ -789,9 +809,23 @@ Replace every Example with your own original copy for this post (do not copy the
     const title = String(parsed.title).trim();
     const heroImages = normalizeHeroImages(parsed, title);
 
+    const seoTitle = String(parsed.seoTitle || '').trim().slice(0, 70);
+    const seoDescription = String(parsed.seoDescription || '').trim().slice(0, 320);
+    const focusKeyword = String(parsed.focusKeyword || '').trim().slice(0, 80);
+    const keywords = Array.isArray(parsed.keywords)
+        ? parsed.keywords
+              .map((k) => String(k || '').trim().toLowerCase())
+              .filter((k) => k && k.length <= 60)
+              .slice(0, 12)
+        : [];
+
     return {
         title,
         excerpt: String(parsed.excerpt || '').trim(),
+        seoTitle,
+        seoDescription,
+        focusKeyword,
+        keywords,
         paragraphs,
         heroImages,
     };
@@ -959,12 +993,34 @@ async function main() {
 
     const skipImageRef = allDrySlots;
     const firstHero = slots[0];
+    const evergreenKeywords = ['dark romance', 'lark elwood', 'independent novel', 'morally grey hero'];
+    const mergedKeywords = (() => {
+        const seen = new Set();
+        const out = [];
+        for (const raw of [
+            ...(Array.isArray(copy.keywords) ? copy.keywords : []),
+            ...evergreenKeywords,
+        ]) {
+            const k = String(raw || '').trim();
+            if (!k) continue;
+            const norm = k.toLowerCase();
+            if (seen.has(norm)) continue;
+            seen.add(norm);
+            out.push(k);
+            if (out.length >= 14) break;
+        }
+        return out;
+    })();
     const doc = {
         _type: 'post',
         title: copy.title,
         slug: { _type: 'slug', current: slugCurrent },
         publishedAt,
         excerpt: copy.excerpt,
+        ...(copy.seoTitle ? { seoTitle: copy.seoTitle } : {}),
+        ...(copy.seoDescription ? { seoDescription: copy.seoDescription } : {}),
+        ...(copy.focusKeyword ? { focusKeyword: copy.focusKeyword } : {}),
+        ...(mergedKeywords.length ? { keywords: mergedKeywords } : {}),
         ...(skipImageRef
             ? {}
             : {

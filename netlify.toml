@@ -3,12 +3,66 @@
   publish = "."
   functions = "netlify/functions"
 
+# ----------------------------------------------------------------------------
+# Edge functions
+# ----------------------------------------------------------------------------
+# /blog/{slug}: server-side OG / Twitter / Article JSON-LD / Breadcrumb / canonical injection
 [[edge_functions]]
   path = "/blog/*"
   function = "inject-blog-og"
 
+# /: server-render the latest dark-romance journal posts into the homepage so
+# search engines (and Pinterest crawlers) see real internal links from the
+# strongest URL to every fresh blog post.
+[[edge_functions]]
+  path = "/"
+  function = "inject-home-seo"
+
+[[edge_functions]]
+  path = "/index.html"
+  function = "inject-home-seo"
+
+# ----------------------------------------------------------------------------
+# SEO endpoints (Sanity-backed, dynamic)
+# ----------------------------------------------------------------------------
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/.netlify/functions/sitemap"
+  status = 200
+
+[[redirects]]
+  from = "/feed.xml"
+  to = "/.netlify/functions/feed"
+  status = 200
+
+[[redirects]]
+  from = "/rss.xml"
+  to = "/.netlify/functions/feed"
+  status = 200
+
+# ----------------------------------------------------------------------------
 # Pretty URLs: /blog/my-post serves post.html; slug is read client-side from the path.
+# ----------------------------------------------------------------------------
 [[redirects]]
   from = "/blog/*"
   to = "/blog/post.html"
   status = 200
+
+# ----------------------------------------------------------------------------
+# robots.txt + sitemap headers
+# ----------------------------------------------------------------------------
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Content-Type = "text/plain; charset=utf-8"
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=300, s-maxage=300"
+
+[[headers]]
+  for = "/feed.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=300, s-maxage=300"

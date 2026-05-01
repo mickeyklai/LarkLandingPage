@@ -52,6 +52,18 @@
         return el;
     }
 
+    function upsertJsonLd(id, obj) {
+        var existing = document.getElementById(id);
+        if (existing) {
+            existing.parentNode.removeChild(existing);
+        }
+        var s = document.createElement('script');
+        s.type = 'application/ld+json';
+        s.id = id;
+        s.textContent = JSON.stringify(obj);
+        document.head.appendChild(s);
+    }
+
     function setOgFromPost(post) {
         if (!post) {
             return;
@@ -67,15 +79,51 @@
             }
         };
 
-        var desc = (post.excerpt || '').trim() || 'Read the latest from Lark Elwood.';
+        var desc =
+            (post.seoDescription && String(post.seoDescription).trim()) ||
+            (post.excerpt && String(post.excerpt).trim()) ||
+            'Dark romance journal entry by Lark Elwood, author of Independent.';
         var pageUrl = window.location.href.split('#')[0];
+        var titleForOg = post.seoTitle || post.title || 'Lark Elwood — Dark Romance Journal';
+        var keywords =
+            Array.isArray(post.keywords) && post.keywords.length
+                ? post.keywords.join(', ')
+                : 'dark romance, Lark Elwood, Independent novel, morally grey hero';
+        var noindex = post.noindex === true;
+        var robots = noindex
+            ? 'noindex, nofollow'
+            : 'index, follow, max-image-preview:large, max-snippet:-1';
 
         metaByName('description').setAttribute('content', desc);
+        metaByName('robots').setAttribute('content', robots);
+        metaByName('googlebot').setAttribute('content', robots);
+        metaByName('author').setAttribute('content', 'Lark Elwood');
+        metaByName('keywords').setAttribute('content', keywords);
+        metaByName('theme-color').setAttribute('content', '#0a0a0a');
 
         metaByProperty('og:type').setAttribute('content', 'article');
-        metaByProperty('og:title').setAttribute('content', post.title || 'Blog');
+        metaByProperty('og:site_name').setAttribute('content', 'Lark Elwood');
+        metaByProperty('og:locale').setAttribute('content', 'en_US');
+        metaByProperty('og:title').setAttribute('content', titleForOg);
         metaByProperty('og:description').setAttribute('content', desc);
         metaByProperty('og:url').setAttribute('content', pageUrl);
+        if (post.publishedAt) {
+            metaByProperty('article:published_time').setAttribute(
+                'content',
+                new Date(post.publishedAt).toISOString(),
+            );
+        }
+        if (post._updatedAt) {
+            metaByProperty('article:modified_time').setAttribute(
+                'content',
+                new Date(post._updatedAt).toISOString(),
+            );
+        }
+        metaByProperty('article:author').setAttribute(
+            'content',
+            'https://larkelwood.com/#author',
+        );
+        metaByProperty('article:section').setAttribute('content', 'Dark Romance');
 
         if (post.ogImage) {
             metaByProperty('og:image').setAttribute('content', absUrl(post.ogImage));
@@ -89,8 +137,10 @@
             metaByName('twitter:image').setAttribute('content', absUrl(post.ogImage));
         }
 
-        metaByName('twitter:title').setAttribute('content', post.title || 'Blog');
+        metaByName('twitter:title').setAttribute('content', titleForOg);
         metaByName('twitter:description').setAttribute('content', desc);
+        metaByName('twitter:site').setAttribute('content', '@larkelwood');
+        metaByName('twitter:creator').setAttribute('content', '@larkelwood');
 
         var link = document.head.querySelector('link[rel="canonical"]');
         if (!link) {
@@ -99,6 +149,76 @@
             document.head.appendChild(link);
         }
         link.setAttribute('href', pageUrl);
+
+        // BlogPosting + Breadcrumb JSON-LD (mirror of edge function output for
+        // crawlers that only see the JS-rendered page, e.g. some lightweight
+        // bots and re-crawls before the edge function runs).
+        var article = {
+            '@context': 'https://schema.org',
+            '@type': 'BlogPosting',
+            mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+            headline: (post.title || 'Lark Elwood').slice(0, 110),
+            description: desc,
+            inLanguage: 'en',
+            articleSection: 'Dark Romance',
+            keywords: keywords,
+            isPartOf: { '@id': 'https://larkelwood.com/blog/#blog' },
+            about: {
+                '@type': 'Book',
+                '@id': 'https://larkelwood.com/#book',
+                name: 'Independent',
+            },
+            author: {
+                '@type': 'Person',
+                '@id': 'https://larkelwood.com/#author',
+                name: 'Lark Elwood',
+                url: 'https://larkelwood.com/',
+            },
+            publisher: {
+                '@type': 'Person',
+                '@id': 'https://larkelwood.com/#author',
+                name: 'Lark Elwood',
+                url: 'https://larkelwood.com/',
+                logo: {
+                    '@type': 'ImageObject',
+                    url: 'https://larkelwood.com/assets/og-lark-elwood.jpg',
+                    width: 1200,
+                    height: 630,
+                },
+            },
+        };
+        if (post.publishedAt) {
+            article.datePublished = new Date(post.publishedAt).toISOString();
+        }
+        if (post._updatedAt) {
+            article.dateModified = new Date(post._updatedAt).toISOString();
+        } else if (post.publishedAt) {
+            article.dateModified = new Date(post.publishedAt).toISOString();
+        }
+        if (post.ogImage) {
+            article.image = {
+                '@type': 'ImageObject',
+                url: absUrl(post.ogImage),
+                width: post.ogImageWidth || undefined,
+                height: post.ogImageHeight || undefined,
+            };
+        }
+        upsertJsonLd('ld-article', article);
+
+        upsertJsonLd('ld-breadcrumb', {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://larkelwood.com/' },
+                {
+                    '@type': 'ListItem',
+                    position: 2,
+                    name: 'Dark Romance Journal',
+                    item: 'https://larkelwood.com/blog/',
+                },
+                { '@type': 'ListItem', position: 3, name: post.title || 'Post', item: pageUrl },
+            ],
+        });
     }
 
     function formatDate(iso) {

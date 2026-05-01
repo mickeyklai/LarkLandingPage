@@ -7,7 +7,26 @@ const DETAIL_QUERY = `
     title,
     "slug": slug.current,
     publishedAt,
+    _updatedAt,
     excerpt,
+    seoTitle,
+    seoDescription,
+    keywords,
+    focusKeyword,
+    noindex,
+    seoImage {
+      ...,
+      asset->{
+        _id,
+        url,
+        metadata {
+          dimensions {
+            width,
+            height
+          }
+        }
+      }
+    },
     mainImage {
       ...,
       asset->{
@@ -249,6 +268,9 @@ function imageBlockToHtml(url, loadingAttr, block) {
 }
 
 function pickOgImageBlock(doc) {
+    if (doc && doc.seoImage && doc.seoImage.asset) {
+        return doc.seoImage;
+    }
     if (doc && doc.mainImage && doc.mainImage.asset) {
         return doc.mainImage;
     }
@@ -408,6 +430,12 @@ exports.handler = async function handler(event) {
         const imageUrls = collectImageUrls(doc.body, imageOpts);
         const og = ogImageFields(doc, imageOpts);
         const { body, ...rest } = doc;
+        const seoTitle = (doc.seoTitle && String(doc.seoTitle).trim()) || '';
+        const seoDescription =
+            (doc.seoDescription && String(doc.seoDescription).trim()) || '';
+        const keywords = Array.isArray(doc.keywords)
+            ? doc.keywords.map((k) => String(k).trim()).filter(Boolean)
+            : [];
         return {
             statusCode: 200,
             headers,
@@ -415,11 +443,15 @@ exports.handler = async function handler(event) {
                 ...rest,
                 bodyHtml,
                 imageUrls,
-                ogTitle: doc.title || '',
-                ogDescription: doc.excerpt || '',
+                ogTitle: seoTitle || doc.title || '',
+                ogDescription: seoDescription || doc.excerpt || '',
                 ogImage: og.ogImage,
                 ogImageWidth: og.ogImageWidth,
                 ogImageHeight: og.ogImageHeight,
+                seoTitle,
+                seoDescription,
+                keywords,
+                noindex: doc.noindex === true,
             }),
         };
     } catch (err) {
