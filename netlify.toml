@@ -11,17 +11,6 @@
   path = "/blog/*"
   function = "inject-blog-og"
 
-# /: server-render the latest dark-romance journal posts into the homepage so
-# search engines (and Pinterest crawlers) see real internal links from the
-# strongest URL to every fresh blog post.
-[[edge_functions]]
-  path = "/"
-  function = "inject-home-seo"
-
-[[edge_functions]]
-  path = "/index.html"
-  function = "inject-home-seo"
-
 # ----------------------------------------------------------------------------
 # SEO endpoints (Sanity-backed, dynamic)
 # ----------------------------------------------------------------------------

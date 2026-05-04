@@ -11,7 +11,6 @@
  * Image strategy (first match wins):
  * - HF_TOKEN — @huggingface/inference + FLUX.1-schnell (Inference Providers, provider "auto").
  *   Groq supplies `imagePrompt` (dark-romance mood, Pinterest-friendly); JPEG → Sanity.
- * - Else PEXELS_API_KEY — stock photo → Sanity upload.
  * - Else BLOG_IMAGE_POOL_REFS — comma-separated Sanity image asset _id values (Studio uploads).
  *
  * Idempotency: base slug is `${BLOG_RUN_DATE or UTC YYYY-MM-DD}-${topicSlug}`. If that slug
@@ -22,8 +21,7 @@
  * Required env:
  *   SANITY_PROJECT_ID, SANITY_API_WRITE_TOKEN (Editor: create documents + upload assets)
  *   GROQ_API_KEY (Groq Cloud for OpenAI-compatible chat completions)
- *   One image source: HF_TOKEN (preferred, Hugging Face FLUX) and/or PEXELS_API_KEY and/or
- *   BLOG_IMAGE_POOL_REFS
+ *   One image source: HF_TOKEN (Hugging Face FLUX) and/or BLOG_IMAGE_POOL_REFS
  *
  * Optional:
  *   SANITY_DATASET (default production), SANITY_API_VERSION (default 2024-01-01)
@@ -33,9 +31,7 @@
  *   BLOG_PUBLISHED_AT — ISO datetime for publishedAt (default: now UTC)
  *   HF_TOKEN — Hugging Face token (Inference); optional HF_IMAGE_MODEL (default FLUX.1-schnell),
  *     HF_IMAGE_PROVIDER (default auto), HF_IMAGE_WIDTH / HF_IMAGE_HEIGHT, HF_NUM_INFERENCE_STEPS
- *   PEXELS_API_KEY — stock photos → Sanity when HF_TOKEN unset
- *   BLOG_IMAGE_POOL_REFS — curated asset ids when neither HF nor Pexels is set
- *   BLOG_PEXELS_QUERIES — optional comma-separated Pexels search terms (rotation by day)
+ *   BLOG_IMAGE_POOL_REFS — curated asset ids when HF_TOKEN is unset
  *   GROQ_JSON_MODE — set "0" or "false" if the API rejects response_format json_object for your model
  *   BLOG_PUBLIC_URL — site origin for CTAs (default https://larkelwood.com). Groq closes each post
  *     with an invitation to join the reader list / newsletter at BLOG_READER_LIST_URL or …/#reader-list
@@ -48,7 +44,7 @@
  *
  * Flags:
  *   --dry-run — do not upload assets or create documents; log intended payload
- *   --stub    — with --dry-run, skip Groq/Pexels (placeholder copy only)
+ *   --stub    — with --dry-run, skip Groq (placeholder copy only)
  *   --next-slug — same as BLOG_MULTIPLE_PER_DAY (extra posts same day get -2, -3, … suffix)
  *
  * Sanity token: create at sanity.io/manage → API → Tokens with Editor (or custom role with
@@ -108,39 +104,39 @@ loadEnvFiles();
 const crypto = require('crypto');
 const { createClient } = require('@sanity/client');
 
-/** Themes for "five dark romance books" roundup posts (rotates by calendar day). */
+/** Post themes / URL slugs (rotates by calendar day). */
 const TOPIC_SLUGS = [
-    'five-enemies-to-lovers-dark-romance-books',
-    'five-spiciest-dark-romance-books-to-binge-at-midnight',
-    'five-mafia-and-underworld-dark-romance-books',
-    'five-morally-grey-hero-obsession-books',
-    'five-books-like-corrupt-but-darker',
-    'five-possessive-hero-dark-romance-reads',
-    'five-angsty-dark-romance-for-grumpy-sunshine-fans',
-    'five-campus-and-bully-tinged-dark-romance-books',
-    'five-slow-burn-dark-romance-that-goes-incendiary',
-    'five-forbidden-love-and-age-gap-tone-dark-romance',
-    'five-dark-academia-romance-crossover-reads',
-    'five-twisted-fairy-tale-and-gothic-dark-romance',
-    'five-bodyguard-and-power-imbalance-dark-romance',
-    'five-captive-and-kidnap-tinged-books-readers-argue-about',
-    'five-dark-romance-with-unhinged-but-loyal-heroes',
-    'five-books-if-you-loved-haunting-adeline-energy',
-    'five-dark-romance-with-villain-coded-heroes',
-    'five-reads-before-you-queue-independent-novel',
-    'five-independent-spirit-heroines-in-dark-romance',
-    'five-arranged-or-marriage-contract-dark-romance-books',
-];
+    // list posts - varied numbers
+    'seven-signs-youre-about-to-fall-for-bully-romance',
+    'three-campus-dark-romance-books-that-ruined-all-others',
+    'ten-dark-romance-red-flags-that-are-green-flags',
+    'five-bully-romance-grovel-worth-the-wait',
+    'five-campus-dark-romance-bully-becomes-obsessed',
+    'five-dark-romance-2am-cant-stop-reading',
 
-const DEFAULT_PEXELS_QUERIES = [
-    'dark academia library bookshelf moody candlelit',
-    'stack leather books bedside lamp aesthetic night',
-    'woman reading vintage books rain window cozy',
-    'gothic desk journal fountain pen stacks books moody',
-    'red wine and books dark romantic table cinematic',
-    'cozy chair tall bookshelves reading nook dramatic light',
-    'hands holding paperback books dark mood romantic',
-    'stormy loft books floor lamp warm glow atmospheric',
+    // reader guides
+    'new-to-dark-romance-start-here-reading-order',
+    'what-makes-bully-romance-work-and-when-it-doesnt',
+    'complete-dark-romance-reading-order-campus-books',
+    'find-next-dark-romance-obsession-by-mood',
+
+    // opinion and essay
+    'why-bully-romance-is-most-misunderstood-subgenre',
+    'dark-romance-hero-vs-just-a-bad-person',
+    'why-we-root-for-villain-in-campus-romance',
+
+    // ranked
+    'dark-romance-heroes-ranked-by-unhinged-level',
+    'campus-bully-romance-ranked-by-grovel-intensity',
+    'dark-romance-toxic-to-tender-arcs-ranked',
+
+    // quiz and picker
+    'which-dark-romance-trope-are-you-reading-habits',
+    'what-kind-of-dark-romance-reader-are-you-quiz',
+
+    // more list posts
+    'five-dark-romance-heroine-refuses-to-be-victim',
+    'five-forced-proximity-dark-romance-winter-isolation',
 ];
 
 function randomKey() {
@@ -179,6 +175,26 @@ function topicIndexForDate(isoDate) {
 
 function topicSlugForDate(isoDate) {
     return TOPIC_SLUGS[topicIndexForDate(isoDate)];
+}
+
+/**
+ * Human-readable theme from topic slug: hyphens → spaces, sentence case (first word only capitalized).
+ * Number words (three, five, seven, …) stay lowercase after the first word; the opening word is
+ * capitalized normally (e.g. five-… → "Five …").
+ */
+function slugToThemeTitle(slug) {
+    const words = String(slug || '')
+        .trim()
+        .split('-')
+        .filter(Boolean)
+        .map((w) => w.toLowerCase());
+    if (words.length === 0) {
+        return '';
+    }
+    const first = words[0];
+    const head = first.charAt(0).toUpperCase() + first.slice(1);
+    const tail = words.slice(1).join(' ');
+    return tail ? `${head} ${tail}` : head;
 }
 
 function parseArgs(argv) {
@@ -256,14 +272,6 @@ function parsePoolRefs() {
         .split(',')
         .map((s) => s.trim())
         .filter(Boolean);
-}
-
-function pexelsQueries() {
-    const raw = process.env.BLOG_PEXELS_QUERIES;
-    if (raw && raw.trim()) {
-        return raw.split(',').map((s) => s.trim()).filter(Boolean);
-    }
-    return DEFAULT_PEXELS_QUERIES;
 }
 
 /**
@@ -371,16 +379,12 @@ function sanitizeImageCaption(s) {
         .slice(0, 220);
 }
 
-function figureCaptionFromMeta(slotCaption, postTitle, { source, photographer }) {
+function figureCaptionFromMeta(slotCaption, postTitle) {
     const raw = sanitizeImageCaption(slotCaption);
     const fallback = postTitle
         ? `${String(postTitle).trim()} · Lark Elwood · dark romance · Independent`
         : 'Lark Elwood — dark romance author · Independent';
-    const primary = raw || fallback;
-    if (source === 'pexels' && photographer) {
-        return `${primary} · Photo: ${photographer} / Pexels`;
-    }
-    return primary;
+    return raw || fallback;
 }
 
 function dryHeroSlot(i, alt) {
@@ -395,7 +399,7 @@ function heroSpecForSlot(heroSpecs, idx, total, context) {
     const base = heroSpecs[idx % heroSpecs.length] || {};
     const n = idx + 1;
     const seedTitle = String((context && context.postTitle) || '').trim();
-    const seedTopic = String((context && context.topicSlug) || '').trim().replace(/-/g, ' ');
+    const seedTopic = slugToThemeTitle(String((context && context.topicSlug) || '').trim());
     const altBase = String(base.imageAlt || `Lark Elwood dark romance · Independent mood`).replace(/\(\d+\s+of\s+\d+\)$/i, '').trim();
     const capBase = String(base.imageCaption || `Lark Elwood · Independent · mood`).trim();
     const promptBase = String(base.imagePrompt || '').trim();
@@ -418,7 +422,6 @@ function heroSpecForSlot(heroSpecs, idx, total, context) {
 async function resolveHeroImageSlots(client, runDate, dryRun, meta, heroSpecs, slotCount) {
     const pool = parsePoolRefs();
     const hf = process.env.HF_TOKEN && String(process.env.HF_TOKEN).trim();
-    const pexelsKey = process.env.PEXELS_API_KEY && String(process.env.PEXELS_API_KEY).trim();
     const slugCurrent = (meta.slugCurrent && String(meta.slugCurrent).trim()) || `post-${runDate}`;
     const postTitle = meta.postTitle && String(meta.postTitle).trim();
     const topicSlug = meta.topicSlug && String(meta.topicSlug).trim();
@@ -448,74 +451,7 @@ async function resolveHeroImageSlots(client, runDate, dryRun, meta, heroSpecs, s
             const doc = await client.assets.upload('image', buf, { filename });
             slots.push({
                 assetId: doc._id,
-                attribution: figureCaptionFromMeta(spec.imageCaption, postTitle, { source: 'hf' }),
-                alt: spec.imageAlt,
-            });
-        }
-        return { slots };
-    }
-
-    if (pexelsKey && dryRun && !pool.length && !hf) {
-        return {
-            slots: Array.from({ length: totalSlots }, (_, i) =>
-                dryHeroSlot(i, heroSpecForSlot(heroSpecs, i, totalSlots, { postTitle, topicSlug }).imageAlt),
-            ),
-        };
-    }
-
-    if (pexelsKey && !dryRun) {
-        const queries = pexelsQueries();
-        const specSeed = heroSpecForSlot(heroSpecs, 0, totalSlots, { postTitle, topicSlug });
-        const promptWords = String(specSeed.imagePrompt || '')
-            .toLowerCase()
-            .replace(/[^a-z0-9\s-]/g, ' ')
-            .split(/\s+/)
-            .filter((w) => w && w.length > 3 && !['with', 'from', 'that', 'this', 'dark', 'romance'].includes(w))
-            .slice(0, 6);
-        const dynamicQuery = promptWords.join(' ').trim();
-        const q = dynamicQuery || queries[topicIndexForDate(runDate) % queries.length];
-        const url = new URL('https://api.pexels.com/v1/search');
-        url.searchParams.set('query', q);
-        url.searchParams.set('per_page', String(Math.min(80, totalSlots)));
-        url.searchParams.set('orientation', 'landscape');
-        const res = await fetch(url.toString(), {
-            headers: { Authorization: pexelsKey },
-        });
-        if (!res.ok) {
-            const t = await res.text().catch(() => '');
-            throw new Error(`Pexels API error ${res.status}: ${t.slice(0, 200)}`);
-        }
-        const data = await res.json();
-        const photos = (data.photos || []).slice(0, totalSlots);
-        if (photos.length < totalSlots) {
-            throw new Error(`Pexels returned fewer than ${totalSlots} photos; widen query or try another day`);
-        }
-        const slots = [];
-        for (let i = 0; i < totalSlots; i += 1) {
-            const photo = photos[i];
-            const srcUrl = photo.src.large2x || photo.src.large || photo.src.original;
-            const imgRes = await fetch(srcUrl);
-            if (!imgRes.ok) {
-                throw new Error(`Failed to download Pexels image: ${imgRes.status}`);
-            }
-            const buf = Buffer.from(await imgRes.arrayBuffer());
-            const ext = (photo.src.original || '').includes('.png') ? 'png' : 'jpg';
-            const filename = seoBlogImageFilename(slugCurrent, ext, i + 1);
-            const doc = await client.assets.upload('image', buf, { filename });
-            const ph = photo.photographer;
-            const photographer =
-                typeof ph === 'string'
-                    ? ph.trim()
-                    : ph && typeof ph.name === 'string'
-                      ? ph.name.trim()
-                      : '';
-            const spec = heroSpecForSlot(heroSpecs, i, totalSlots, { postTitle, topicSlug });
-            slots.push({
-                assetId: doc._id,
-                attribution: figureCaptionFromMeta(spec.imageCaption, postTitle, {
-                    source: 'pexels',
-                    photographer,
-                }),
+                attribution: figureCaptionFromMeta(spec.imageCaption, postTitle),
                 alt: spec.imageAlt,
             });
         }
@@ -530,7 +466,7 @@ async function resolveHeroImageSlots(client, runDate, dryRun, meta, heroSpecs, s
             const spec = heroSpecForSlot(heroSpecs, i, totalSlots, { postTitle, topicSlug });
             slots.push({
                 assetId: ref,
-                attribution: figureCaptionFromMeta(spec.imageCaption, postTitle, { source: 'pool' }),
+                attribution: figureCaptionFromMeta(spec.imageCaption, postTitle),
                 alt: spec.imageAlt,
             });
         }
@@ -546,7 +482,7 @@ async function resolveHeroImageSlots(client, runDate, dryRun, meta, heroSpecs, s
     }
 
     throw new Error(
-        `Set HF_TOKEN, or PEXELS_API_KEY, or BLOG_IMAGE_POOL_REFS (≥1 ref; ≥${totalSlots} distinct refs recommended for unique mainImage patches).`,
+        `Set HF_TOKEN, or BLOG_IMAGE_POOL_REFS (≥1 ref; ≥${totalSlots} distinct refs recommended for unique mainImage patches).`,
     );
 }
 
@@ -700,7 +636,7 @@ async function generateCopy({ runDate, topicSlug, stub }) {
     }
 
     const model = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
-    const themeHuman = topicSlug.replace(/-/g, ' ');
+    const themeHuman = slugToThemeTitle(topicSlug);
     const siteOrigin = blogPublicUrl();
     const newsletterUrl = readerListCtaUrl();
     const prompt = `You are Lark Elwood, author of the dark romance novel Independent. You publish READING LISTS for larkelwood.com: Pinterest-friendly "five dark romance books" roundups for readers who binge morally grey, obsessive, high-stakes romance. Every post compares the genre to your debut novel Independent with a warm "if you crushed this stack, you'll want Independent next" bridge—editorial comparison ONLY, never imply another author endorses you.
