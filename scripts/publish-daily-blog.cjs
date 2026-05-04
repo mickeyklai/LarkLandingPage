@@ -304,9 +304,57 @@ const HF_NEGATIVE_PROMPT =
     'nudity, nude, naked, NSFW, explicit, pornographic, sexual act, ' +
     'exposed breasts, exposed genitals';
 
+/** Slug-specific scene core for FLUX (wrapped with HF_STYLE_PREFIX + HF_STYLE_SUFFIX in enhanceImagePrompt). */
+const HF_TOPIC_SCENES = {
+    'seven-signs-youre-about-to-fall-for-bully-romance':
+        'woman sitting cross-legged on dorm bed at night, open book in lap, biting her lip, moody desk lamp glow',
+    'three-campus-dark-romance-books-that-ruined-all-others':
+        'three worn paperbacks stacked on a rain-streaked windowsill overlooking a dark campus courtyard',
+    'ten-dark-romance-red-flags-that-are-green-flags':
+        "woman's hand with red-painted nails holding a dog-eared paperback, velvet armchair, candlelight",
+    'five-bully-romance-grovel-worth-the-wait':
+        'man leaning against a stone university wall at dusk, hands in jacket pockets, head slightly bowed',
+    'five-campus-dark-romance-bully-becomes-obsessed':
+        'empty college hallway at night, single locker slightly ajar, dramatic overhead light casting long shadows',
+    'five-dark-romance-2am-cant-stop-reading':
+        'woman reading in bed at 2am, phone flashlight, tangled sheets, half-empty mug on nightstand',
+    'new-to-dark-romance-start-here-reading-order':
+        'neat stack of five books on a dark oak desk, velvet bookmark ribbon, single candle flame',
+    'what-makes-bully-romance-work-and-when-it-doesnt':
+        'two silhouettes in a dimly lit university corridor facing each other, tension visible in their posture',
+    'complete-dark-romance-reading-order-campus-books':
+        'books arranged in a curved row on a library shelf, moody warm light, one book slightly pulled out',
+    'find-next-dark-romance-obsession-by-mood':
+        'woman browsing a shadowy bookshelf, fingertips trailing along spines, hair falling forward',
+    'why-bully-romance-is-most-misunderstood-subgenre':
+        'close-up of a handwritten journal entry on aged paper, fountain pen resting across the page, candlelight',
+    'dark-romance-hero-vs-just-a-bad-person':
+        'two books side by side on a dark surface, one with a red ribbon bookmark, dramatic split lighting',
+    'why-we-root-for-villain-in-campus-romance':
+        'man in a dark university hoodie leaning against a doorframe, face half in shadow, arms crossed',
+    'dark-romance-heroes-ranked-by-unhinged-level':
+        'row of books on a shelf, spines facing out, moody dramatic spotlight from above',
+    'campus-bully-romance-ranked-by-grovel-intensity':
+        'rain-soaked campus steps at night, wet stone, single lamppost casting a halo of light',
+    'dark-romance-toxic-to-tender-arcs-ranked':
+        'two mugs on a windowsill, one tipped over slightly, stormy sky outside, intimate and tense',
+    'which-dark-romance-trope-are-you-reading-habits':
+        'flat lay of reading accessories — bookmark, pen, worn paperback, dried rose petal — on dark velvet',
+    'what-kind-of-dark-romance-reader-are-you-quiz':
+        'woman at a cafe table at night, book open, pen hovering over a handwritten list, moody window light',
+    'five-dark-romance-heroine-refuses-to-be-victim':
+        'woman standing at the end of a dark corridor, chin up, light ahead of her, shadows behind',
+    'five-forced-proximity-dark-romance-winter-isolation':
+        'snow falling outside a lit window, two mugs on a wooden sill, warm amber glow inside against cold blue outside',
+};
+
 function enhanceImagePrompt(raw) {
+    const s = String(raw || '').trim();
+    if (s.startsWith(HF_STYLE_PREFIX)) {
+        return s;
+    }
     const core =
-        String(raw || '').trim() ||
+        s ||
         'rain-streaked gothic window, velvet chaise, a couple seated together with natural faces visible, clasped hands with five fingers each, single guttering candle, open book with worn spine';
     return `${HF_STYLE_PREFIX}${core}${HF_STYLE_SUFFIX}`;
 }
@@ -441,12 +489,14 @@ async function resolveHeroImageSlots(client, runDate, dryRun, meta, heroSpecs, s
 
     if (hf && !dryRun) {
         const slots = [];
+        const slug = String(topicSlug || '').trim();
+        const scene =
+            (slug && HF_TOPIC_SCENES[slug]) ||
+            'rain-streaked gothic window, velvet chaise, a couple seated together with natural faces visible, clasped hands with five fingers each, single guttering candle, open book with worn spine';
         for (let i = 0; i < totalSlots; i += 1) {
             const spec = heroSpecForSlot(heroSpecs, i, totalSlots, { postTitle, topicSlug });
-            const promptFor =
-                (spec.imagePrompt && String(spec.imagePrompt).trim()) ||
-                'storm beyond tall arched windows, dripping wax candle, stacked antique books, black lace on marble, a woman in gothic dress with natural face visible, correct five-finger hands resting on marble';
-            const buf = await generateHfImageJpeg(promptFor);
+            const prompt = HF_STYLE_PREFIX + scene + HF_STYLE_SUFFIX;
+            const buf = await generateHfImageJpeg(prompt);
             const filename = seoBlogImageFilename(slugCurrent, 'jpg', i + 1);
             const doc = await client.assets.upload('image', buf, { filename });
             slots.push({
