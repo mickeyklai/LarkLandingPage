@@ -1,0 +1,467 @@
+/* Hebrew site only — loaded on /he/ via i18n/locale-detect.js */
+
+/* OS Aran — Hebrew serif/body (commercial use per Ofir Shavit license) */
+@font-face {
+    font-family: 'OS Aran';
+    src:
+        url('/assets/fonts/os-aran/os_aran_400ffc-webfont.woff2') format('woff2'),
+        url('/assets/fonts/os-aran/os_aran_400ffc-webfont.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'OS Aran';
+    src:
+        url('/assets/fonts/os-aran/os_aran_w_500ffc-webfont.woff2') format('woff2'),
+        url('/assets/fonts/os-aran/os_aran_w_500ffc-webfont.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'OS Aran';
+    src:
+        url('/assets/fonts/os-aran/os_aran_r_600ffc-webfont.woff2') format('woff2'),
+        url('/assets/fonts/os-aran/os_aran_r_600ffc-webfont.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ================================================================
+   TYPOGRAPHY — OS Aran (serif/body) + Heebo (UI sans)
+================================================================ */
+html[lang="he"] {
+    --font-serif: 'OS Aran', 'Noto Serif Hebrew', Georgia, serif;
+    --font-sans: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-body: 'OS Aran', Georgia, serif;
+    --he-display-tracking: 0.14em;
+}
+
+html[lang="he"] .logo-name {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: var(--he-display-tracking);
+}
+
+html[lang="he"] .hero-title {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: var(--he-display-tracking);
+    white-space: normal;
+    line-height: 1.12;
+}
+
+html[lang="he"] .hero-title-text {
+    letter-spacing: inherit;
+    margin-inline-end: 0;
+}
+
+html[lang="he"] #book-heading.section-heading {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    letter-spacing: 0.1em;
+}
+
+html[lang="he"] .hero-newsletter-head {
+    font-family: var(--font-serif);
+    font-style: normal;
+    font-weight: 400;
+    font-size: clamp(1.35rem, 4.2vw, 1.95rem);
+    letter-spacing: 0.01em;
+    line-height: 1.45;
+}
+
+html[lang="he"] body {
+    font-size: 1.125rem;
+}
+
+html[lang="he"] .book-blurb {
+    font-size: clamp(1.3rem, 3.1vw, 1.58rem);
+    line-height: 1.65;
+}
+
+html[lang="he"] .for-you-list li {
+    font-size: clamp(1.15rem, 2.7vw, 1.38rem);
+    line-height: 1.6;
+}
+
+html[lang="he"] .author-bio {
+    font-size: clamp(1.05rem, 2.4vw, 1.2rem);
+    line-height: 1.7;
+}
+
+html[lang="he"] .content-notice {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    border-left: none;
+    border-right: 1px solid rgba(0, 200, 255, 0.18);
+    padding-left: 0;
+    padding-right: 1.1rem;
+}
+
+html[lang="he"] .faq-question {
+    font-size: clamp(1.05rem, 2.5vw, 1.22rem);
+    text-align: right;
+    padding: 1.35rem 0 1.35rem 2.75rem;
+}
+
+html[lang="he"] .faq-question::after {
+    right: auto;
+    left: 0;
+}
+
+html[lang="he"] .faq-answer-inner {
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 2.2vw, 1.12rem);
+    line-height: 1.65;
+    text-align: right;
+}
+
+html[lang="he"] .faq-section .section-inner {
+    direction: rtl;
+    text-align: right;
+}
+
+html[lang="he"] .faq-section .section-heading.text-center {
+    text-align: center;
+}
+
+html[lang="he"] .faq-section .section-kicker {
+    text-align: center;
+}
+
+html[lang="he"] .follow-lead {
+    font-size: clamp(1.05rem, 2.3vw, 1.18rem);
+    line-height: 1.65;
+}
+
+html[lang="he"] .arc-intro {
+    font-size: clamp(1rem, 2.2vw, 1.12rem);
+    line-height: 1.65;
+}
+
+html[lang="he"] .footer-text {
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+
+html[lang="he"] .section-kicker,
+html[lang="he"] .hero-micro,
+html[lang="he"] .genre-tag,
+html[lang="he"] .arc-badge,
+html[lang="he"] .btn-arc,
+html[lang="he"] .site-nav a,
+html[lang="he"] .lang-switcher-btn,
+html[lang="he"] .btn-hero-cta,
+html[lang="he"] .cookie-consent-accept,
+html[lang="he"] .home-journal-card-meta,
+html[lang="he"] .home-journal-card-arrow,
+html[lang="he"] .home-journal-more-link,
+html[lang="he"] .channel-platform {
+    letter-spacing: 0.03em;
+    text-transform: none;
+}
+
+html[lang="he"] .section-kicker {
+    font-size: clamp(0.88rem, 2.4vw, 1rem);
+    font-weight: 600;
+    margin-bottom: 1.35rem;
+}
+
+html[lang="he"] .arc-badge {
+    font-size: clamp(0.85rem, 2.2vw, 0.95rem);
+    padding: 0.45rem 1.25rem;
+}
+
+html[lang="he"] .section-heading {
+    font-size: clamp(2.5rem, 7vw, 3.45rem);
+    line-height: 1.14;
+    margin-bottom: 2rem;
+}
+
+html[lang="he"] .arc-heading {
+    font-size: clamp(2.25rem, 6.2vw, 3rem);
+}
+
+html[lang="he"] .section-heading:not(#book-heading),
+html[lang="he"] .book-blurb,
+html[lang="he"] .for-you-list li,
+html[lang="he"] .arc-heading {
+    letter-spacing: 0;
+}
+
+html[lang="he"] .he-arc-dialog-title {
+    font-size: clamp(1.35rem, 4.2vw, 1.55rem);
+}
+
+html[lang="he"] .he-arc-dialog-lead,
+html[lang="he"] .arc-form-label,
+html[lang="he"] .arc-form-input,
+html[lang="he"] .arc-form-textarea,
+html[lang="he"] .arc-form-consent {
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    html[lang="he"] .hero-title-text {
+        margin-inline-end: 0;
+    }
+
+    html[lang="he"] .logo-name,
+    html[lang="he"] .hero-title {
+        letter-spacing: 0.1em;
+    }
+
+    html[lang="he"] #book-heading.section-heading {
+        letter-spacing: 0.08em;
+    }
+
+    html[lang="he"] .hero-newsletter-head {
+        font-size: clamp(1.2rem, 5vw, 1.55rem);
+    }
+
+    html[lang="he"] .hero-newsletter-head,
+    html[lang="he"] .hero-newsletter-sub {
+        letter-spacing: 0.02em;
+    }
+}
+
+/* ================================================================
+   ARC application modal
+================================================================ */
+.he-arc-dialog {
+    padding: 0;
+    border: none;
+    background: transparent;
+    width: min(28rem, calc(100vw - 1.5rem));
+    max-width: 100%;
+    max-height: min(90dvh, 52rem);
+    margin: auto;
+    box-sizing: border-box;
+}
+
+.he-arc-dialog::backdrop {
+    background: rgba(0, 3, 10, 0.84);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.he-arc-dialog-surface {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    padding: clamp(1.25rem, 4vw, 1.85rem);
+    padding-top: clamp(1.35rem, 4vw, 1.95rem);
+    padding-inline-end: clamp(2.75rem, 8vw, 3.25rem);
+    background: linear-gradient(180deg, #0c141c 0%, #060a10 100%);
+    border: 1px solid rgba(0, 210, 255, 0.22);
+    border-radius: 8px;
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.6),
+        0 24px 64px rgba(0, 0, 0, 0.65),
+        0 0 48px rgba(0, 120, 180, 0.12);
+    max-height: min(85dvh, 48rem);
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 200, 235, 0.48) rgba(0, 0, 0, 0.38);
+}
+
+.he-arc-dialog-close {
+    position: absolute;
+    top: 1rem;
+    inset-inline-end: 1rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(230, 240, 250, 0.85);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.he-arc-dialog-close:hover {
+    background: rgba(0, 200, 255, 0.12);
+    border-color: rgba(0, 220, 255, 0.35);
+    color: #fff;
+}
+
+.he-arc-dialog-close:focus-visible {
+    outline: 2px solid rgba(0, 230, 255, 0.85);
+    outline-offset: 2px;
+}
+
+.he-arc-dialog-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.2rem, 4vw, 1.4rem);
+    font-weight: 500;
+    letter-spacing: 0;
+    color: #f0f6fa;
+    margin: 0 0 0.5rem;
+    padding-inline-end: 0.25rem;
+    line-height: 1.25;
+}
+
+.he-arc-dialog-lead {
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: rgba(200, 215, 230, 0.72);
+    margin: 0 0 1.35rem;
+}
+
+.arc-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    width: 100%;
+    text-align: start;
+}
+
+.arc-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.arc-form-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: none;
+    color: rgba(180, 210, 235, 0.85);
+}
+
+.arc-form-input,
+.arc-form-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.9375rem;
+    color: #e8eef4;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 6px;
+    font-family: var(--font-sans);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.arc-form-textarea {
+    resize: vertical;
+    min-height: 5.5rem;
+    line-height: 1.5;
+}
+
+.arc-form-input::placeholder,
+.arc-form-textarea::placeholder {
+    color: rgba(180, 195, 210, 0.35);
+}
+
+.arc-form-input:hover,
+.arc-form-textarea:hover {
+    border-color: rgba(0, 200, 255, 0.25);
+}
+
+.arc-form-input:focus,
+.arc-form-textarea:focus {
+    outline: none;
+    border-color: rgba(0, 230, 255, 0.45);
+    box-shadow: 0 0 0 2px rgba(0, 200, 255, 0.1);
+}
+
+.arc-form-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    color: rgba(200, 215, 230, 0.82);
+    cursor: pointer;
+    text-align: start;
+}
+
+.arc-form-checkbox {
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+    accent-color: #2ad4f0;
+}
+
+.arc-form-consent a {
+    color: rgba(120, 220, 255, 0.95);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.arc-form-submit {
+    width: 100%;
+    margin-top: 0.25rem;
+    letter-spacing: 0.03em;
+    text-transform: none;
+}
+
+.arc-form-submit:disabled,
+.arc-form-input:disabled,
+.arc-form-textarea:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.arc-form-success {
+    text-align: center;
+    padding: 1.5rem 0 0.5rem;
+}
+
+.arc-form-success-title {
+    margin: 0 0 0.35rem;
+    font-size: 0.95rem;
+    color: #d4f8ff;
+}
+
+.arc-form-success-note {
+    margin: 0;
+    font-size: 0.82rem;
+    color: rgba(180, 210, 235, 0.75);
+}
+
+.arc-form-feedback {
+    margin: 0;
+    font-size: 0.82rem;
+    text-align: center;
+}
+
+.arc-form-feedback--error {
+    color: #ff9a9a;
+}
+
+@media (max-width: 768px) {
+    .he-arc-dialog {
+        width: calc(100vw - 1rem);
+        max-height: min(92dvh, 52rem);
+    }
+
+    .he-arc-dialog-surface {
+        max-height: min(88dvh, 48rem);
+        padding-inline: 1rem;
+        padding-inline-end: 2.75rem;
+    }
+
+    .he-arc-dialog-close {
+        top: 0.65rem;
+        inset-inline-end: 0.65rem;
+    }
+}

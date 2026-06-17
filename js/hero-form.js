@@ -1,4 +1,11 @@
 (function () {
+    function msg(key, fallback) {
+        if (window.LarkI18n && typeof window.LarkI18n.t === 'function') {
+            return window.LarkI18n.t(key, fallback);
+        }
+        return fallback;
+    }
+
     var heroForm = document.getElementById('heroQuickForm');
     var heroSubmitBtn = document.getElementById('heroQuickSubmit');
     var heroEmailInput = document.getElementById('quick-email');
@@ -25,7 +32,10 @@
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
     }
 
-    if (heroForm && heroEmailInput && heroSubmitBtn) {
+    function bindForm() {
+        if (!heroForm || !heroEmailInput || !heroSubmitBtn) return;
+        heroSubmitDefaultLabel = heroSubmitBtn.textContent;
+
         heroForm.addEventListener('submit', function (e) {
             e.preventDefault();
             setHeroError('');
@@ -35,7 +45,7 @@
             var email = heroEmailInput.value.trim();
             if (!isValidEmail(email)) {
                 heroEmailInput.focus();
-                setHeroError('please enter a valid email address.');
+                setHeroError(msg('js.hero.invalidEmail', 'please enter a valid email address.'));
                 return;
             }
 
@@ -43,7 +53,7 @@
             heroSubmitBtn.disabled = true;
             heroEmailInput.disabled = true;
             heroSubmitBtn.setAttribute('aria-busy', 'true');
-            heroSubmitBtn.textContent = 'Joining…';
+            heroSubmitBtn.textContent = msg('js.hero.joining', 'Joining…');
 
             fetch(subscribeUrl, {
                 method: 'POST',
@@ -70,14 +80,14 @@
                         }
                         return;
                     }
-                    var msg =
+                    var errText =
                         out.data && out.data.error
                             ? out.data.error
-                            : 'something went wrong. please try again.';
-                    setHeroError(msg);
+                            : msg('js.hero.errorGeneric', 'something went wrong. please try again.');
+                    setHeroError(errText);
                 })
                 .catch(function () {
-                    setHeroError('something went wrong. please try again.');
+                    setHeroError(msg('js.hero.errorGeneric', 'something went wrong. please try again.'));
                 })
                 .then(function () {
                     heroSubmitting = false;
@@ -94,5 +104,11 @@
                     heroSubmitBtn.textContent = heroSubmitDefaultLabel;
                 });
         });
+    }
+
+    if (window.LarkI18n && typeof window.LarkI18n.whenReady === 'function') {
+        window.LarkI18n.whenReady(bindForm);
+    } else {
+        bindForm();
     }
 })();

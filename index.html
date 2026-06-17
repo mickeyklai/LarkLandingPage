@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="i18n-pending">
 <head>
+    <script src="/i18n/locale-detect.js"></script>
+    <style>.i18n-pending body{visibility:hidden}</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lark Elwood — Dark Romance Author | Independent (Official)</title>
@@ -48,14 +50,14 @@
     <meta name="twitter:image" content="https://larkelwood.com/assets/og-lark-elwood.jpg">
     <meta name="twitter:image:alt" content="Lark Elwood — Independent. A dark romance novel.">
 
-    <!-- Fonts: Cormorant Garamond, luxury editorial serif -->
+    <!-- Fonts: Cormorant Garamond (English). Hebrew fonts load on /he/ via locale-detect.js -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.sanity.io">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
     <script async src="https://tally.so/widgets/embed.js"></script>
 
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
 
     <!-- Analytics pixel IDs: injected at deploy via scripts/inject-analytics-env.cjs -->
     <script>
@@ -252,18 +254,18 @@
 <body>
 
     <header>
-        <a href="#" class="logo" aria-label="Lark Elwood — dark romance author, home">
-            <span class="logo-name">Lark Elwood</span>
+        <a href="#" class="logo" data-i18n-aria="brand.logoAria" aria-label="Lark Elwood — dark romance author, home">
+            <span class="logo-name" data-i18n="brand.name">Lark Elwood</span>
         </a>
         <nav class="site-nav" aria-label="Site navigation">
-            <a href="#reader-list" class="site-nav-primary" aria-label="Join the reader list: release updates and early access"><span class="site-nav-cta-full">Join the reader list</span><span class="site-nav-cta-compact" aria-hidden="true">Notify Me</span></a>
+            <a href="#reader-list" class="site-nav-primary" data-i18n-aria="nav.joinAria" aria-label="Join the reader list: release updates and early access"><span class="site-nav-cta-full" data-i18n="nav.joinFull">Join the reader list</span><span class="site-nav-cta-compact" aria-hidden="true" data-i18n="nav.joinCompact">Notify Me</span></a>
             <div class="site-nav-rest">
-                <a href="#the-book">The Book</a>
-                <a href="#about">About</a>
-                <a href="#faq">FAQ</a>
-                <a href="#follow">Follow</a>
-                <a href="#arc">ARC</a>
-                <a href="/blog/">Blog</a>
+                <a href="#the-book" data-i18n="nav.theBook">The Book</a>
+                <a href="#about" data-i18n="nav.about">About</a>
+                <a href="#faq" data-i18n="nav.faq">FAQ</a>
+                <a href="#follow" data-i18n="nav.follow">Follow</a>
+                <a href="#arc" data-i18n="nav.arc">ARC</a>
+                <a href="/blog/" data-i18n="nav.blog">Blog</a>
             </div>
         </nav>
     </header>
@@ -273,11 +275,11 @@
         <!-- ============================================================
              HERO
         ============================================================ -->
-        <section class="hero" aria-label="Independent: dark romance reveal">
-            <span class="hero-micro hero-micro-tl" aria-hidden="true">Dark romance</span>
-            <span class="hero-micro hero-micro-tr" aria-hidden="true">Adult readers only</span>
-            <span class="hero-micro hero-micro-bl" aria-hidden="true">Coming soon</span>
-            <span class="hero-micro hero-micro-br" aria-hidden="true">A novel by Lark Elwood</span>
+        <section class="hero" data-i18n-aria="hero.ariaLabel" aria-label="Independent: dark romance reveal">
+            <span class="hero-micro hero-micro-tl" aria-hidden="true" data-i18n="hero.microTl">Dark romance</span>
+            <span class="hero-micro hero-micro-tr" aria-hidden="true" data-i18n="hero.microTr">Adult readers only</span>
+            <span class="hero-micro hero-micro-bl" aria-hidden="true" data-i18n="hero.microBl">Coming soon</span>
+            <span class="hero-micro hero-micro-br" aria-hidden="true" data-i18n="hero.microBr">A novel by Lark Elwood</span>
             <div class="hero-broken-frame" aria-hidden="true">
                 <span class="bf bf-tl"></span>
                 <span class="bf bf-tr"></span>
@@ -288,7 +290,7 @@
             </div>
             <img
                 class="hero-smoke"
-                src="assets/blue-smoke.png"
+                src="/assets/blue-smoke.png"
                 alt=""
                 width="1024"
                 height="571"
@@ -296,39 +298,39 @@
             >
             <img
                 class="hero-eye"
-                src="assets/blue-eye.png"
+                src="/assets/blue-eye.png"
                 alt=""
                 width="1024"
                 height="571"
                 loading="eager"
             >
             <div class="hero-content">
-                <h1 class="hero-title neon-blue"><span class="hero-title-text">Independent</span></h1>
-                <p class="visually-hidden">Independent — a dark romance novel by Lark Elwood, a dark romance author. A story of obsession, possessive power, and a morally grey hero. Adult readers only.</p>
+                <h1 class="hero-title neon-blue"><span class="hero-title-text" data-i18n="book.title">Independent</span></h1>
+                <p class="visually-hidden" data-i18n="brand.heroHidden">Independent — a dark romance novel by Lark Elwood, a dark romance author. A story of obsession, possessive power, and a morally grey hero. Adult readers only.</p>
             </div>
             <div class="hero-cta hero-newsletter" id="reader-list" aria-labelledby="reader-list-heading">
-                <p class="hero-newsletter-head" id="reader-list-heading">I wasn't his type. I was his target.</p>
+                <p class="hero-newsletter-head" id="reader-list-heading" data-i18n="hero.headline">I wasn't his type. I was his target.</p>
                 <p class="hero-newsletter-sub">
-                    <span class="hero-newsletter-sub-desktop">but now you can know his name... and hear his song.</span>
+                    <span class="hero-newsletter-sub-desktop" data-i18n="hero.subDesktop">but now you can know his name... and hear his song.</span>
                     <span class="hero-newsletter-sub-mobile">
-                        <span class="hero-newsletter-sub-line">Now you can know his name...</span>
-                        <span class="hero-newsletter-sub-line">and hear his song.</span>
+                        <span class="hero-newsletter-sub-line" data-i18n="hero.subMobile1">Now you can know his name...</span>
+                        <span class="hero-newsletter-sub-line" data-i18n="hero.subMobile2">and hear his song.</span>
                     </span>
                 </p>
                 <p class="hero-social-hint" aria-label="Follow @larkelwood">
-                    <a href="https://www.tiktok.com/@larkelwood" target="_blank" rel="noopener noreferrer">TikTok</a>
+                    <a href="https://www.tiktok.com/@larkelwood" target="_blank" rel="noopener noreferrer" data-follow-channel="tiktok" data-i18n="follow.platform.tiktok">TikTok</a>
                     <span class="sep" aria-hidden="true">·</span>
-                    <a href="https://www.instagram.com/larkelwood" target="_blank" rel="noopener noreferrer">Instagram</a>
+                    <a href="https://www.instagram.com/larkelwood" target="_blank" rel="noopener noreferrer" data-follow-channel="instagram" data-i18n="follow.platform.instagram">Instagram</a>
                     <span class="sep" aria-hidden="true">·</span>
-                    <a href="https://www.pinterest.com/larkelwood" target="_blank" rel="noopener noreferrer">Pinterest</a>
+                    <a href="https://www.pinterest.com/larkelwood" target="_blank" rel="noopener noreferrer" data-follow-channel="pinterest" data-i18n="follow.platform.pinterest">Pinterest</a>
                     <span class="sep" aria-hidden="true">·</span>
-                    <a href="https://www.goodreads.com/larkelwood" target="_blank" rel="noopener noreferrer">Goodreads</a>
+                    <a href="https://www.goodreads.com/larkelwood" target="_blank" rel="noopener noreferrer" data-follow-channel="goodreads" data-i18n="follow.platform.goodreads">Goodreads</a>
                     <span class="sep" aria-hidden="true">·</span>
-                    <a href="https://x.com/larkelwood" target="_blank" rel="noopener noreferrer">X</a>
+                    <a href="https://x.com/larkelwood" target="_blank" rel="noopener noreferrer" data-follow-channel="x" data-i18n="follow.platform.x">X</a>
                 </p>
                 <div class="hero-cta-form-wrap">
-                    <form class="hero-cta-form" id="heroQuickForm" action="#" method="post" aria-label="Join the reader list" novalidate>
-                        <label class="visually-hidden" for="quick-email">Email address</label>
+                    <form class="hero-cta-form" id="heroQuickForm" action="#" method="post" data-i18n-aria="hero.formAria" aria-label="Join the reader list" novalidate>
+                        <label class="visually-hidden" for="quick-email" data-i18n="hero.emailLabel">Email address</label>
                         <input
                             type="email"
                             id="quick-email"
@@ -336,15 +338,16 @@
                             class="hero-cta-input"
                             autocomplete="email"
                             required
+                            data-i18n-attr="placeholder:hero.emailPlaceholder"
                             placeholder="your email for his name and song"
                             inputmode="email"
                             maxlength="254"
                         >
-                        <button type="submit" class="btn-hero-cta" id="heroQuickSubmit">Join the reader list</button>
+                        <button type="submit" class="btn-hero-cta" id="heroQuickSubmit" data-i18n="hero.submit">Join the reader list</button>
                     </form>
                     <div class="hero-cta-success-panel" id="heroCtaSuccess" role="status" aria-live="polite" hidden>
-                        <p class="hero-cta-success-title">you're in. check your inbox now.</p>
-                        <p class="hero-cta-success-note hero-cta-success-spam">
+                        <p class="hero-cta-success-title" data-i18n="hero.successTitle">you're in. check your inbox now.</p>
+                        <p class="hero-cta-success-note hero-cta-success-spam" data-i18n-html="hero.successSpam">
                             <span style="color: #ff4d4d; font-weight: bold;">Check your SPAM folder—move it to Primary so you don't lose him.</span>
                         </p>
                     </div>
@@ -358,10 +361,10 @@
         ============================================================ -->
         <section class="book-section content-section" id="the-book" aria-labelledby="book-heading">
             <div class="section-inner text-center">
-                <span class="section-kicker">The Novel</span>
+                <span class="section-kicker" data-i18n="book.kicker">The Novel</span>
                 <div class="ornament" aria-hidden="true"><div class="ornament-gem"></div></div>
-                <h2 class="section-heading" id="book-heading">Independent</h2>
-                <div class="book-blurb">
+                <h2 class="section-heading" id="book-heading" data-i18n="book.title">Independent</h2>
+                <div class="book-blurb" data-i18n-html="book.blurb">
                     <p>She built her life on discipline.</p>
                     <p>He built his on getting exactly what he wants.</p>
                     <p>When his attention lands on her, everything becomes a test: of control, of desire, and of the loyalties she thought were unbreakable. He doesn't chase; he acquires. And he has never lost anything he decided was his.</p>
@@ -369,15 +372,15 @@
                     <p>It's the way she's starting to respond.</p>
                     <p><em>Independent</em> is a dark romance novel by Lark Elwood. It doesn't promise a safe journey, but it promises an unforgettable one.</p>
                 </div>
-                <div class="genre-tags" role="list" aria-label="Genre">
-                    <span class="genre-tag" role="listitem">Dark Romance</span>
-                    <span class="genre-tag" role="listitem">Morally Grey Hero</span>
-                    <span class="genre-tag" role="listitem">Obsessive Romance</span>
-                    <span class="genre-tag" role="listitem">Spicy Romance</span>
-                    <span class="genre-tag" role="listitem">Possessive Hero</span>
-                    <span class="genre-tag" role="listitem">Adult Fiction</span>
-                    <span class="genre-tag" role="listitem">Forbidden Romance</span>
-                    <span class="genre-tag" role="listitem">Enemies to Lovers</span>
+                <div class="genre-tags" role="list" data-i18n-aria="book.genreAria" aria-label="Genre">
+                    <span class="genre-tag" role="listitem" data-i18n="book.genre1">Dark Romance</span>
+                    <span class="genre-tag" role="listitem" data-i18n="book.genre2">Morally Grey Hero</span>
+                    <span class="genre-tag" role="listitem" data-i18n="book.genre3">Obsessive Romance</span>
+                    <span class="genre-tag" role="listitem" data-i18n="book.genre4">Spicy Romance</span>
+                    <span class="genre-tag" role="listitem" data-i18n="book.genre5">Possessive Hero</span>
+                    <span class="genre-tag" role="listitem" data-i18n="book.genre6">Adult Fiction</span>
+                    <span class="genre-tag" role="listitem" data-i18n="book.genre7">Forbidden Romance</span>
+                    <span class="genre-tag" role="listitem" data-i18n="book.genre8">Enemies to Lovers</span>
                 </div>
             </div>
         </section>
@@ -387,17 +390,17 @@
         ============================================================ -->
         <section class="readers-section content-section" id="readers" aria-labelledby="readers-heading">
             <div class="section-inner">
-                <span class="section-kicker">The Reader</span>
-                <h2 class="section-heading" id="readers-heading">This book is for you if&hellip;</h2>
+                <span class="section-kicker" data-i18n="readers.kicker">The Reader</span>
+                <h2 class="section-heading" id="readers-heading" data-i18n="readers.heading">This book is for you if&hellip;</h2>
                 <ul class="for-you-list">
-                    <li><span class="list-rose" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(72 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(144 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(216 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(288 12 12)"/></svg></span>You love a hero who takes what he wants, and you're rooting for him anyway</li>
-                    <li><span class="list-rose" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(72 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(144 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(216 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(288 12 12)"/></svg></span>You read for the tension as much as the resolution</li>
-                    <li><span class="list-rose" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(72 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(144 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(216 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(288 12 12)"/></svg></span>Morally complex characters feel more interesting to you than safe ones</li>
-                    <li><span class="list-rose" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(72 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(144 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(216 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(288 12 12)"/></svg></span>Obsession, possessiveness, and power dynamics are your comfort zone</li>
-                    <li><span class="list-rose" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(72 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(144 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(216 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(288 12 12)"/></svg></span>You've dog-eared half of every dark romance you've ever owned and felt zero guilt about it</li>
-                    <li><span class="list-rose" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(72 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(144 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(216 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(288 12 12)"/></svg></span>You want a story that earns its ending instead of just handing one to you</li>
+                    <li><span class="list-rose" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(72 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(144 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(216 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(288 12 12)"/></svg></span><span data-i18n="readers.item1">You love a hero who takes what he wants, and you're rooting for him anyway</span></li>
+                    <li><span class="list-rose" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(72 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(144 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(216 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(288 12 12)"/></svg></span><span data-i18n="readers.item2">You read for the tension as much as the resolution</span></li>
+                    <li><span class="list-rose" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(72 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(144 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(216 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(288 12 12)"/></svg></span><span data-i18n="readers.item3">Morally complex characters feel more interesting to you than safe ones</span></li>
+                    <li><span class="list-rose" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(72 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(144 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(216 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(288 12 12)"/></svg></span><span data-i18n="readers.item4">Obsession, possessiveness, and power dynamics are your comfort zone</span></li>
+                    <li><span class="list-rose" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(72 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(144 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(216 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(288 12 12)"/></svg></span><span data-i18n="readers.item5">You've dog-eared half of every dark romance you've ever owned and felt zero guilt about it</span></li>
+                    <li><span class="list-rose" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(72 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(144 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(216 12 12)"/><path d="M12 10C10 9 9 6.5 12 4c3 2.5 2 5 0 6z" transform="rotate(288 12 12)"/></svg></span><span data-i18n="readers.item6">You want a story that earns its ending instead of just handing one to you</span></li>
                 </ul>
-                <p class="content-notice">
+                <p class="content-notice" data-i18n-html="readers.notice">
                     <em>Independent</em> is intended for readers 18 and older. It contains explicit content, power imbalance, and emotionally intense themes. A full content warning list is available on request before applying for an ARC.
                 </p>
             </div>
@@ -408,10 +411,10 @@
         ============================================================ -->
         <section class="author-section content-section" id="about" aria-labelledby="author-heading">
             <div class="section-inner text-center">
-                <span class="section-kicker">The Author</span>
+                <span class="section-kicker" data-i18n="author.kicker">The Author</span>
                 <div class="ornament" aria-hidden="true"><div class="ornament-gem"></div></div>
-                <h2 class="section-heading" id="author-heading">Lark Elwood</h2>
-                <div class="author-bio">
+                <h2 class="section-heading" id="author-heading" data-i18n="author.name">Lark Elwood</h2>
+                <div class="author-bio" data-i18n-html="author.bio">
                     <p><strong>Lark Elwood is a dark romance author</strong> writing for readers who aren't afraid of the complicated parts: the power plays, the obsession, and the morally grey heroes who make choices you wouldn't but understand completely.</p>
                     <p><em>Independent</em> is her debut novel. She believes every great dark romance has to earn its ending, and she spent a long time making sure this one does.</p>
                     <p>She writes for the readers who finish a book at 2am and lie awake thinking about it. This one is for you.</p>
@@ -424,82 +427,82 @@
         ============================================================ -->
         <section class="faq-section content-section" id="faq" aria-labelledby="faq-heading">
             <div class="section-inner">
-                <span class="section-kicker">Questions</span>
-                <h2 class="section-heading text-center" id="faq-heading">Common Questions</h2>
+                <span class="section-kicker" data-i18n="faq.kicker">Questions</span>
+                <h2 class="section-heading text-center" id="faq-heading" data-i18n="faq.heading">Common Questions</h2>
                 <div class="faq-list">
 
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false" type="button">
+                        <button class="faq-question" aria-expanded="false" type="button" data-i18n-html="faq.q1.question">
                             What genre is <em>Independent</em>?
                         </button>
                         <div class="faq-answer" role="region">
-                            <div class="faq-answer-inner">
+                            <div class="faq-answer-inner" data-i18n-html="faq.q1.answer">
                                 <em>Independent</em> is a dark romance novel for adult readers. It features a morally gray hero, explicit intimacy, obsessive tension, and an emotionally charged dynamic between the two main characters. If you enjoy dark romance authors like Ana Huang, Rina Kent, or Penelope Douglas, this book was written with you in mind.
                             </div>
                         </div>
                     </div>
 
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false" type="button">
+                        <button class="faq-question" aria-expanded="false" type="button" data-i18n="faq.q2.question">
                             Is this book explicit?
                         </button>
                         <div class="faq-answer" role="region">
-                            <div class="faq-answer-inner">
+                            <div class="faq-answer-inner" data-i18n-html="faq.q2.answer">
                                 Yes. <em>Independent</em> is a spicy romance with explicit sexual content. It is intended for readers 18 and older. If you prefer closed-door romance, this one is not for you. But if you're here, you probably already knew that.
                             </div>
                         </div>
                     </div>
 
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false" type="button">
+                        <button class="faq-question" aria-expanded="false" type="button" data-i18n="faq.q3.question">
                             Are there trigger warnings?
                         </button>
                         <div class="faq-answer" role="region">
-                            <div class="faq-answer-inner">
+                            <div class="faq-answer-inner" data-i18n-html="faq.q3.answer">
                                 Yes. <em>Independent</em> contains mature themes including power imbalance, obsessive and possessive behavior, morally gray dynamics, and emotionally intense situations. A detailed content warning list is available to readers: join the reader list or reach out directly to request it before <a href="#arc">applying for an ARC</a>.
                             </div>
                         </div>
                     </div>
 
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false" type="button">
+                        <button class="faq-question" aria-expanded="false" type="button" data-i18n-html="faq.q4.question">
                             When does <em>Independent</em> release?
                         </button>
                         <div class="faq-answer" role="region">
-                            <div class="faq-answer-inner">
+                            <div class="faq-answer-inner" data-i18n="faq.q4.answer">
                                 A release date will be announced to the reader list first. Join using the form at the top of this page to be notified as soon as a date is confirmed, along with cover reveals, bonus content, and early access details.
                             </div>
                         </div>
                     </div>
 
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false" type="button">
+                        <button class="faq-question" aria-expanded="false" type="button" data-i18n="faq.q5.question">
                             What is an ARC and how do I apply?
                         </button>
                         <div class="faq-answer" role="region">
-                            <div class="faq-answer-inner">
+                            <div class="faq-answer-inner" data-i18n-html="faq.q5.answer">
                                 An ARC (advance reader copy) is a pre-release version of the book given to approved readers in exchange for an honest review posted around or after release. The ARC team for <em>Independent</em> is small and selective. Apply using the form in the <a href="#arc">ARC section</a>. All applicants will be contacted, and applications are reviewed on a rolling basis.
                             </div>
                         </div>
                     </div>
 
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false" type="button">
+                        <button class="faq-question" aria-expanded="false" type="button" data-i18n="faq.q6.question">
                             Who is Lark Elwood?
                         </button>
                         <div class="faq-answer" role="region">
-                            <div class="faq-answer-inner">
+                            <div class="faq-answer-inner" data-i18n-html="faq.q6.answer">
                                 <strong>Lark Elwood</strong> is a <strong>dark romance author</strong>. She writes adult romance with morally grey heroes, obsessive tension, and spicy explicit content for readers who love high stakes. Her debut <strong>dark romance novel</strong> is <em>Independent</em>. This official site (<a href="https://larkelwood.com">larkelwood.com</a>) is where readers join her list for release news and read her <a href="/blog/">dark romance journal</a>.
                             </div>
                         </div>
                     </div>
 
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false" type="button">
+                        <button class="faq-question" aria-expanded="false" type="button" data-i18n="faq.q7.question">
                             Is Lark Elwood a dark romance author?
                         </button>
                         <div class="faq-answer" role="region">
-                            <div class="faq-answer-inner">
+                            <div class="faq-answer-inner" data-i18n-html="faq.q7.answer">
                                 Yes. <strong>Lark Elwood is a dark romance author</strong> specializing in morally grey heroes, obsessive and possessive dynamics, and adult explicit romance. Readers searching for contemporary <strong>dark romance authors</strong> in that vein discover her debut <em>Independent</em> here and on <a href="https://www.goodreads.com/larkelwood" target="_blank" rel="noopener noreferrer">Goodreads</a>.
                             </div>
                         </div>
@@ -514,72 +517,72 @@
         ============================================================ -->
         <section class="follow-section content-section" id="follow" aria-labelledby="follow-heading">
             <div class="section-inner">
-                <span class="section-kicker">Stay Connected</span>
-                <h2 class="section-heading text-center" id="follow-heading">Follow the world of <em>Independent</em></h2>
-                <p class="follow-lead">Lark Elwood is active across platforms. Find teasers, aesthetics, and updates, wherever you read.</p>
-                <nav class="channels" aria-label="Lark Elwood on social media">
+                <span class="section-kicker" data-i18n="follow.kicker">Stay Connected</span>
+                <h2 class="section-heading text-center" id="follow-heading" data-i18n-html="follow.heading">Follow the world of <em>Independent</em></h2>
+                <p class="follow-lead" data-i18n="follow.lead">Lark Elwood is active across platforms. Find teasers, aesthetics, and updates, wherever you read.</p>
+                <nav class="channels" data-i18n-aria="brand.followNavAria" aria-label="Lark Elwood on social media">
 
-                    <a class="channel-row" href="https://www.tiktok.com/@larkelwood" target="_blank" rel="noopener noreferrer">
+                    <a class="channel-row" href="https://www.tiktok.com/@larkelwood" target="_blank" rel="noopener noreferrer" data-follow-channel="tiktok">
                         <span class="channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none;"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.83 1.56V6.8a4.85 4.85 0 0 1-1.06-.11z"/></svg></span>
-                        <span class="channel-platform">TikTok</span>
+                        <span class="channel-platform" data-i18n="follow.platform.tiktok">TikTok</span>
                         <span class="channel-rule" aria-hidden="true"></span>
-                        <span class="channel-desc">Dark romance hooks, mood videos, and teasers from the book</span>
+                        <span class="channel-desc" data-i18n="follow.tiktok">Dark romance hooks, mood videos, and teasers from the book</span>
                         <span class="channel-arrow" aria-hidden="true">→</span>
                     </a>
 
-                    <a class="channel-row" href="https://www.instagram.com/larkelwood" target="_blank" rel="noopener noreferrer">
+                    <a class="channel-row" href="https://www.instagram.com/larkelwood" target="_blank" rel="noopener noreferrer" data-follow-channel="instagram">
                         <span class="channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" stroke="none" fill="currentColor"/></svg></span>
-                        <span class="channel-platform">Instagram</span>
+                        <span class="channel-platform" data-i18n="follow.platform.instagram">Instagram</span>
                         <span class="channel-rule" aria-hidden="true"></span>
-                        <span class="channel-desc">Aesthetics, quotes, cover reveals, and visual atmosphere</span>
+                        <span class="channel-desc" data-i18n="follow.instagram">Aesthetics, quotes, cover reveals, and visual atmosphere</span>
                         <span class="channel-arrow" aria-hidden="true">→</span>
                     </a>
 
-                    <a class="channel-row" href="https://www.pinterest.com/larkelwood" target="_blank" rel="noopener noreferrer">
+                    <a class="channel-row" href="https://www.pinterest.com/larkelwood" target="_blank" rel="noopener noreferrer" data-follow-channel="pinterest">
                         <span class="channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none;"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg></span>
-                        <span class="channel-platform">Pinterest</span>
+                        <span class="channel-platform" data-i18n="follow.platform.pinterest">Pinterest</span>
                         <span class="channel-rule" aria-hidden="true"></span>
-                        <span class="channel-desc">Mood boards, aesthetics, and book-adjacent inspiration</span>
+                        <span class="channel-desc" data-i18n="follow.pinterest">Mood boards, aesthetics, and book-adjacent inspiration</span>
                         <span class="channel-arrow" aria-hidden="true">→</span>
                     </a>
 
-                    <a class="channel-row" href="https://www.goodreads.com/larkelwood" target="_blank" rel="noopener noreferrer">
+                    <a class="channel-row" href="https://www.goodreads.com/larkelwood" target="_blank" rel="noopener noreferrer" data-follow-channel="goodreads">
                         <span class="channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
-                        <span class="channel-platform">Goodreads</span>
+                        <span class="channel-platform" data-i18n="follow.platform.goodreads">Goodreads</span>
                         <span class="channel-rule" aria-hidden="true"></span>
-                        <span class="channel-desc">Add <em>Independent</em> to your shelf and follow for reviews and release updates</span>
+                        <span class="channel-desc" data-i18n-html="follow.goodreads">Add <em>Independent</em> to your shelf and follow for reviews and release updates</span>
                         <span class="channel-arrow" aria-hidden="true">→</span>
                     </a>
 
-                    <a class="channel-row channel-row--email" href="#quick-email">
+                    <a class="channel-row channel-row--email" href="#quick-email" data-follow-channel="email">
                         <span class="channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
-                        <span class="channel-platform">Email</span>
+                        <span class="channel-platform" data-i18n="follow.platform.email">Email</span>
                         <span class="channel-rule" aria-hidden="true"></span>
-                        <span class="channel-desc">First access to releases, bonus pages, and ARC news. The reader list gets everything first</span>
+                        <span class="channel-desc" data-i18n="follow.email">First access to releases, bonus pages, and ARC news. The reader list gets everything first</span>
                         <span class="channel-arrow" aria-hidden="true">→</span>
                     </a>
 
-                    <a class="channel-row" href="https://www.threads.net/@larkelwood" target="_blank" rel="noopener noreferrer">
+                    <a class="channel-row" href="https://www.threads.net/@larkelwood" target="_blank" rel="noopener noreferrer" data-follow-channel="threads">
                         <span class="channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/></svg></span>
-                        <span class="channel-platform">Threads</span>
+                        <span class="channel-platform" data-i18n="follow.platform.threads">Threads</span>
                         <span class="channel-rule" aria-hidden="true"></span>
-                        <span class="channel-desc">Writing thoughts, dark romance conversation, and reader community</span>
+                        <span class="channel-desc" data-i18n="follow.threads">Writing thoughts, dark romance conversation, and reader community</span>
                         <span class="channel-arrow" aria-hidden="true">→</span>
                     </a>
 
-                    <a class="channel-row" href="https://x.com/larkelwood" target="_blank" rel="noopener noreferrer">
+                    <a class="channel-row" href="https://x.com/larkelwood" target="_blank" rel="noopener noreferrer" data-follow-channel="x">
                         <span class="channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none;"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L2.133 2.25H8.81l4.261 5.632 5.173-5.632zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></span>
-                        <span class="channel-platform">X</span>
+                        <span class="channel-platform" data-i18n="follow.platform.x">X</span>
                         <span class="channel-rule" aria-hidden="true"></span>
-                        <span class="channel-desc">Quick updates, dark romance talk, and conversations with readers</span>
+                        <span class="channel-desc" data-i18n="follow.x">Quick updates, dark romance talk, and conversations with readers</span>
                         <span class="channel-arrow" aria-hidden="true">→</span>
                     </a>
 
-                    <a class="channel-row" href="https://www.facebook.com/larkelwood" target="_blank" rel="noopener noreferrer">
+                    <a class="channel-row" href="https://www.facebook.com/larkelwood" target="_blank" rel="noopener noreferrer" data-follow-channel="facebook">
                         <span class="channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></span>
-                        <span class="channel-platform">Facebook</span>
+                        <span class="channel-platform" data-i18n="follow.platform.facebook">Facebook</span>
                         <span class="channel-rule" aria-hidden="true"></span>
-                        <span class="channel-desc">Announcements, community, and release news</span>
+                        <span class="channel-desc" data-i18n="follow.facebook">Announcements, community, and release news</span>
                         <span class="channel-arrow" aria-hidden="true">→</span>
                     </a>
 
@@ -592,9 +595,9 @@
         ============================================================ -->
         <section class="arc-section content-section" id="arc" aria-labelledby="arc-heading">
             <div class="arc-invitation">
-                <span class="arc-badge">Advance Readers</span>
-                <h2 class="arc-heading" id="arc-heading">Read it before anyone else</h2>
-                <div class="arc-intro">
+                <span class="arc-badge" data-i18n="arc.badge">Advance Readers</span>
+                <h2 class="arc-heading" id="arc-heading" data-i18n="arc.heading">Read it before anyone else</h2>
+                <div class="arc-intro" data-i18n-html="arc.intro">
                     <p>The ARC team for <em>Independent</em> is a small group of approved readers who receive an advance copy before release in exchange for an honest review.</p>
                     <p><em>Independent</em> contains explicit content, mature themes, and emotionally intense dynamics. Please apply only if you enjoy dark romance and are comfortable reviewing stories with adult content.</p>
                     <p>If selected, you'll receive your copy along with all the information you need ahead of the release window.</p>
@@ -609,6 +612,7 @@
                     data-tally-overlay="1"
                     data-tally-auto-close="1000"
                     data-tally-form-events-forwarding="1"
+                    data-i18n="arc.cta"
                 >
                     Apply for Access
                 </button>
@@ -619,59 +623,60 @@
 
     <footer>
         <div class="footer-inner">
-            <p class="footer-name">Lark Elwood</p>
+            <p class="footer-name" data-i18n="brand.name">Lark Elwood</p>
             <p class="footer-social-label">@larkelwood</p>
             <nav class="social-links" aria-label="Social media">
-                <a class="social-link" href="https://www.instagram.com/larkelwood" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <a class="social-link" href="https://www.instagram.com/larkelwood" target="_blank" rel="noopener noreferrer" data-follow-channel="instagram" data-i18n-attr="aria-label:follow.platform.instagram" aria-label="Instagram">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
                         <circle cx="12" cy="12" r="4"/>
                         <circle cx="17.5" cy="6.5" r="1.2" stroke="none" fill="currentColor"/>
                     </svg>
                 </a>
-                <a class="social-link social-link--pinterest" href="https://www.pinterest.com/larkelwood" target="_blank" rel="noopener noreferrer" aria-label="Pinterest">
+                <a class="social-link social-link--pinterest" href="https://www.pinterest.com/larkelwood" target="_blank" rel="noopener noreferrer" data-follow-channel="pinterest" data-i18n-attr="aria-label:follow.platform.pinterest" aria-label="Pinterest">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/>
                     </svg>
                 </a>
-                <a class="social-link social-link--tiktok" href="https://www.tiktok.com/@larkelwood" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                <a class="social-link social-link--tiktok" href="https://www.tiktok.com/@larkelwood" target="_blank" rel="noopener noreferrer" data-follow-channel="tiktok" data-i18n-attr="aria-label:follow.platform.tiktok" aria-label="TikTok">
                     <svg viewBox="0 0 24 24" aria-hidden="true" style="fill:currentColor;stroke:none;">
                         <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.83 1.56V6.8a4.85 4.85 0 0 1-1.06-.11z"/>
                     </svg>
                 </a>
-                <a class="social-link" href="https://www.threads.net/@larkelwood" target="_blank" rel="noopener noreferrer" aria-label="Threads">
+                <a class="social-link" href="https://www.threads.net/@larkelwood" target="_blank" rel="noopener noreferrer" data-follow-channel="threads" data-i18n-attr="aria-label:follow.platform.threads" aria-label="Threads">
                     <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="4"/>
                         <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/>
                     </svg>
                 </a>
-                <a class="social-link" href="https://x.com/larkelwood" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+                <a class="social-link" href="https://x.com/larkelwood" target="_blank" rel="noopener noreferrer" data-follow-channel="x" data-i18n-attr="aria-label:follow.platform.x" aria-label="X (Twitter)">
                     <svg viewBox="0 0 24 24" aria-hidden="true" style="fill:currentColor;stroke:none;">
                         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L2.133 2.25H8.81l4.261 5.632 5.173-5.632zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                     </svg>
                 </a>
-                <a class="social-link" href="https://www.facebook.com/larkelwood" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                <a class="social-link" href="https://www.facebook.com/larkelwood" target="_blank" rel="noopener noreferrer" data-follow-channel="facebook" data-i18n-attr="aria-label:follow.platform.facebook" aria-label="Facebook">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
                     </svg>
                 </a>
             </nav>
-            <p class="footer-text">Official author website &nbsp;&middot;&nbsp; Dark romance novel <em>Independent</em> &nbsp;&middot;&nbsp; <a href="/blog/">Dark romance journal</a> &nbsp;&middot;&nbsp; <a href="/feed.xml">RSS</a> &nbsp;&middot;&nbsp; <a href="/privacy-policy.html">Privacy policy</a> &nbsp;&middot;&nbsp; All content &copy; Lark Elwood</p>
+            <p class="footer-text" data-i18n-html="footer.text">Official author website &nbsp;&middot;&nbsp; Dark romance novel <em>Independent</em> &nbsp;&middot;&nbsp; <a href="/blog/">Dark romance journal</a> &nbsp;&middot;&nbsp; <a href="/feed.xml">RSS</a> &nbsp;&middot;&nbsp; <a href="/privacy-policy.html">Privacy policy</a> &nbsp;&middot;&nbsp; All content &copy; Lark Elwood</p>
         </div>
     </footer>
 
-    <script src="js/cookie-consent.js"></script>
-    <script src="js/tiktok-pixel.js"></script>
-    <script src="js/meta-pixel.js"></script>
-    <script src="js/meta-capi-client.js"></script>
-    <script src="js/scroll.js"></script>
-    <script src="js/hero-form.js"></script>
-    <script src="js/faq.js"></script>
+    <script src="/js/i18n.js"></script>
+    <script src="/js/cookie-consent.js"></script>
+    <script src="/js/tiktok-pixel.js"></script>
+    <script src="/js/meta-pixel.js"></script>
+    <script src="/js/meta-capi-client.js"></script>
+    <script src="/js/scroll.js"></script>
+    <script src="/js/hero-form.js"></script>
+    <script src="/js/faq.js"></script>
 
     <!-- Three.js (required by smoke.js) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <!-- Atmospheric blue smoke overlay -->
-    <script src="js/smoke.js"></script>
+    <script src="/js/smoke.js"></script>
 
 </body>
 </html>

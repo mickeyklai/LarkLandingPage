@@ -20,7 +20,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.58rem;
     font-weight: 600;
     letter-spacing: 0.28em;
@@ -36,7 +36,7 @@
 }
 
 .blog-list-title {
-    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-family: var(--font-serif);
     font-size: clamp(2rem, 5vw, 2.65rem);
     font-weight: 500;
     letter-spacing: 0.04em;
@@ -46,7 +46,7 @@
 }
 
 .blog-list-lead {
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-body);
     font-size: clamp(0.9375rem, 2vw, 1.05rem);
     line-height: 1.75;
     color: rgba(195, 212, 230, 0.58);
@@ -108,7 +108,7 @@
 }
 
 .blog-card-meta {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.55rem;
     font-weight: 600;
     letter-spacing: 0.32em;
@@ -118,7 +118,7 @@
 }
 
 .blog-card-title {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: var(--font-serif);
     font-size: clamp(1.2rem, 3vw, 1.45rem);
     font-weight: 500;
     letter-spacing: 0.03em;
@@ -129,7 +129,7 @@
 }
 
 .blog-card-excerpt {
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-body);
     font-size: 0.9375rem;
     line-height: 1.65;
     color: rgba(185, 204, 224, 0.52);
@@ -137,7 +137,7 @@
 }
 
 .blog-card-arrow {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.75rem;
     color: rgba(0, 200, 255, 0.35);
     margin-top: 0.65rem;
@@ -151,7 +151,7 @@
 }
 
 .blog-empty {
-    font-family: Georgia, serif;
+    font-family: var(--font-body);
     font-size: 1rem;
     color: rgba(190, 207, 226, 0.45);
     margin: 0;
@@ -160,7 +160,7 @@
 }
 
 .blog-status {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.8rem;
     color: rgba(200, 215, 230, 0.55);
     margin: 0 0 1rem;
@@ -180,7 +180,7 @@
 }
 
 .blog-article-meta {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.55rem;
     font-weight: 600;
     letter-spacing: 0.36em;
@@ -219,7 +219,7 @@
 }
 
 .blog-article-title {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: var(--font-serif);
     font-size: clamp(1.85rem, 4.5vw, 2.5rem);
     font-weight: 500;
     letter-spacing: 0.04em;
@@ -229,7 +229,7 @@
 }
 
 .blog-article-dek {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: var(--font-serif);
     font-size: clamp(1.05rem, 2.4vw, 1.2rem);
     font-style: italic;
     font-weight: 400;
@@ -239,7 +239,7 @@
 }
 
 .blog-prose {
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-body);
     font-size: clamp(0.975rem, 2.1vw, 1.0625rem);
     line-height: 1.88;
     color: rgba(208, 222, 238, 0.82);
@@ -251,7 +251,7 @@
 .blog-prose h2,
 .blog-prose h3,
 .blog-prose h4 {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: var(--font-serif);
     font-weight: 500;
     letter-spacing: 0.03em;
     color: #eef4fa;
@@ -603,7 +603,7 @@
 
 .blog-post-after-kicker {
     margin: 0 0 0.6rem;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.7rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
@@ -631,7 +631,7 @@
 
 .blog-post-after-links {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.78rem;
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -648,5 +648,24 @@
 .blog-post-after-links a:focus-visible {
     color: rgba(0, 235, 255, 0.95);
     border-bottom-color: rgba(0, 230, 255, 0.55);
+}
+
+/* Hebrew: match main site editorial serif + UI sans */
+html[lang="he"] .blog-card-meta,
+html[lang="he"] .blog-article-meta,
+html[lang="he"] .blog-post-after-kicker,
+html[lang="he"] .blog-post-after-links {
+    letter-spacing: 0.03em;
+    text-transform: none;
+}
+
+html[lang="he"] .blog-list-title,
+html[lang="he"] .blog-card-title,
+html[lang="he"] .blog-article-title,
+html[lang="he"] .blog-prose h1,
+html[lang="he"] .blog-prose h2,
+html[lang="he"] .blog-prose h3,
+html[lang="he"] .blog-prose h4 {
+    letter-spacing: 0;
 }
 

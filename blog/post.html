@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="i18n-pending">
 <head>
+    <script src="/i18n/locale-detect.js"></script>
+    <style>.i18n-pending body{visibility:hidden}</style>
     <meta charset="UTF-8">
     <!-- blog-og-inject -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +19,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.sanity.io" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Frank+Ruhl+Libre:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/blog.css">
@@ -29,21 +31,21 @@
             <span class="logo-name">Lark Elwood</span>
         </a>
         <nav class="site-nav" aria-label="Site navigation">
-            <a href="/#reader-list" class="site-nav-primary" aria-label="Join the reader list"><span class="site-nav-cta-full">Join the reader list</span><span class="site-nav-cta-compact" aria-hidden="true">Notify Me</span></a>
+            <a href="/#reader-list" class="site-nav-primary" data-i18n-aria="nav.joinAria" aria-label="Join the reader list"><span class="site-nav-cta-full" data-i18n="nav.joinFull">Join the reader list</span><span class="site-nav-cta-compact" aria-hidden="true" data-i18n="nav.joinCompact">Notify Me</span></a>
             <div class="site-nav-rest">
-                <a href="/#the-book">The Book</a>
-                <a href="/#about">About</a>
-                <a href="/#faq">FAQ</a>
-                <a href="/#follow">Follow</a>
-                <a href="/#arc">ARC</a>
-                <a href="/blog/">Blog</a>
+                <a href="/#the-book" data-i18n="nav.theBook">The Book</a>
+                <a href="/#about" data-i18n="nav.about">About</a>
+                <a href="/#faq" data-i18n="nav.faq">FAQ</a>
+                <a href="/#follow" data-i18n="nav.follow">Follow</a>
+                <a href="/#arc" data-i18n="nav.arc">ARC</a>
+                <a href="/blog/" data-i18n="nav.blog">Blog</a>
             </div>
         </nav>
     </header>
 
     <main class="blog-page">
         <div class="blog-main blog-main--wide">
-            <a class="blog-back" href="/blog/">← All posts</a>
+            <a class="blog-back" href="/blog/" data-i18n="blog.backAll">← All posts</a>
 
             <p id="blog-status" class="blog-status" role="status" aria-live="polite"></p>
 
@@ -58,9 +60,9 @@
                 <div id="blog-prose" class="blog-prose"></div>
 
                 <aside class="blog-post-after" aria-label="About the author and the book">
-                    <p class="blog-post-after-kicker">About the author</p>
-                    <p class="blog-post-after-text">Written by <a href="/#about"><strong>Lark Elwood</strong></a>, dark romance author. These roundups name real reads you've probably dog-eared; her debut novel <em><a href="/#the-book">Independent</a></em> is for readers who tore through comps like today's five. <a href="/#reader-list">Join the reader list</a> for release news, ARC invites, bonus pages.</p>
-                    <p class="blog-post-after-links"><a href="/blog/">More five-book lists &rarr;</a></p>
+                    <p class="blog-post-after-kicker" data-i18n="blog.aboutKicker">About the author</p>
+                    <p class="blog-post-after-text" data-i18n-html="blog.aboutText">Written by <a href="/#about"><strong>Lark Elwood</strong></a>, dark romance author. These roundups name real reads you've probably dog-eared; her debut novel <em><a href="/#the-book">Independent</a></em> is for readers who tore through comps like today's five. <a href="/#reader-list">Join the reader list</a> for release news, ARC invites, bonus pages.</p>
+                    <p class="blog-post-after-links"><a href="/blog/" data-i18n="blog.moreLists">More five-book lists &rarr;</a></p>
                 </aside>
             </article>
         </div>
@@ -70,10 +72,11 @@
         <div class="footer-inner">
             <p class="footer-name">Lark Elwood</p>
             <p class="footer-social-label">@larkelwood</p>
-            <p class="footer-text">Dark romance · <a href="/blog/">Blog</a> · <a href="/privacy-policy.html">Privacy policy</a> · <a href="/">Home</a></p>
+            <p class="footer-text" data-i18n-html="blog.footer">Dark romance · <a href="/blog/">Blog</a> · <a href="/privacy-policy.html">Privacy policy</a> · <a href="/">Home</a></p>
         </div>
     </footer>
 
+    <script src="/js/i18n.js"></script>
     <script src="/js/cookie-consent.js"></script>
     <script src="/js/meta-capi-client.js"></script>
     <script src="/js/blog-post.js"></script>

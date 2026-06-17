@@ -19,6 +19,9 @@ html, body {
     --header-block: 5.25rem;
     /* In-page #anchors: must clear sticky header (taller than --header-block on mobile) */
     --anchor-offset: var(--header-block);
+    --font-serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    --font-body: Georgia, 'Times New Roman', serif;
 }
 
 html {
@@ -75,7 +78,7 @@ body {
     --bg-raised: #000000;
     background: var(--bg);
     color: var(--text);
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-body);
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -111,7 +114,7 @@ header {
 }
 
 .logo-name {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: var(--font-sans);
     font-size: 1.35rem;
     font-weight: 400;
     letter-spacing: 0.22em;
@@ -136,7 +139,7 @@ header {
 }
 
 .site-nav a {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.63rem;
     font-weight: 700;
     letter-spacing: 0.24em;
@@ -178,6 +181,107 @@ header {
     box-shadow:
         0 0 0 1px rgba(0, 235, 255, 0.12) inset,
         0 0 22px rgba(0, 210, 255, 0.18);
+}
+
+/* ================================================================
+   LANGUAGE SWITCHER
+================================================================ */
+.lang-switcher {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.lang-switcher-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-sans);
+    font-size: 0.63rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(210, 225, 240, 0.68);
+    background: transparent;
+    border: 1px solid rgba(0, 210, 255, 0.28);
+    border-radius: 999px;
+    padding: 0.42rem 0.65rem;
+    cursor: pointer;
+    transition:
+        color 0.18s ease,
+        border-color 0.18s ease,
+        background 0.18s ease;
+}
+
+.lang-switcher-btn:hover,
+.lang-switcher--open .lang-switcher-btn {
+    color: rgba(0, 235, 255, 0.92);
+    border-color: rgba(0, 210, 255, 0.55);
+    background: rgba(0, 120, 160, 0.12);
+}
+
+.lang-switcher-chevron {
+    font-size: 0.7em;
+    line-height: 1;
+    opacity: 0.75;
+}
+
+.lang-switcher-flag {
+    font-size: 1.05em;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.lang-switcher-menu {
+    position: absolute;
+    top: calc(100% + 0.45rem);
+    right: 0;
+    z-index: 120;
+    min-width: 9.5rem;
+    max-height: min(70vh, 16rem);
+    overflow-y: auto;
+    margin: 0;
+    padding: 0.35rem 0;
+    list-style: none;
+    background: rgba(8, 14, 22, 0.97);
+    border: 1px solid rgba(0, 210, 255, 0.28);
+    border-radius: 6px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+}
+
+.lang-switcher-menu a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 0.85rem;
+    font-family: var(--font-sans);
+    font-size: 0.63rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: none;
+    color: rgba(210, 225, 240, 0.82);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.lang-switcher-menu a:hover,
+.lang-switcher-menu a[aria-current="true"] {
+    color: rgba(0, 235, 255, 0.95);
+    background: rgba(0, 120, 160, 0.14);
+}
+
+html[dir="rtl"] .lang-switcher-menu {
+    right: auto;
+    left: 0;
+}
+
+html[dir="rtl"] .site-nav a.site-nav-primary {
+    margin: -0.5rem 0 -0.5rem -0.25rem;
+}
+
+html[dir="rtl"] .lang-switcher-menu a,
+html[dir="rtl"] .site-nav-rest,
+html[dir="rtl"] .site-nav {
+    direction: rtl;
 }
 
 /* ================================================================
@@ -301,7 +405,7 @@ header {
 .hero-micro {
     position: absolute;
     z-index: 3;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.55rem;
     font-weight: 500;
     letter-spacing: 0.25em;
@@ -335,7 +439,7 @@ header {
 }
 
 .hero-title {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: var(--font-sans);
     font-size: clamp(2.75rem, 13vw, 6.5rem);
     font-weight: 400;
     text-transform: uppercase;
@@ -356,7 +460,7 @@ header {
 
 /* Newsletter hook: same neon cyan treatment as original .hero-hook */
 .hero-newsletter-head {
-    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-family: var(--font-serif);
     font-size: clamp(1.1rem, 3.2vw, 1.55rem);
     font-style: italic;
     font-weight: 400;
@@ -371,7 +475,7 @@ header {
 }
 
 .hero-newsletter-sub {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: var(--font-sans);
     font-size: clamp(0.8rem, 1.8vw, 0.9rem);
     font-weight: 400;
     letter-spacing: 0.08em;
@@ -435,7 +539,7 @@ header {
     border: 1px solid rgba(102, 252, 241, 0.2);
     border-right: none;
     border-radius: 2px 0 0 2px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -462,7 +566,7 @@ header {
     border-left: none;
     border-radius: 0 2px 2px 0;
     cursor: pointer;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     transition: filter 0.15s ease, box-shadow 0.15s ease;
     white-space: nowrap;
 }
@@ -523,7 +627,7 @@ header {
     margin: 0;
     width: 100%;
     text-align: center;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.78rem;
     font-weight: 500;
     letter-spacing: 0.04em;
@@ -546,7 +650,7 @@ header {
 
 .hero-cta-success-panel .hero-cta-success-title {
     margin: 0 0 0.35rem;
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: var(--font-serif);
     font-size: clamp(1.15rem, 3.5vw, 1.35rem);
     font-weight: 500;
     letter-spacing: 0.06em;
@@ -563,7 +667,7 @@ header {
 }
 
 .hero-cta-success-panel .hero-cta-success-spam {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: clamp(0.72rem, 2vw, 0.82rem);
     line-height: 1.5;
 }
@@ -600,7 +704,7 @@ header {
 
 .section-kicker {
     display: block;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.58rem;
     font-weight: 600;
     letter-spacing: 0.42em;
@@ -610,7 +714,7 @@ header {
 }
 
 .section-heading {
-    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-family: var(--font-serif);
     font-size: clamp(2rem, 5.5vw, 2.85rem);
     font-weight: 500;
     letter-spacing: 0.04em;
@@ -653,7 +757,7 @@ header {
 }
 
 .book-blurb {
-    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-family: var(--font-serif);
     font-size: clamp(1.2rem, 2.8vw, 1.45rem);
     font-weight: 400;
     line-height: 1.85;
@@ -679,7 +783,7 @@ header {
 
 .genre-tag {
     padding: 0.35rem 0.9rem;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.57rem;
     font-weight: 600;
     letter-spacing: 0.22em;
@@ -714,7 +818,7 @@ header {
     display: flex;
     align-items: flex-start;
     gap: 1.15rem;
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: var(--font-serif);
     font-size: clamp(1.075rem, 2.5vw, 1.28rem);
     font-weight: 400;
     line-height: 1.65;
@@ -752,7 +856,7 @@ header {
 }
 
 .content-notice {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.78rem;
     line-height: 1.7;
     color: rgba(165, 180, 198, 0.48);
@@ -773,7 +877,7 @@ header {
 }
 
 .author-bio {
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-body);
     font-size: clamp(0.9375rem, 2.2vw, 1.0625rem);
     line-height: 1.88;
     color: rgba(208, 222, 238, 0.78);
@@ -816,7 +920,7 @@ header {
     padding: 1.35rem 2.75rem 1.35rem 0;
     cursor: pointer;
     position: relative;
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-body);
     font-size: clamp(0.9375rem, 2.2vw, 1.05rem);
     font-weight: 400;
     color: rgba(225, 237, 250, 0.82);
@@ -838,7 +942,7 @@ header {
     color: rgba(0, 200, 255, 0.5);
     font-size: 1.35rem;
     font-weight: 300;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     line-height: 1;
     transition: color 0.2s ease, opacity 0.2s ease;
 }
@@ -865,7 +969,7 @@ header {
 }
 
 .faq-answer-inner {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: var(--font-sans);
     font-size: clamp(0.875rem, 1.9vw, 0.9375rem);
     line-height: 1.78;
     color: rgba(190, 207, 226, 0.65);
@@ -937,7 +1041,7 @@ header {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.56rem;
     font-weight: 600;
     letter-spacing: 0.4em;
@@ -950,7 +1054,7 @@ header {
 }
 
 .arc-heading {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: var(--font-serif);
     font-size: clamp(1.75rem, 5vw, 2.45rem);
     font-weight: 500;
     letter-spacing: 0.04em;
@@ -960,7 +1064,7 @@ header {
 }
 
 .arc-intro {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: clamp(0.875rem, 1.9vw, 0.9375rem);
     line-height: 1.8;
     color: rgba(195, 213, 232, 0.62);
@@ -984,7 +1088,7 @@ header {
     border-radius: 999px;
     background: linear-gradient(180deg, rgba(0, 50, 72, 0.5) 0%, rgba(0, 18, 36, 0.95) 100%);
     color: #d4f8ff;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.63rem;
     font-weight: 600;
     letter-spacing: 0.22em;
@@ -1027,7 +1131,7 @@ footer {
 }
 
 .footer-name {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.68rem;
     font-weight: 600;
     letter-spacing: 0.3em;
@@ -1036,7 +1140,7 @@ footer {
 }
 
 .footer-text {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.68rem;
     line-height: 1.55;
     color: rgba(165, 180, 198, 0.28);
@@ -1103,7 +1207,7 @@ footer {
 .cookie-consent-text {
     flex: 1 1 12rem;
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.78rem;
     line-height: 1.5;
     color: rgba(210, 220, 235, 0.88);
@@ -1124,7 +1228,7 @@ footer {
 
 .cookie-consent-accept {
     flex-shrink: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.12em;
@@ -1191,6 +1295,10 @@ footer {
     min-height: 44px;
 }
 
+.social-link[hidden] {
+    display: none !important;
+}
+
 .social-link:hover {
     color: rgba(0, 210, 255, 0.8);
 }
@@ -1221,7 +1329,7 @@ footer {
     align-items: center;
     justify-content: center;
     gap: 0.6rem;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.52rem;
     font-weight: 500;
     letter-spacing: 0.26em;
@@ -1255,7 +1363,7 @@ footer {
 }
 
 .follow-lead {
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-body);
     font-size: clamp(0.9375rem, 2vw, 1.05rem);
     line-height: 1.78;
     color: rgba(195, 212, 230, 0.58);
@@ -1278,6 +1386,10 @@ footer {
     text-decoration: none;
     color: inherit;
     position: relative;
+}
+
+.channel-row[hidden] {
+    display: none !important;
 }
 
 .channel-row:first-child {
@@ -1322,7 +1434,7 @@ footer {
 }
 
 .channel-platform {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.57rem;
     font-weight: 600;
     letter-spacing: 0.3em;
@@ -1341,7 +1453,7 @@ footer {
 }
 
 .channel-desc {
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-body);
     font-size: clamp(0.875rem, 1.9vw, 0.9375rem);
     line-height: 1.5;
     color: rgba(185, 204, 224, 0.48);
@@ -1351,7 +1463,7 @@ footer {
 }
 
 .channel-arrow {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.82rem;
     color: rgba(0, 200, 255, 0.3);
     flex-shrink: 0;
@@ -1373,7 +1485,7 @@ footer {
    FOOTER IMPROVEMENTS
 ================================================================ */
 .footer-social-label {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.55rem;
     font-weight: 500;
     letter-spacing: 0.3em;
@@ -1723,6 +1835,12 @@ footer {
         gap: 0 0.9rem;
         padding: 0.4rem 0 0.25rem;
     }
+
+    .lang-switcher-btn {
+        font-size: 0.52rem;
+        letter-spacing: 0.1em;
+        padding: 0.38rem 0.55rem;
+    }
 }
 
 /* ================================================================
@@ -1799,7 +1917,7 @@ main, footer {
 }
 
 .legal-updated {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.65rem;
     letter-spacing: 0.08em;
     color: var(--text-faint);
@@ -1815,7 +1933,7 @@ main, footer {
 }
 
 .legal-section h2 {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.62rem;
     font-weight: 700;
     letter-spacing: 0.28em;
@@ -1826,7 +1944,7 @@ main, footer {
 
 .legal-section p,
 .legal-section ul {
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-body);
     font-size: clamp(0.9375rem, 2vw, 1.02rem);
     line-height: 1.75;
     color: rgba(195, 212, 230, 0.72);
@@ -1898,7 +2016,7 @@ main, footer {
 
 .home-journal-card-meta {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.72rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -1907,7 +2025,7 @@ main, footer {
 
 .home-journal-card-title {
     margin: 0;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--font-serif);
     font-size: clamp(1.25rem, 2.1vw, 1.55rem);
     font-weight: 500;
     line-height: 1.25;
@@ -1927,7 +2045,7 @@ main, footer {
 
 .home-journal-card-arrow {
     margin-top: 0.4rem;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.78rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -1942,7 +2060,7 @@ main, footer {
 .home-journal-more-link {
     color: rgba(0, 215, 255, 0.85);
     text-decoration: none;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.82rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;

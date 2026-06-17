@@ -310,12 +310,13 @@ function injectHead(html, meta, canonicalUrl) {
 export default async (request, context) => {
     const url = new URL(request.url);
     const parts = url.pathname.split('/').filter(Boolean);
+    const blogIdx = parts.indexOf('blog');
 
-    if (parts[0] !== 'blog' || parts.length < 2) {
+    if (blogIdx === -1 || parts.length < blogIdx + 2) {
         return context.next();
     }
 
-    const slug = parts[1];
+    const slug = parts[blogIdx + 1];
     if (slug === 'index.html' || slug === 'post.html' || slug === '') {
         return context.next();
     }

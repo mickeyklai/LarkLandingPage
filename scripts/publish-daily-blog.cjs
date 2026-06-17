@@ -493,19 +493,41 @@ async function resolveHeroImageSlots(client, runDate, dryRun, meta, heroSpecs, s
         const scene =
             (slug && HF_TOPIC_SCENES[slug]) ||
             'rain-streaked gothic window, velvet chaise, a couple seated together with natural faces visible, clasped hands with five fingers each, single guttering candle, open book with worn spine';
-        for (let i = 0; i < totalSlots; i += 1) {
-            const spec = heroSpecForSlot(heroSpecs, i, totalSlots, { postTitle, topicSlug });
-            const prompt = HF_STYLE_PREFIX + scene + HF_STYLE_SUFFIX;
-            const buf = await generateHfImageJpeg(prompt);
-            const filename = seoBlogImageFilename(slugCurrent, 'jpg', i + 1);
-            const doc = await client.assets.upload('image', buf, { filename });
-            slots.push({
-                assetId: doc._id,
-                attribution: figureCaptionFromMeta(spec.imageCaption, postTitle),
-                alt: spec.imageAlt,
-            });
+        try {
+            for (let i = 0; i < totalSlots; i += 1) {
+                const spec = heroSpecForSlot(heroSpecs, i, totalSlots, { postTitle, topicSlug });
+                const prompt = HF_STYLE_PREFIX + scene + HF_STYLE_SUFFIX;
+                const buf = await generateHfImageJpeg(prompt);
+                const filename = seoBlogImageFilename(slugCurrent, 'jpg', i + 1);
+                const doc = await client.assets.upload('image', buf, { filename });
+                slots.push({
+                    assetId: doc._id,
+                    attribution: figureCaptionFromMeta(spec.imageCaption, postTitle),
+                    alt: spec.imageAlt,
+                });
+            }
+            return { slots };
+        } catch (e) {
+            if (pool.length) {
+                // eslint-disable-next-line no-console
+                console.warn(
+                    `HF image generation failed; falling back to BLOG_IMAGE_POOL_REFS. (${e && e.message ? e.message : e})`,
+                );
+                const fallback = [];
+                const start = topicIndexForDate(runDate) % pool.length;
+                for (let i = 0; i < totalSlots; i += 1) {
+                    const ref = pool[(start + i) % pool.length];
+                    const spec = heroSpecForSlot(heroSpecs, i, totalSlots, { postTitle, topicSlug });
+                    fallback.push({
+                        assetId: ref,
+                        attribution: figureCaptionFromMeta(spec.imageCaption, postTitle),
+                        alt: spec.imageAlt,
+                    });
+                }
+                return { slots: fallback };
+            }
+            throw e;
         }
-        return { slots };
     }
 
     if (pool.length) {

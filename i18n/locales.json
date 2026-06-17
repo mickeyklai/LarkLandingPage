@@ -1,0 +1,23 @@
+{
+  "default": "en",
+  "locales": {
+    "en": {
+      "label": "English",
+      "ogLocale": "en_US",
+      "rtl": false
+    },
+    "he": {
+      "label": "עברית",
+      "ogLocale": "he_IL",
+      "rtl": true,
+      "blog": false,
+      "arc": false,
+      "arcForm": false,
+      "faq": false,
+      "followChannels": ["tiktok", "email"],
+      "channelUrls": {
+        "tiktok": "https://www.tiktok.com/@user2510836870706"
+      }
+    }
+  }
+}

@@ -1,0 +1,163 @@
+{
+  "lang": {
+    "label": "Language"
+  },
+  "meta": {
+    "title": "Lark Elwood — Dark Romance Author | Independent (Official)",
+    "description": "Lark Elwood is a dark romance author writing morally grey, obsessive, possessive-hero romance for adult readers. Her debut dark romance novel is Independent. Official site: reader list, ARC, and journal.",
+    "ogTitle": "Lark Elwood — Dark Romance Author | Independent",
+    "ogDescription": "Lark Elwood writes dark romance for adult readers. Debut novel: Independent — obsession, possessive power, and a morally grey hero. I wasn't his type. I was his target."
+  },
+  "nav": {
+    "joinFull": "Join the reader list",
+    "joinCompact": "Notify Me",
+    "joinAria": "Join the reader list: release updates and early access",
+    "theBook": "The Book",
+    "about": "About",
+    "faq": "FAQ",
+    "follow": "Follow",
+    "arc": "ARC",
+    "blog": "Blog"
+  },
+  "hero": {
+    "ariaLabel": "Independent: dark romance reveal",
+    "microTl": "Dark romance",
+    "microTr": "Adult readers only",
+    "microBl": "Coming soon",
+    "microBr": "A novel by Lark Elwood",
+    "headline": "I wasn't his type. I was his target.",
+    "subDesktop": "but now you can know his name... and hear his song.",
+    "subMobile1": "Now you can know his name...",
+    "subMobile2": "and hear his song.",
+    "formAria": "Join the reader list",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "your email for his name and song",
+    "submit": "Join the reader list",
+    "successTitle": "you're in. check your inbox now.",
+    "successSpam": "<span style=\"color: #ff4d4d; font-weight: bold;\">Check your SPAM folder—move it to Primary so you don't lose him.</span>"
+  },
+  "book": {
+    "title": "Independent",
+    "kicker": "The Novel",
+    "blurb": "<p>She built her life on discipline.</p><p>He built his on getting exactly what he wants.</p><p>When his attention lands on her, everything becomes a test: of control, of desire, and of the loyalties she thought were unbreakable. He doesn't chase; he acquires. And he has never lost anything he decided was his.</p><p>The most dangerous part isn't his obsession.</p><p>It's the way she's starting to respond.</p><p><em>Independent</em> is a dark romance novel by Lark Elwood. It doesn't promise a safe journey, but it promises an unforgettable one.</p>",
+    "genreAria": "Genre",
+    "genre1": "Dark Romance",
+    "genre2": "Morally Grey Hero",
+    "genre3": "Obsessive Romance",
+    "genre4": "Spicy Romance",
+    "genre5": "Possessive Hero",
+    "genre6": "Adult Fiction",
+    "genre7": "Forbidden Romance",
+    "genre8": "Enemies to Lovers"
+  },
+  "readers": {
+    "kicker": "The Reader",
+    "heading": "This book is for you if…",
+    "item1": "You love a hero who takes what he wants, and you're rooting for him anyway",
+    "item2": "You read for the tension as much as the resolution",
+    "item3": "Morally complex characters feel more interesting to you than safe ones",
+    "item4": "Obsession, possessiveness, and power dynamics are your comfort zone",
+    "item5": "You've dog-eared half of every dark romance you've ever owned and felt zero guilt about it",
+    "item6": "You want a story that earns its ending instead of just handing one to you",
+    "notice": "<em>Independent</em> is intended for readers 18 and older. It contains explicit content, power imbalance, and emotionally intense themes. A full content warning list is available on request before applying for an ARC."
+  },
+  "author": {
+    "kicker": "The Author",
+    "bio": "<p><strong>Lark Elwood is a dark romance author</strong> writing for readers who aren't afraid of the complicated parts: the power plays, the obsession, and the morally grey heroes who make choices you wouldn't but understand completely.</p><p><em>Independent</em> is her debut novel. She believes every great dark romance has to earn its ending, and she spent a long time making sure this one does.</p><p>She writes for the readers who finish a book at 2am and lie awake thinking about it. This one is for you.</p>"
+  },
+  "faq": {
+    "kicker": "Questions",
+    "heading": "Common Questions",
+    "q1": {
+      "question": "What genre is <em>Independent</em>?",
+      "answer": "<em>Independent</em> is a dark romance novel for adult readers. It features a morally gray hero, explicit intimacy, obsessive tension, and an emotionally charged dynamic between the two main characters. If you enjoy dark romance authors like Ana Huang, Rina Kent, or Penelope Douglas, this book was written with you in mind."
+    },
+    "q2": {
+      "question": "Is this book explicit?",
+      "answer": "Yes. <em>Independent</em> is a spicy romance with explicit sexual content. It is intended for readers 18 and older. If you prefer closed-door romance, this one is not for you. But if you're here, you probably already knew that."
+    },
+    "q3": {
+      "question": "Are there trigger warnings?",
+      "answer": "Yes. <em>Independent</em> contains mature themes including power imbalance, obsessive and possessive behavior, morally gray dynamics, and emotionally intense situations. A detailed content warning list is available to readers: join the reader list or reach out directly to request it before <a href=\"#arc\">applying for an ARC</a>."
+    },
+    "q4": {
+      "question": "When does <em>Independent</em> release?",
+      "answer": "A release date will be announced to the reader list first. Join using the form at the top of this page to be notified as soon as a date is confirmed, along with cover reveals, bonus content, and early access details."
+    },
+    "q5": {
+      "question": "What is an ARC and how do I apply?",
+      "answer": "An ARC (advance reader copy) is a pre-release version of the book given to approved readers in exchange for an honest review posted around or after release. The ARC team for <em>Independent</em> is small and selective. Apply using the form in the <a href=\"#arc\">ARC section</a>. All applicants will be contacted, and applications are reviewed on a rolling basis."
+    },
+    "q6": {
+      "question": "Who is Lark Elwood?",
+      "answer": "<strong>Lark Elwood</strong> is a <strong>dark romance author</strong>. She writes adult romance with morally grey heroes, obsessive tension, and spicy explicit content for readers who love high stakes. Her debut <strong>dark romance novel</strong> is <em>Independent</em>. This official site (<a href=\"https://larkelwood.com\">larkelwood.com</a>) is where readers join her list for release news and read her <a href=\"/blog/\">dark romance journal</a>."
+    },
+    "q7": {
+      "question": "Is Lark Elwood a dark romance author?",
+      "answer": "Yes. <strong>Lark Elwood is a dark romance author</strong> specializing in morally grey heroes, obsessive and possessive dynamics, and adult explicit romance. Readers searching for contemporary <strong>dark romance authors</strong> in that vein discover her debut <em>Independent</em> here and on <a href=\"https://www.goodreads.com/larkelwood\" target=\"_blank\" rel=\"noopener noreferrer\">Goodreads</a>."
+    }
+  },
+  "follow": {
+    "kicker": "Stay Connected",
+    "heading": "Follow the world of <em>Independent</em>",
+    "lead": "Lark Elwood is active across platforms. Find teasers, aesthetics, and updates, wherever you read.",
+    "platform": {
+      "tiktok": "TikTok",
+      "instagram": "Instagram",
+      "pinterest": "Pinterest",
+      "goodreads": "Goodreads",
+      "email": "Email",
+      "threads": "Threads",
+      "x": "X",
+      "facebook": "Facebook"
+    },
+    "tiktok": "Dark romance hooks, mood videos, and teasers from the book",
+    "instagram": "Aesthetics, quotes, cover reveals, and visual atmosphere",
+    "pinterest": "Mood boards, aesthetics, and book-adjacent inspiration",
+    "goodreads": "Add <em>Independent</em> to your shelf and follow for reviews and release updates",
+    "email": "First access to releases, bonus pages, and ARC news. The reader list gets everything first",
+    "threads": "Writing thoughts, dark romance conversation, and reader community",
+    "x": "Quick updates, dark romance talk, and conversations with readers",
+    "facebook": "Announcements, community, and release news"
+  },
+  "arc": {
+    "badge": "Advance Readers",
+    "heading": "Read it before anyone else",
+    "intro": "<p>The ARC team for <em>Independent</em> is a small group of approved readers who receive an advance copy before release in exchange for an honest review.</p><p><em>Independent</em> contains explicit content, mature themes, and emotionally intense dynamics. Please apply only if you enjoy dark romance and are comfortable reviewing stories with adult content.</p><p>If selected, you'll receive your copy along with all the information you need ahead of the release window.</p>",
+    "cta": "Apply for Access"
+  },
+  "footer": {
+    "text": "Official author website &nbsp;&middot;&nbsp; Dark romance novel <em>Independent</em> &nbsp;&middot;&nbsp; <a href=\"/blog/\">Dark romance journal</a> &nbsp;&middot;&nbsp; <a href=\"/feed.xml\">RSS</a> &nbsp;&middot;&nbsp; <a href=\"/privacy-policy.html\">Privacy policy</a> &nbsp;&middot;&nbsp; All content &copy; Lark Elwood"
+  },
+  "blog": {
+    "backHome": "← Home",
+    "kicker": "Book lists · Pinterest saves",
+    "title": "Five dark romance books you'll binge next",
+    "lead": "Every post is a <strong>five-book dark romance roundup</strong> naming real novels readers already binge (enemies-to-lovers heat, obsessive morally grey heroes, spice, forbidden and mafia-tinged setups, rotated by topic). Lark Elwood threads each list toward her debut <em><a href=\"/#the-book\">Independent</a></em>-if today's stack scratches your itch, Independent is the obsession next. Moody enough to pin.",
+    "backAll": "← All posts",
+    "aboutKicker": "About the author",
+    "aboutText": "Written by <a href=\"/#about\"><strong>Lark Elwood</strong></a>, dark romance author. These roundups name real reads you've probably dog-eared; her debut novel <em><a href=\"/#the-book\">Independent</a></em> is for readers who tore through comps like today's five. <a href=\"/#reader-list\">Join the reader list</a> for release news, ARC invites, bonus pages.",
+    "moreLists": "More five-book lists →",
+    "footer": "Dark romance · <a href=\"/blog/\">Blog</a> · <a href=\"/privacy-policy.html\">Privacy policy</a> · <a href=\"/\">Home</a>"
+  },
+  "js": {
+    "hero": {
+      "invalidEmail": "please enter a valid email address.",
+      "joining": "Joining…",
+      "errorGeneric": "something went wrong. please try again."
+    },
+    "cookie": {
+      "aria": "Cookie notice",
+      "text": "We use cookies to improve your experience and understand how readers use this site. <a href=\"/privacy-policy.html\">Privacy policy</a>.",
+      "accept": "Accept"
+    },
+    "blog": {
+      "loading": "Loading…",
+      "empty": "No posts yet. Check back soon.",
+      "journal": "Journal",
+      "read": "Read →",
+      "loadError": "Could not load posts.",
+      "untitled": "Untitled"
+    }
+  }
+}
