@@ -14,10 +14,12 @@
       "arc": false,
       "arcForm": false,
       "faq": false,
-      "followChannels": ["tiktok", "email"],
+      "followChannels": ["tiktok", "instagram", "email"],
       "channelUrls": {
-        "tiktok": "https://www.tiktok.com/@user2510836870706"
-      }
+        "tiktok": "https://www.tiktok.com/@user2510836870706",
+        "instagram": "https://www.instagram.com/larkelwoodbooks/"
+      },
+      "closingSignup": true
     }
   }
 }

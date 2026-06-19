@@ -120,6 +120,17 @@
     "x": "Quick updates, dark romance talk, and conversations with readers",
     "facebook": "Announcements, community, and release news"
   },
+  "closingSignup": {
+    "kicker": "Join the list",
+    "heading": "Know his name. Hear his song.",
+    "lead": "Join the reader list and be first to hear updates.",
+    "formAria": "Join the reader list",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "your email",
+    "submit": "Join now",
+    "successTitle": "You're in. Check your inbox.",
+    "successSpam": "<span style=\"color: #ff4d4d; font-weight: bold;\">Check your spam folder.</span>"
+  },
   "arc": {
     "badge": "Advance Readers",
     "heading": "Read it before anyone else",

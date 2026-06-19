@@ -6,25 +6,7 @@
         return fallback;
     }
 
-    var heroForm = document.getElementById('heroQuickForm');
-    var heroSubmitBtn = document.getElementById('heroQuickSubmit');
-    var heroEmailInput = document.getElementById('quick-email');
-    var heroSuccessPanel = document.getElementById('heroCtaSuccess');
-    var heroErrorEl = document.getElementById('heroCtaError');
     var subscribeUrl = '/.netlify/functions/subscribe';
-    var heroSubmitDefaultLabel = heroSubmitBtn ? heroSubmitBtn.textContent : '';
-    var heroSubmitting = false;
-
-    function setHeroError(message) {
-        if (!heroErrorEl) return;
-        if (message) {
-            heroErrorEl.textContent = message;
-            heroErrorEl.hidden = false;
-        } else {
-            heroErrorEl.textContent = '';
-            heroErrorEl.hidden = true;
-        }
-    }
 
     function isValidEmail(value) {
         var v = (value || '').trim();
@@ -32,28 +14,46 @@
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
     }
 
-    function bindForm() {
-        if (!heroForm || !heroEmailInput || !heroSubmitBtn) return;
-        heroSubmitDefaultLabel = heroSubmitBtn.textContent;
+    function bindSubscribeForm(cfg) {
+        var form = document.getElementById(cfg.formId);
+        var submitBtn = document.getElementById(cfg.submitId);
+        var emailInput = document.getElementById(cfg.emailId);
+        var successPanel = document.getElementById(cfg.successId);
+        var errorEl = document.getElementById(cfg.errorId);
+        var submitting = false;
+        var submitDefaultLabel = submitBtn ? submitBtn.textContent : '';
 
-        heroForm.addEventListener('submit', function (e) {
+        function setError(message) {
+            if (!errorEl) return;
+            if (message) {
+                errorEl.textContent = message;
+                errorEl.hidden = false;
+            } else {
+                errorEl.textContent = '';
+                errorEl.hidden = true;
+            }
+        }
+
+        if (!form || !emailInput || !submitBtn) return;
+
+        form.addEventListener('submit', function (e) {
             e.preventDefault();
-            setHeroError('');
+            setError('');
 
-            if (heroSubmitting) return;
+            if (submitting) return;
 
-            var email = heroEmailInput.value.trim();
+            var email = emailInput.value.trim();
             if (!isValidEmail(email)) {
-                heroEmailInput.focus();
-                setHeroError(msg('js.hero.invalidEmail', 'please enter a valid email address.'));
+                emailInput.focus();
+                setError(msg(cfg.invalidEmailKey, 'please enter a valid email address.'));
                 return;
             }
 
-            heroSubmitting = true;
-            heroSubmitBtn.disabled = true;
-            heroEmailInput.disabled = true;
-            heroSubmitBtn.setAttribute('aria-busy', 'true');
-            heroSubmitBtn.textContent = msg('js.hero.joining', 'Joining…');
+            submitting = true;
+            submitBtn.disabled = true;
+            emailInput.disabled = true;
+            submitBtn.setAttribute('aria-busy', 'true');
+            submitBtn.textContent = msg(cfg.joiningKey, 'Joining…');
 
             fetch(subscribeUrl, {
                 method: 'POST',
@@ -73,8 +73,8 @@
                 })
                 .then(function (out) {
                     if (out.res.ok && out.data && out.data.ok) {
-                        heroForm.hidden = true;
-                        if (heroSuccessPanel) heroSuccessPanel.hidden = false;
+                        form.hidden = true;
+                        if (successPanel) successPanel.hidden = false;
                         if (typeof window.sendMetaCapiEvent === 'function') {
                             window.sendMetaCapiEvent({ eventName: 'Lead', email: email });
                         }
@@ -83,32 +83,56 @@
                     var errText =
                         out.data && out.data.error
                             ? out.data.error
-                            : msg('js.hero.errorGeneric', 'something went wrong. please try again.');
-                    setHeroError(errText);
+                            : msg(cfg.errorGenericKey, 'something went wrong. please try again.');
+                    setError(errText);
                 })
                 .catch(function () {
-                    setHeroError(msg('js.hero.errorGeneric', 'something went wrong. please try again.'));
+                    setError(msg(cfg.errorGenericKey, 'something went wrong. please try again.'));
                 })
                 .then(function () {
-                    heroSubmitting = false;
-                    if (heroSuccessPanel && !heroSuccessPanel.hidden) {
-                        heroSubmitBtn.removeAttribute('aria-busy');
-                        heroSubmitBtn.disabled = false;
-                        heroEmailInput.disabled = false;
-                        heroSubmitBtn.textContent = heroSubmitDefaultLabel;
+                    submitting = false;
+                    if (successPanel && !successPanel.hidden) {
+                        submitBtn.removeAttribute('aria-busy');
+                        submitBtn.disabled = false;
+                        emailInput.disabled = false;
+                        submitBtn.textContent = submitDefaultLabel;
                         return;
                     }
-                    heroSubmitBtn.disabled = false;
-                    heroEmailInput.disabled = false;
-                    heroSubmitBtn.removeAttribute('aria-busy');
-                    heroSubmitBtn.textContent = heroSubmitDefaultLabel;
+                    submitBtn.disabled = false;
+                    emailInput.disabled = false;
+                    submitBtn.removeAttribute('aria-busy');
+                    submitBtn.textContent = submitDefaultLabel;
                 });
         });
     }
 
+    function initForms() {
+        bindSubscribeForm({
+            formId: 'heroQuickForm',
+            submitId: 'heroQuickSubmit',
+            emailId: 'quick-email',
+            successId: 'heroCtaSuccess',
+            errorId: 'heroCtaError',
+            invalidEmailKey: 'js.hero.invalidEmail',
+            joiningKey: 'js.hero.joining',
+            errorGenericKey: 'js.hero.errorGeneric',
+        });
+
+        bindSubscribeForm({
+            formId: 'closingSignupForm',
+            submitId: 'closingSignupSubmit',
+            emailId: 'closing-signup-email',
+            successId: 'closingSignupSuccess',
+            errorId: 'closingSignupError',
+            invalidEmailKey: 'js.hero.invalidEmail',
+            joiningKey: 'js.hero.joining',
+            errorGenericKey: 'js.hero.errorGeneric',
+        });
+    }
+
     if (window.LarkI18n && typeof window.LarkI18n.whenReady === 'function') {
-        window.LarkI18n.whenReady(bindForm);
+        window.LarkI18n.whenReady(initForms);
     } else {
-        bindForm();
+        initForms();
     }
 })();

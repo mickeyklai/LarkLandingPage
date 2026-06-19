@@ -43,6 +43,7 @@ html[lang="he"] {
 
 html[lang="he"] .logo-name {
     font-family: var(--font-sans);
+    font-size: 1.55rem;
     font-weight: 400;
     text-transform: none;
     letter-spacing: var(--he-display-tracking);
@@ -50,6 +51,7 @@ html[lang="he"] .logo-name {
 
 html[lang="he"] .hero-title {
     font-family: var(--font-sans);
+    font-size: clamp(3rem, 14vw, 7.25rem);
     font-weight: 400;
     text-transform: none;
     letter-spacing: var(--he-display-tracking);
@@ -64,6 +66,7 @@ html[lang="he"] .hero-title-text {
 
 html[lang="he"] #book-heading.section-heading {
     font-family: var(--font-sans);
+    font-size: clamp(3rem, 14vw, 7.25rem);
     font-weight: 400;
     letter-spacing: 0.1em;
 }
@@ -72,7 +75,7 @@ html[lang="he"] .hero-newsletter-head {
     font-family: var(--font-serif);
     font-style: normal;
     font-weight: 400;
-    font-size: clamp(1.35rem, 4.2vw, 1.95rem);
+    font-size: clamp(1.55rem, 4.8vw, 2.25rem);
     letter-spacing: 0.01em;
     line-height: 1.45;
 }
@@ -169,24 +172,65 @@ html[lang="he"] .channel-platform {
 }
 
 html[lang="he"] .section-kicker {
-    font-size: clamp(0.88rem, 2.4vw, 1rem);
+    font-size: clamp(1rem, 2.8vw, 1.2rem);
     font-weight: 600;
+    color: rgba(0, 215, 255, 0.78);
     margin-bottom: 1.35rem;
 }
 
 html[lang="he"] .arc-badge {
-    font-size: clamp(0.85rem, 2.2vw, 0.95rem);
-    padding: 0.45rem 1.25rem;
+    font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+    padding: 0.5rem 1.35rem;
+    color: rgba(0, 225, 255, 0.88);
 }
 
 html[lang="he"] .section-heading {
-    font-size: clamp(2.5rem, 7vw, 3.45rem);
+    font-size: clamp(2.85rem, 7.8vw, 3.9rem);
     line-height: 1.14;
     margin-bottom: 2rem;
 }
 
 html[lang="he"] .arc-heading {
-    font-size: clamp(2.25rem, 6.2vw, 3rem);
+    font-size: clamp(2.55rem, 6.8vw, 3.4rem);
+}
+
+html[lang="he"] .hero-micro {
+    font-size: clamp(0.62rem, 1.8vw, 0.72rem);
+    color: rgba(0, 220, 255, 0.58);
+}
+
+html[lang="he"] .genre-tag {
+    font-size: clamp(0.68rem, 2vw, 0.78rem);
+    color: rgba(0, 215, 255, 0.78);
+    border-color: rgba(0, 210, 255, 0.28);
+    padding: 0.45rem 1rem;
+}
+
+html[lang="he"] .channel-platform {
+    font-size: clamp(0.68rem, 2vw, 0.78rem);
+    width: 6.25rem;
+    color: rgba(0, 215, 255, 0.72);
+}
+
+html[lang="he"] .channel-row--email .channel-platform {
+    color: rgba(0, 230, 255, 0.88);
+}
+
+html[lang="he"] .site-nav a {
+    font-size: 0.72rem;
+}
+
+html[lang="he"] .site-nav a.site-nav-primary {
+    font-size: 0.72rem;
+    padding: 0.55rem 0.95rem;
+}
+
+html[lang="he"] .neon-blue {
+    text-shadow:
+        0 0 8px #00e6ff,
+        0 0 20px #00c8ff,
+        0 0 40px rgba(0, 180, 255, 0.95),
+        0 0 72px rgba(0, 140, 255, 0.55);
 }
 
 html[lang="he"] .section-heading:not(#book-heading),
@@ -223,7 +267,7 @@ html[lang="he"] .arc-form-consent {
     }
 
     html[lang="he"] .hero-newsletter-head {
-        font-size: clamp(1.2rem, 5vw, 1.55rem);
+        font-size: clamp(1.4rem, 5.5vw, 1.85rem);
     }
 
     html[lang="he"] .hero-newsletter-head,
@@ -463,5 +507,221 @@ html[lang="he"] .arc-form-consent {
     .he-arc-dialog-close {
         top: 0.65rem;
         inset-inline-end: 0.65rem;
+    }
+}
+
+/* ================================================================
+   Closing signup — Hebrew CTA after Follow
+================================================================ */
+.closing-signup-section {
+    position: relative;
+    padding: clamp(3rem, 9vw, 5rem) 1.25rem;
+    background: var(--bg);
+}
+
+.closing-signup-inner {
+    position: relative;
+    max-width: 38rem;
+    margin: 0 auto;
+    text-align: center;
+    padding: 0 clamp(0.25rem, 2vw, 1rem);
+}
+
+.closing-signup-kicker {
+    display: inline-block;
+    margin-bottom: 1.25rem;
+    padding: 0.45rem 1.2rem;
+    font-family: var(--font-sans);
+    font-size: clamp(0.95rem, 2.8vw, 1.1rem);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: none;
+    color: rgba(0, 215, 255, 0.78);
+    background: transparent;
+    border: 1px solid rgba(0, 200, 255, 0.22);
+    border-radius: 999px;
+}
+
+.closing-signup-heading {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 7vw, 3.1rem);
+    font-weight: 400;
+    line-height: 1.28;
+    letter-spacing: 0.01em;
+    color: #eef4fa;
+    margin: 0 0 1.1rem;
+}
+
+.closing-signup-heading em {
+    font-style: normal;
+    color: rgba(0, 215, 255, 0.88);
+}
+
+.closing-signup-lead {
+    font-family: var(--font-body);
+    font-size: clamp(1.05rem, 2.8vw, 1.22rem);
+    line-height: 1.65;
+    color: rgba(200, 220, 235, 0.82);
+    margin: 0;
+    max-width: 28rem;
+    margin-inline: auto;
+}
+
+.closing-signup-form-wrap {
+    margin-top: clamp(1.75rem, 5vw, 2.5rem);
+}
+
+.closing-signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.closing-signup-form[hidden] {
+    display: none !important;
+}
+
+.closing-signup-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1.1rem 1.25rem;
+    font-family: var(--font-sans);
+    font-size: clamp(1rem, 3.2vw, 1.1rem);
+    color: #eef6fb;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(0, 220, 255, 0.35);
+    border-radius: 4px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.closing-signup-input::placeholder {
+    color: rgba(170, 190, 210, 0.55);
+}
+
+.closing-signup-input:hover {
+    border-color: rgba(0, 230, 255, 0.5);
+}
+
+.closing-signup-input:focus {
+    outline: none;
+    border-color: rgba(0, 245, 255, 0.75);
+    box-shadow:
+        0 0 0 3px rgba(0, 200, 255, 0.15),
+        0 0 24px rgba(0, 200, 255, 0.2);
+}
+
+.closing-signup-submit {
+    width: 100%;
+    padding: 1.15rem 1.5rem;
+    font-family: var(--font-sans);
+    font-size: clamp(1rem, 3.8vw, 1.15rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: none;
+    color: #041018;
+    background: linear-gradient(180deg, #c8f6ff 0%, #2ee0ff 45%, #00b8e0 100%);
+    border: 1px solid rgba(0, 245, 255, 0.7);
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 0 16px rgba(0, 220, 255, 0.35);
+    animation: closingSignupCtaPulse 2.8s ease-in-out infinite;
+    transition: filter 0.15s ease;
+}
+
+@keyframes closingSignupCtaPulse {
+    0%,
+    100% {
+        box-shadow: 0 0 16px rgba(0, 220, 255, 0.35);
+    }
+
+    50% {
+        box-shadow: 0 0 28px rgba(0, 235, 255, 0.55);
+    }
+}
+
+.closing-signup-submit:hover {
+    filter: brightness(1.06);
+}
+
+.closing-signup-submit:focus-visible {
+    outline: 2px solid rgba(0, 245, 255, 0.9);
+    outline-offset: 3px;
+}
+
+.closing-signup-submit:disabled,
+.closing-signup-input:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    animation: none;
+}
+
+.closing-signup-success {
+    padding: 1.25rem 0 0.25rem;
+}
+
+.closing-signup-success[hidden] {
+    display: none !important;
+}
+
+.closing-signup-success-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.2rem, 4vw, 1.45rem);
+    color: rgba(120, 240, 255, 0.95);
+    margin: 0 0 0.65rem;
+}
+
+.closing-signup-success-note {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: rgba(190, 210, 225, 0.75);
+    margin: 0;
+}
+
+.closing-signup-feedback {
+    margin: 0.85rem 0 0;
+    font-size: 0.92rem;
+}
+
+.closing-signup-feedback[hidden] {
+    display: none !important;
+}
+
+.closing-signup-feedback--error {
+    color: #ff9a9a;
+}
+
+@media (min-width: 640px) {
+    .closing-signup-form {
+        flex-direction: row;
+        align-items: stretch;
+    }
+
+    .closing-signup-input {
+        flex: 1;
+        min-width: 0;
+        border-radius: 4px 0 0 4px;
+    }
+
+    .closing-signup-submit {
+        width: auto;
+        flex-shrink: 0;
+        padding-inline: 2rem;
+        border-radius: 0 4px 4px 0;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 768px) {
+    .closing-signup-section {
+        padding-inline: max(1rem, env(safe-area-inset-left, 0px));
+        padding-inline-end: max(1rem, env(safe-area-inset-right, 0px));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .closing-signup-submit {
+        animation: none;
     }
 }

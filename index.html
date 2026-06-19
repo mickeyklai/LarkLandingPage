@@ -591,6 +591,42 @@
         </section>
 
         <!-- ============================================================
+             CLOSING SIGNUP (Hebrew only — shown via locales.json)
+        ============================================================ -->
+        <section class="closing-signup-section content-section" id="closing-signup" aria-labelledby="closing-signup-heading" hidden aria-hidden="true">
+            <div class="closing-signup-inner">
+                <span class="closing-signup-kicker" data-i18n="closingSignup.kicker">Join the list</span>
+                <h2 class="closing-signup-heading" id="closing-signup-heading" data-i18n-html="closingSignup.heading">Know his name. Hear his song.</h2>
+                <p class="closing-signup-lead" data-i18n="closingSignup.lead">Join the reader list and be first to hear updates.</p>
+                <div class="closing-signup-form-wrap">
+                    <form class="closing-signup-form" id="closingSignupForm" action="#" method="post" data-i18n-aria="closingSignup.formAria" aria-label="Join the reader list" novalidate>
+                        <label class="visually-hidden" for="closing-signup-email" data-i18n="closingSignup.emailLabel">Email address</label>
+                        <input
+                            type="email"
+                            id="closing-signup-email"
+                            name="email"
+                            class="closing-signup-input"
+                            autocomplete="email"
+                            required
+                            data-i18n-attr="placeholder:closingSignup.emailPlaceholder"
+                            placeholder="your email"
+                            inputmode="email"
+                            maxlength="254"
+                        >
+                        <button type="submit" class="closing-signup-submit" id="closingSignupSubmit" data-i18n="closingSignup.submit">Join now</button>
+                    </form>
+                    <div class="closing-signup-success" id="closingSignupSuccess" role="status" aria-live="polite" hidden>
+                        <p class="closing-signup-success-title" data-i18n="closingSignup.successTitle">You're in.</p>
+                        <p class="closing-signup-success-note closing-signup-success-spam" data-i18n-html="closingSignup.successSpam">
+                            <span style="color: #ff4d4d; font-weight: bold;">Check your spam folder.</span>
+                        </p>
+                    </div>
+                    <p class="closing-signup-feedback closing-signup-feedback--error" id="closingSignupError" role="alert" aria-live="assertive" hidden></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
              ARC SECTION: Private Invitation
         ============================================================ -->
         <section class="arc-section content-section" id="arc" aria-labelledby="arc-heading">

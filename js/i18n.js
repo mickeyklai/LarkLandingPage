@@ -274,6 +274,17 @@
             });
         }
 
+        if (meta.closingSignup) {
+            var closingSignup = document.getElementById('closing-signup');
+            if (closingSignup) {
+                closingSignup.hidden = false;
+                closingSignup.removeAttribute('aria-hidden');
+            }
+            document.querySelectorAll('a[data-follow-channel="email"]').forEach(function (el) {
+                el.setAttribute('href', '#closing-signup-email');
+            });
+        }
+
         if (currentLocale === 'he') {
             loadHebrewAssets(meta);
         }
