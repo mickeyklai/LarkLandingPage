@@ -138,7 +138,7 @@
     "cta": "Apply for Access"
   },
   "footer": {
-    "text": "Official author website &nbsp;&middot;&nbsp; Dark romance novel <em>Independent</em> &nbsp;&middot;&nbsp; <a href=\"/blog/\">Dark romance journal</a> &nbsp;&middot;&nbsp; <a href=\"/feed.xml\">RSS</a> &nbsp;&middot;&nbsp; <a href=\"/privacy-policy.html\">Privacy policy</a> &nbsp;&middot;&nbsp; All content &copy; Lark Elwood"
+    "text": "Official author website &nbsp;&middot;&nbsp; Dark romance novel <em>Independent</em> &nbsp;&middot;&nbsp; <a href=\"/blog/\">Dark romance journal</a> &nbsp;&middot;&nbsp; <a href=\"/feed.xml\">RSS</a> &nbsp;&middot;&nbsp; <a href=\"/privacy-policy.html\">Privacy policy</a> &nbsp;&middot;&nbsp; <a href=\"/terms.html\">Terms</a> &nbsp;&middot;&nbsp; All content &copy; Lark Elwood"
   },
   "blog": {
     "backHome": "← Home",
@@ -149,7 +149,7 @@
     "aboutKicker": "About the author",
     "aboutText": "Written by <a href=\"/#about\"><strong>Lark Elwood</strong></a>, dark romance author. These roundups name real reads you've probably dog-eared; her debut novel <em><a href=\"/#the-book\">Independent</a></em> is for readers who tore through comps like today's five. <a href=\"/#reader-list\">Join the reader list</a> for release news, ARC invites, bonus pages.",
     "moreLists": "More five-book lists →",
-    "footer": "Dark romance · <a href=\"/blog/\">Blog</a> · <a href=\"/privacy-policy.html\">Privacy policy</a> · <a href=\"/\">Home</a>"
+    "footer": "Dark romance · <a href=\"/blog/\">Blog</a> · <a href=\"/privacy-policy.html\">Privacy policy</a> · <a href=\"/terms.html\">Terms</a> · <a href=\"/\">Home</a>"
   },
   "js": {
     "hero": {

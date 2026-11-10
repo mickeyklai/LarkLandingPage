@@ -165,7 +165,7 @@
     }
   },
   "footer": {
-    "text": "אתר הסופרת הרשמי &nbsp;&middot;&nbsp; מותחן פסיכולוגי <em>עצמאית</em> &nbsp;&middot;&nbsp; <a href=\"/privacy-policy.html\">מדיניות פרטיות</a> &nbsp;&middot;&nbsp; כל התוכן &copy; לארק אלווד"
+    "text": "אתר הסופרת הרשמי &nbsp;&middot;&nbsp; מותחן פסיכולוגי <em>עצמאית</em> &nbsp;&middot;&nbsp; <a href=\"/privacy-policy.html\">מדיניות פרטיות</a> &nbsp;&middot;&nbsp; <a href=\"/terms.html\">תנאי שימוש</a> &nbsp;&middot;&nbsp; כל התוכן &copy; לארק אלווד"
   },
   "blog": {
     "backHome": "← בית",
@@ -176,7 +176,7 @@
     "aboutKicker": "אודות הסופרת",
     "aboutText": "נכתב על ידי <a href=\"/#about\"><strong>לארק אלווד</strong></a>. הסיכומים האלה מציינים קריאות אמיתיות שכנראה כבר קיפלת בהן פינות; רומן הבכורה שלה <em><a href=\"/#the-book\">עצמאית</a></em> הוא מותחן פסיכולוגי עם מתח רומנטי עמוק. <a href=\"/#reader-list\">הצטרפי לרשימה</a> לחדשות הוצאה ועמודי בונוס.",
     "moreLists": "עוד רשימות של חמישה ספרים →",
-    "footer": "מותחן פסיכולוגי · <a href=\"/privacy-policy.html\">מדיניות פרטיות</a> · <a href=\"/\">בית</a>"
+    "footer": "מותחן פסיכולוגי · <a href=\"/privacy-policy.html\">מדיניות פרטיות</a> · <a href=\"/terms.html\">תנאי שימוש</a> · <a href=\"/\">בית</a>"
   },
   "privacy": {
     "collectionP1": "האתר הזה (<a href=\"https://larkelwood.com\">larkelwood.com</a>) מופעל על ידי לארק אלווד. במהלך הגלישה או השימוש באתר, מידע מסוים עשוי להיאסף אוטומטית, ומידע נוסף עשוי להיאסף כשאת בוחרת לתקשר עם טפסים או פיצ'רים באתר.",

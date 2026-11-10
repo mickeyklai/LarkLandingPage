@@ -35,6 +35,7 @@ const STATIC_URLS = [
     { loc: '/', changefreq: 'weekly', priority: '1.0' },
     { loc: '/blog/', changefreq: 'daily', priority: '0.9' },
     { loc: '/privacy-policy.html', changefreq: 'yearly', priority: '0.2' },
+    { loc: '/terms.html', changefreq: 'yearly', priority: '0.2' },
 ];
 
 const headers = {

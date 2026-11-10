@@ -52,6 +52,11 @@
   to = "/privacy-policy.html"
   status = 200
 
+[[redirects]]
+  from = "/he/terms.html"
+  to = "/terms.html"
+  status = 200
+
 # LOCALE_REDIRECTS_END
 
 # ----------------------------------------------------------------------------
