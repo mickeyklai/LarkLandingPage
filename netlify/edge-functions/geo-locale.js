@@ -13,6 +13,10 @@ function shouldSkip(pathname) {
     if (pathname === '/robots.txt' || pathname === '/sitemap.xml' || pathname === '/feed.xml' || pathname === '/rss.xml') {
         return true;
     }
+    // OAuth / Login Kit callback must stay on the exact registered URL.
+    if (pathname === '/tiktok-callback.html' || pathname === '/he/tiktok-callback.html') {
+        return true;
+    }
     return false;
 }
 

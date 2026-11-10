@@ -57,6 +57,11 @@
   to = "/terms.html"
   status = 200
 
+[[redirects]]
+  from = "/he/tiktok-callback.html"
+  to = "/tiktok-callback.html"
+  status = 200
+
 # LOCALE_REDIRECTS_END
 
 # ----------------------------------------------------------------------------
