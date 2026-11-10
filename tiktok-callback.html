@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Returning to Lark Publisher…</title>
+</head>
+<body>
+  <p>Returning to Lark Publisher…</p>
+  <script>
+    // TikTok Web Login Kit cannot redirect to localhost, so this page
+    // lives on the verified domain and forwards the OAuth result locally.
+    const params = window.location.search || "";
+    window.location.replace("http://127.0.0.1:8787/callback/" + params);
+  </script>
+</body>
+</html>
